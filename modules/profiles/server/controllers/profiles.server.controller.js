@@ -62,7 +62,7 @@ exports.delete = function (req, res) {
  * Only lists the current user's profile
  */
 exports.list = function (req, res) {
-  Profile.find({user: req.user}).populate('user', 'displayName').exec(function (err, profile) {
+  Profile.find({ user: req.user }).populate('user', 'displayName').exec(function (err, profile) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -73,7 +73,7 @@ exports.list = function (req, res) {
   });
 };
 
-exports.articleByID = function (req, res, next, id) {
+exports.profileByID = function (req, res, next, id) {
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({
