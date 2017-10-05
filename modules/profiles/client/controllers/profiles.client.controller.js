@@ -42,7 +42,7 @@ angular.module('profiles').controller('ProfilesController', ['$scope', '$statePa
 
       // Redirect after save
       profile.$save(function (response) {
-        $location.path('profiles/' + response._id);
+        $location.path('profile/view');
 
         // Clear form fields
         $scope.title = '';
@@ -88,11 +88,59 @@ angular.module('profiles').controller('ProfilesController', ['$scope', '$statePa
       $scope.profiles = Profiles.list();
     };
 
-    // Find existing profile
+    // Find the current user's profile
     $scope.findOne = function () {
       $scope.profile = Profiles.get({
-        profileId: $stateParams.profileId
+        user: $scope.authentication.user._id
       });
     };
+
+
+    $scope.test_create = function () {
+      $scope.error = null;
+
+
+      // Create new Profile object
+      var profile = new Profiles({
+        Priority: {
+          Family: 1,
+          Health: 2,
+          Rest_and_Relaxation: 3,
+          Faith: 4,
+          Finance: 5,
+          Romance: 6,
+          Friends: 7,
+          Contribution: 8,
+          Security: 9,
+          Personal_Growth: 10
+        },
+        Satisfaction: {
+          Personal_Growth: 5,
+          Career: 5,
+          Family_and_Friends: 5,
+          Health: 5,
+          Physical_Env: 6,
+          Romance: 5,
+          Money: 5,
+          Fun: 5
+        }
+      });
+
+      // Redirect after save
+      profile.$save(function (response) {
+        $location.path('profile/view');
+
+        // Clear form fields
+        $scope.title = '';
+        $scope.content = '';
+      }, function (errorResponse) {
+        $scope.error = errorResponse.data.message;
+        console.log($scope.error);
+      });
+    };
+
+
+
+
   }
 ]);
