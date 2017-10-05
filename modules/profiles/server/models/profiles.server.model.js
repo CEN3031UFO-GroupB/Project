@@ -15,26 +15,26 @@ var ProfileSchema = new Schema({
     default: Date.now
   },
   Priority: [{
-    Family: Number,
-    Health: Number,
-	Rest_and_Relaxation: Number,
-	Faith: Number,
-	Finance: Number,
-	Romance: Number,
-	Friends: Number,
-	Contribution: Number,
-	Security: Number,
-	Personal_Growth: Number
+    Family: {type: Number, min: 1, max: 10},
+    Health: {type: Number, min: 1, max: 10},
+	Rest_and_Relaxation: {type: Number, min: 1, max: 10},
+	Faith: {type: Number, min: 1, max: 10},
+	Finance: {type: Number, min: 1, max: 10},
+	Romance: {type: Number, min: 1, max: 10},
+	Friends: {type: Number, min: 1, max: 10},
+	Contribution: {type: Number, min: 1, max: 10},
+	Security: {type: Number, min: 1, max: 10},
+	Personal_Growth: {type: Number, min: 1, max: 10}
   }],
   Satisfaction: [{
-  	Personal_Growth: Number,
-  	Career: Number,
-  	Family_and_Friends: Number,
-  	Health: Number,
-  	Physical_Env: Number,
-  	Romance: Number,
-  	Money: Number,
-  	Fun: Number
+  	Personal_Growth: {type: Number, min: 0, max: 10},
+  	Career: {type: Number, min: 0, max: 10},
+  	Family_and_Friends: {type: Number, min: 0, max: 10},
+  	Health: {type: Number, min: 0, max: 10},
+  	Physical_Env: {type: Number, min: 0, max: 10},
+  	Romance: {type: Number, min: 0, max: 10},
+  	Money: {type: Number, min: 0, max: 10},
+  	Fun: {type: Number, min: 0, max: 10}
   }],
   user: {
     type: Schema.ObjectId,
