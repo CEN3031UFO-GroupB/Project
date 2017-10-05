@@ -4,6 +4,26 @@ angular.module('profiles').controller('ProfilesController', ['$scope', '$statePa
   function ($scope, $stateParams, $location, Authentication, Profiles) {
     $scope.authentication = Authentication;
 
+    var clearForm = function(){
+      $scope.Personal_Growth = null;
+      $scope.Career = null;
+      $scope.Family_and_Friends = null;
+      $scope.Health = null;
+      $scope.Physical_Env = null;
+      $scope.Romance = null;
+      $scope.Money = null;
+      $scope.Fun = null;
+      $scope.Family = null;
+      $scope.Health = null;
+      $scope.Rest_and_Relaxation = null;
+      $scope.Faith = null;
+      $scope.Finance = null;
+      $scope.Romance = null;
+      $scope.Friends = null;
+      $scope.Contribution = null;
+      $scope.Security = null;
+      $scope.Personal_Growth = null;
+    };
     // Create new Profile
     $scope.create = function (isValid) {
       $scope.error = null;
@@ -45,8 +65,7 @@ angular.module('profiles').controller('ProfilesController', ['$scope', '$statePa
         $location.path('profile/view');
 
         // Clear form fields
-        $scope.title = '';
-        $scope.content = '';
+        clearForm();
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
       });
@@ -77,7 +96,7 @@ angular.module('profiles').controller('ProfilesController', ['$scope', '$statePa
       var profile = $scope.profile;
 
       profile.$update(function () {
-        $location.path('profiles/' + profile._id);
+        $location.path('profiles/view');
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
       });
@@ -131,8 +150,7 @@ angular.module('profiles').controller('ProfilesController', ['$scope', '$statePa
         $location.path('profile/view');
 
         // Clear form fields
-        $scope.title = '';
-        $scope.content = '';
+        clearForm();
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
         console.log($scope.error);
