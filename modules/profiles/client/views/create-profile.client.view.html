@@ -3,12 +3,22 @@
     <h1>Getting Started</h1>
   </div>
   <div class="col-md-12">
-    <form name="profileForm" class="form-horizontal" ng-submit="test_create()" novalidate>
+  <p>
+	Please sort the lists below, with the highest priority (1) on top,
+	and the lowest priority (8 or 10) at the bottom.
+  </p>
+    <form name="profileForm" class="form-horizontal" ng-submit="CreateProfile();">
       <fieldset>
-
-
+        <h2>Priorities</h2>
+        <ul ui-sortable="sortablePriorities" ng-model="profile.priorities" class="profiles-list">
+          <li ng-repeat="priority in profile.priorities" class="profiles-list-element">{{ priority.name }}</li>
+        </ul>
+		<h2>Satisfactions</h2>
+        <ul ui-sortable="sortableSatisfactions" ng-model="profile.satisfactions" class="profiles-list">
+          <li ng-repeat="satisfaction in profile.satisfactions" class="profiles-list-element">{{ satisfaction.name }}</li>
+        </ul>
         <div class="form-group">
-          <input type="submit" class="btn btn-default">
+          <input type="submit" class="btn btn-default" value="Create">
         </div>
         <div ng-show="error" class="text-danger">
           <strong ng-bind="error"></strong>

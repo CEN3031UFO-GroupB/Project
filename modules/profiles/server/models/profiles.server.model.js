@@ -17,24 +17,24 @@ var ProfileSchema = new Schema({
   Priority: [{
     Family: Number,
     Health: Number,
-	Rest_and_Relaxation: Number,
-	Faith: Number,
-	Finance: Number,
-	Romance: Number,
-	Friends: Number,
-	Contribution: Number,
-	Security: Number,
-	Personal_Growth: Number
+    Rest_and_Relaxation: Number,
+    Faith: Number,
+    Finance: Number,
+    Romance: Number,
+    Friends: Number,
+    Contribution: Number,
+    Security: Number,
+    Personal_Growth: Number
   }],
   Satisfaction: [{
-  	Personal_Growth: Number,
-  	Career: Number,
-  	Family_and_Friends: Number,
-  	Health: Number,
-  	Physical_Env: Number,
-  	Romance: Number,
-  	Money: Number,
-  	Fun: Number
+    Personal_Growth: Number,
+    Career: Number,
+    Family_and_Friends: Number,
+    Health: Number,
+    Physical_Env: Number,
+    Romance: Number,
+    Money: Number,
+    Fun: Number
   }],
   user: {
     type: Schema.ObjectId,

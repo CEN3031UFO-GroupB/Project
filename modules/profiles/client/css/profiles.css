@@ -1,0 +1,15 @@
+.profiles-list {
+	list-style-type: none;
+	width: 250px;
+}
+
+.profiles-list-element {
+	background-color: #CCCCCC;
+	border: solid black 1px;
+	margin-left: -30px;
+}
+
+.profiles-list-element:hover {
+	background-color: #EEEEEE;
+	cursor: pointer;
+}
