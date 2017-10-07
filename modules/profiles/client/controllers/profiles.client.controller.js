@@ -36,32 +36,16 @@ angular.module('profiles').controller('ProfilesController', ['$scope', '$statePa
                     name: 'Personal Growth'
                 }
             ],
-			satisfactions: [
-			    {
-                    name: 'Personal Growth'
-                },
-                {
-                    name: 'Career'
-                },
-                {
-                    name: 'Family and Friends'
-                },
-                {
-                    name: 'Health'
-                },
-                {
-                    name: 'Physical Env'
-                },
-                {
-                    name: 'Romance'
-                },
-                {
-                    name: 'Money'
-                },
-                {
-                    name: 'Fun'
-                },
-			]
+			satisfactions: {
+				personalGrowth: 5,
+				career: 5,
+				familyAndFriends: 5,
+				health: 5,
+				physicalEnv: 5,
+				romance: 5,
+				money: 5,
+				fun: 5
+			}
         };
 
         // Create new Profile
@@ -83,14 +67,14 @@ angular.module('profiles').controller('ProfilesController', ['$scope', '$statePa
                     Personal_Growth: $scope.profile.priorities.findIndex(x => x.name === "Personal Growth") + 1
                 },
                 Satisfaction: {
-                    Personal_Growth: $scope.profile.satisfactions.findIndex(x => x.name === "Personal Growth") + 1,
-                    Career: $scope.profile.satisfactions.findIndex(x => x.name === "Career") + 1,
-                    Family_and_Friends: $scope.profile.satisfactions.findIndex(x => x.name === "Family and Friends") + 1,
-                    Health: $scope.profile.satisfactions.findIndex(x => x.name === "Health") + 1,
-                    Physical_Env: $scope.profile.satisfactions.findIndex(x => x.name === "Physical Env") + 1,
-                    Romance: $scope.profile.satisfactions.findIndex(x => x.name === "Romance") + 1,
-                    Money: $scope.profile.satisfactions.findIndex(x => x.name === "Money") + 1,
-                    Fun: $scope.profile.satisfactions.findIndex(x => x.name === "Fun") + 1
+                    Personal_Growth: $scope.profile.satisfactions.personalGrowth,
+                    Career: $scope.profile.satisfactions.career,
+                    Family_and_Friends: $scope.profile.satisfactions.familyAndFriends,
+                    Health: $scope.profile.satisfactions.health,
+                    Physical_Env: $scope.profile.satisfactions.physicalEnv,
+                    Romance: $scope.profile.satisfactions.romance,
+                    Money: $scope.profile.satisfactions.money,
+                    Fun: $scope.profile.satisfactions.fun
                 }
             });
 						
