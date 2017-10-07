@@ -31,6 +31,17 @@ exports.read = function (req, res) {
 exports.update = function (req, res) {
   var profile = req.profile;
 
+
+  // Check if profile was last updated over 12 weeks ago
+  // Return error message if not
+  var oneDay = 24*60*60*1000;
+  var daysElapsed = Math.round(Math.abs((profile.last_modified.getTime() - Date.now.getTime())/(oneDay)));
+  if(daysElapsed < 7*12){
+    return res.status(400).send({
+        message: 'Priorities and Satisfaction ratings can be updated every 12 weeks.'
+    });
+  }
+
   profile.last_modified = Date.now;
 
   profile.save(function (err) {
