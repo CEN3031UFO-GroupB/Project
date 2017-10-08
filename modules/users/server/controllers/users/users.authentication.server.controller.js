@@ -23,15 +23,8 @@ exports.signup = function (req, res) {
   //delete req.body.roles;
 
   // Init Variables
+  console.log(JSON.stringify(req.body));
   var user = new User(req.body);
-
-  // Add user roles server-side
-  if (req.roles = 1){
-    user.roles = ['admin']
-  }
-  else if (req.roles = 2){
-    user.roles = ['user']
-  }
 
   var message = null;
 
