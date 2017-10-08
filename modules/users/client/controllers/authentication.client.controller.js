@@ -18,13 +18,12 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$stat
 
       if (!isValid) {
         $scope.$broadcast('show-errors-check-validity', 'userForm');
-
         return false;
       }
 
       $http.post('/api/auth/signup', $scope.credentials).success(function (response) {
         // If successful we assign the response to the global user model
-          console.log($scope.credentials);
+        console.log($scope.credentials);
         $scope.authentication.user = response;
 
         // And redirect to the previous or home page
