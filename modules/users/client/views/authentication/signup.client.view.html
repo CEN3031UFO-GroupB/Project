@@ -46,6 +46,23 @@
           <label>Password Requirements</label>
           <progressbar value="requirementsProgress" type="{{requirementsColor}}"><span style="color:white; white-space:nowrap;">{{requirementsProgress}}%</span></progressbar>
         </div>
+
+        <div class="form-group" show-errors>
+          <label for="registrationKey">Registration Number</label>
+          <input type="text" id="registrationKey" name="registrationKey" class="form-control" ng-model="credentials.registrationKey" placeholder="Registration #" required>
+          <div ng-messages="userForm.registrationKey.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Registration number is required.</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="roles">Role</label>
+          <select ng-init="credentials.roles = ['admin']" name="roles" id="roles" class="form-control" ng-model="credentials.roles" required>
+            <option selected="selected" value=['user']>User</option>
+            <option value=['admin']>Coach</option>
+          </select>
+        </div>
+
         <div class="text-center form-group">
           <button type="submit" class="btn btn-primary">Sign up</button>
           &nbsp; or&nbsp;
