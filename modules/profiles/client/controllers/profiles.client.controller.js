@@ -82,102 +82,55 @@ angular.module('profiles').controller('ProfilesController', ['$scope', '$statePa
             profile.$save(function (response) {
                 $location.path('profile/view');
 
-                // Clear form fields
-                $scope.title = '';
-                $scope.content = '';
             }, function (errorResponse) {
                 $scope.error = errorResponse.data.message;
             });
         };
 
-        // Delete a profile
-        $scope.remove = function (profile) {
-            if (profile) {
-                profile.$remove();
-
-            } else {
-                $scope.profile.$remove(function () {
-                    $location.path('profile');
-                });
-            }
-        };
 
         // Update existing Profile
-        $scope.update = function (isValid) {
+        $scope.update = function () {
             $scope.error = null;
 
-            if (!isValid) {
-                $scope.$broadcast('show-errors-check-validity', 'profileForm');
-
-                return false;
-            }
-
-            var profile = $scope.profile;
+            var profile = $scope.currentProfile;
+            profile.Priority = {
+                Family: $scope.profile.priorities.findIndex(x => x.name === "Family") + 1,
+                Health: $scope.profile.priorities.findIndex(x => x.name === "Health") + 1,
+                Rest_and_Relaxation: $scope.profile.priorities.findIndex(x => x.name === "Rest and Relaxation") + 1,
+                Faith: $scope.profile.priorities.findIndex(x => x.name === "Faith") + 1,
+                Finance: $scope.profile.priorities.findIndex(x => x.name === "Finance") + 1,
+                Romance: $scope.profile.priorities.findIndex(x => x.name === "Romance") + 1,
+                Friends: $scope.profile.priorities.findIndex(x => x.name === "Friends") + 1,
+                Contribution: $scope.profile.priorities.findIndex(x => x.name === "Contribution") + 1,
+                Security: $scope.profile.priorities.findIndex(x => x.name === "Security") + 1,
+                Personal_Growth: $scope.profile.priorities.findIndex(x => x.name === "Personal Growth") + 1
+            };
+            profile.Satisfaction = {
+                Personal_Growth: $scope.profile.satisfactions.personalGrowth,
+                Career: $scope.profile.satisfactions.career,
+                Family_and_Friends: $scope.profile.satisfactions.familyAndFriends,
+                Health: $scope.profile.satisfactions.health,
+                Physical_Env: $scope.profile.satisfactions.physicalEnv,
+                Romance: $scope.profile.satisfactions.romance,
+                Money: $scope.profile.satisfactions.money,
+                Fun: $scope.profile.satisfactions.fun
+            };
 
             profile.$update(function () {
-                $location.path('profiles/' + profile._id);
+                $location.path('profile/view');
             }, function (errorResponse) {
                 $scope.error = errorResponse.data.message;
             });
-        };
 
-        // Find a list of Profiles
-        $scope.find = function () {
-            $scope.profiles = Profiles.list();
+
         };
 
         // Find the current user's profile
         $scope.findOne = function () {
-            $scope.profile = Profiles.get({
+            $scope.currentProfile = Profiles.get({
                 user: $scope.authentication.user._id
             });
         };
-
-
-        $scope.test_create = function () {
-            $scope.error = null;
-
-
-            // Create new Profile object
-            var profile = new Profiles({
-                Priority: {
-                    Family: 1,
-                    Health: 2,
-                    Rest_and_Relaxation: 3,
-                    Faith: 4,
-                    Finance: 5,
-                    Romance: 6,
-                    Friends: 7,
-                    Contribution: 8,
-                    Security: 9,
-                    Personal_Growth: 10
-                },
-                Satisfaction: {
-                    Personal_Growth: 5,
-                    Career: 5,
-                    Family_and_Friends: 5,
-                    Health: 5,
-                    Physical_Env: 6,
-                    Romance: 5,
-                    Money: 5,
-                    Fun: 5
-                }
-            });
-
-            // Redirect after save
-            profile.$save(function (response) {
-                $location.path('profile/view');
-
-                // Clear form fields
-                $scope.title = '';
-                $scope.content = '';
-            }, function (errorResponse) {
-                $scope.error = errorResponse.data.message;
-                console.log($scope.error);
-            });
-        };
-
-
 
 
     }
