@@ -1,0 +1,25 @@
+<section ng-controller="ProfilesController" ng-init="findOne()">
+  <div class="page-header">
+    <h1>Profile</h1>
+  </div>
+  <div>
+  	<div class="section-header">
+    	<h3>Priorities</h3>
+  	</div>
+      <p ng-repeat="(key, data) in currentProfile.Priority[0]" ng-if="key!='_id'"> {{ key }} : {{ data }}</p>
+  </div>
+ <div>
+  	<div class="section-header">
+    	<h3>Satisfaction</h3>
+  	</div>
+      <p ng-repeat="(key, data) in currentProfile.Satisfaction[0]" ng-if="key!='_id'"> {{ key }} : {{ data }}</p>
+  </div>
+
+
+  <small>
+    <em class="text-muted">
+      Last updated on
+      <span ng-bind="currentProfile.last_modified | date:'mediumDate'"></span>
+    </em>
+  </small>
+</section>
