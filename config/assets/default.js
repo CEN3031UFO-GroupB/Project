@@ -4,8 +4,7 @@ module.exports = {
   client: {
     lib: {
       css: [
-        'public/lib/bootstrap/dist/css/bootstrap.css',
-        'public/lib/bootstrap/dist/css/bootstrap-theme.css'
+        'public/lib/bootstrap-power-theme/bootstrap-theme-power.css'
       ],
       js: [
         'public/lib/jquery/dist/jquery.js',
@@ -19,12 +18,14 @@ module.exports = {
         'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
         'public/lib/angular-file-upload/angular-file-upload.js',
         'public/lib/owasp-password-strength-test/owasp-password-strength-test.js',
-        'public/lib/angular-ui-sortable/sortable.js'
+        'public/lib/angular-ui-sortable/sortable.js',
+        'public/lib/angular-ui-slider/src/slider.js'
       ],
       tests: ['public/lib/angular-mocks/angular-mocks.js']
     },
     css: [
-      'modules/*/client/css/*.css'
+      'modules/*/client/css/*.css',
+      'public/lib/jquery-ui/themes/base/jquery-ui.css'
     ],
     less: [
       'modules/*/client/less/*.less'
