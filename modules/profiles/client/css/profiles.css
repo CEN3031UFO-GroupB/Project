@@ -1,16 +1,18 @@
 .profiles-list {
-	list-style-type: none;
+	list-style-type: decimal;
 	width: 250px;
+	margin-left: 10px;
 }
 
 .profiles-list-element {
-	background-color: #CCCCCC;
-	border: solid black 1px;
+	background-color: #4EB0DA;
+	border: solid #39a7d6 1px;
 	margin-left: -30px;
+	padding: 8px;
 }
 
 .profiles-list-element:hover {
-	background-color: #EEEEEE;
+	background-color: #67DEFF;
 	cursor: pointer;
 }
 
