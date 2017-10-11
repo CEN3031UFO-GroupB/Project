@@ -59,6 +59,11 @@ var UserSchema = new Schema({
     lowercase: true,
     trim: true
   },
+  registrationKey: {
+    type: String,
+    required: 'Please fill in the registration key',
+    unique: 'Registration key already been used'
+  },
   password: {
     type: String,
     default: ''
