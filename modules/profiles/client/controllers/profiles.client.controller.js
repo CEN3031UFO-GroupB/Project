@@ -127,11 +127,46 @@ angular.module('profiles').controller('ProfilesController', ['$scope', '$statePa
 
         // Find the current user's profile
         $scope.findOne = function () {
-            $scope.currentProfile = Profiles.get({
-                user: $scope.authentication.user._id
+            $scope.currentProfile = Profiles.get(
+                {user: $scope.authentication.user._id},
+                
+                // Function for the view/edit profile view
+                // Needs to be here so that it only gets called after the get() query finishes
+                function(s){
+
+                    // Make the Priority object into an array
+                    // Arrays are much easier to display with ng-repeat
+                    var p = s.Priority[0];
+                    $scope.prioritiesArray = [];
+                    angular.forEach(p, function(value, key) {
+                        if(key !== '_id'){
+                            $scope.prioritiesArray.push({
+                                name: key.replace('_', ' ').replace('_', ' '),
+                                rank: value
+                            });
+                        }
+
+                    });
+
+                    // Set the scroller's values to those on the user's profile
+                    $scope.profile.satisfactions.personalGrowth = s.Satisfaction[0].Personal_Growth;
+                    $scope.profile.satisfactions.career = s.Satisfaction[0].Career;
+                    $scope.profile.satisfactions.familyAndFriends = s.Satisfaction[0].Family_and_Friends;
+                    $scope.profile.satisfactions.health = s.Satisfaction[0].Health;
+                    $scope.profile.satisfactions.physicalEnv = s.Satisfaction[0].Physical_Env;
+                    $scope.profile.satisfactions.romance = s.Satisfaction[0].Romance;
+                    $scope.profile.satisfactions.money = s.Satisfaction[0].Money;
+                    $scope.profile.satisfactions.fun = s.Satisfaction[0].Fun;
+                    
+                    // Check if it's been 12 weeks since last changed
+                    var oneDay = 24*60*60*1000;
+                    var dateOnProfile = new Date(s.last_modified);
+                    var daysElapsed = Math.round(Math.abs((dateOnProfile.getTime() - (new Date()).getTime())/(oneDay)));
+
+                    // This variable will be used with ng-show on the view to indicate when it's time to update the profile
+                    $scope.profileCanChange = (daysElapsed >= 7*12);
             });
         };
-
 
     }
 ]);
