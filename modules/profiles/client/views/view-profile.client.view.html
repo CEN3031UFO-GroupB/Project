@@ -1,4 +1,4 @@
-<section ng-controller="ProfilesController" ng-init="findOne()">
+<section ng-controller="ProfilesController" ng-init="findOne(authentication.user._id)">
   <div class="page-header">
     <h1>Priorities and Satisfaction Ratings</h1>
   </div>
@@ -86,7 +86,7 @@
   </div>
 </section>
 
-<script type="text/javascript"> 
+<script type="text/javascript">
 $(function(){
   $(".profile-slider").slider("disable");
   $("#sort1").sortable("disable");
