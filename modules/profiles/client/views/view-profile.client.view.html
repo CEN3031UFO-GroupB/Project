@@ -18,7 +18,7 @@
       <p>
         Your current order of priorities.
         </p>
-        <ul ui-sortable="sortablePriorities" ng-model="currentProfile.Priority[0]" class="profiles-list">
+        <ul id="sort1" ui-sortable="sortablePriorities" ng-model="profile.priorities" class="profiles-list">
           <li  ng-repeat="priority in prioritiesArray | orderBy:'rank'" class="profiles-list-element">{{ priority.name }}</li>
         </ul>
     <h2>Satisfactions</h2>
@@ -89,9 +89,11 @@
 <script type="text/javascript"> 
 $(function(){
   $(".profile-slider").slider("disable");
+  $("#sort1").sortable("disable");
 });
 var editProf = function(){
   $(".profile-slider").slider("enable");
+  $("#sort1").sortable("enable");
   document.getElementById("editButton1").remove();
   $("#saveButton1").attr('disabled', false);
 };
