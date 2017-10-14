@@ -134,6 +134,20 @@ angular.module('profiles').controller('ProfilesController', ['$scope', '$statePa
                 // Needs to be here so that it only gets called after the get() query finishes
                 function(s){
 
+                    // Make the Priority object into an array
+                    // Arrays are much easier to display with ng-repeat
+                    var p = s.Priority[0];
+                    $scope.prioritiesArray = [];
+                    angular.forEach(p, function(value, key) {
+                        if(key !== '_id'){
+                            $scope.prioritiesArray.push({
+                                name: key.replace('_', ' ').replace('_', ' '),
+                                rank: value
+                            });
+                        }
+
+                    });
+
                     // Set the scroller's values to those on the user's profile
                     $scope.profile.satisfactions.personalGrowth = s.Satisfaction[0].Personal_Growth;
                     $scope.profile.satisfactions.career = s.Satisfaction[0].Career;

@@ -1,25 +1,98 @@
 <section ng-controller="ProfilesController" ng-init="findOne()">
   <div class="page-header">
-    <h1>Profile</h1>
+    <h1>Priorities and Satisfaction Ratings</h1>
   </div>
-  <div>
-  	<div class="section-header">
-    	<h3>Priorities</h3>
-  	</div>
-      <p ng-repeat="(key, data) in currentProfile.Priority[0]" ng-if="key!='_id'"> {{ key }} : {{ data }}</p>
-  </div>
- <div>
-  	<div class="section-header">
-    	<h3>Satisfaction</h3>
-  	</div>
-      <p ng-repeat="(key, data) in currentProfile.Satisfaction[0]" ng-if="key!='_id'"> {{ key }} : {{ data }}</p>
-  </div>
+  <div class="col-md-12">
+     <div ng-show="profileCanChange" id="editButton1" class="form-group">
+      <p>
+      <strong>
+        It's time to update your priorities and satisfactions!
+        </strong>
+        </p>
+        <input class="btn btn-primary" value="Edit" onclick="editProf()">
+     </div>
 
+    <form name="profileForm" class="form-horizontal" ng-submit="update();">
+      <fieldset>
+        <h2>Priorities</h2>
+      <p>
+        Your current order of priorities.
+        </p>
+        <ul ui-sortable="sortablePriorities" ng-model="currentProfile.Priority[0]" class="profiles-list">
+          <li  ng-repeat="priority in prioritiesArray | orderBy:'rank'" class="profiles-list-element">{{ priority.name }}</li>
+        </ul>
+    <h2>Satisfactions</h2>
+    <p>
+        Your current staisfaction levels.
+        </p>
 
-  <small>
-    <em class="text-muted">
-      Last updated on
-      <span ng-bind="currentProfile.last_modified | date:'mediumDate'"></span>
-    </em>
-  </small>
+    <div class="form-group">
+      <div class="col-md-2">Peronal Growth
+      </div>
+      <div class="col-md-4"><div class="profile-slider" ui-slider data-tip min="1" max="10" ng-model="profile.satisfactions.personalGrowth"></div>
+      </div>
+    </div>
+        <div class="form-group">
+      <div class="col-md-2">Career
+      </div>
+      <div class="col-md-4"><div class="profile-slider" ui-slider data-tip min="1" max="10" ng-model="profile.satisfactions.career"></div>
+      </div>
+    </div>
+        <div class="form-group">
+      <div class="col-md-2">Family and Friends
+      </div>
+      <div class="col-md-4"><div class="profile-slider" ui-slider data-tip min="1" max="10" ng-model="profile.satisfactions.familyAndFriends"></div>
+      </div>
+    </div>
+        <div class="form-group">
+      <div class="col-md-2">Health
+      </div>
+      <div class="col-md-4"><div class="profile-slider" ui-slider data-tip min="1" max="10" ng-model="profile.satisfactions.health"></div>
+      </div>
+    </div>
+        <div class="form-group">
+      <div class="col-md-2">Physical Environment
+      </div>
+      <div class="col-md-4"><div class="profile-slider" ui-slider data-tip  min="1" max="10" ng-model="profile.satisfactions.physicalEnv"></div>
+      </div>
+    </div>
+        <div class="form-group">
+      <div class="col-md-2">Romance
+      </div>
+      <div class="col-md-4"><div class="profile-slider" ui-slider data-tip min="1" max="10" ng-model="profile.satisfactions.romance"></div>
+      </div>
+    </div>
+        <div class="form-group">
+      <div class="col-md-2">Money
+      </div>
+      <div class="col-md-4"><div class="profile-slider" ui-slider data-tip min="1" max="10" ng-model="profile.satisfactions.money"></div>
+      </div>
+    </div>
+        <div class="form-group">
+      <div class="col-md-2">Fun
+      </div>
+      <div class="col-md-4"><div class="profile-slider" ui-slider data-tip min="1" max="10" ng-model="profile.satisfactions.fun"></div>
+      </div>
+    </div>
+    <div></div>
+        <div class="form-group">
+          <input id="saveButton1" type="submit" class="btn btn-primary" value="Save" disabled="true">
+        </div>
+        <div ng-show="error" class="text-danger">
+          <strong ng-bind="error"></strong>
+        </div>
+      </fieldset>
+    </form>
+  </div>
 </section>
+
+<script type="text/javascript"> 
+$(function(){
+  $(".profile-slider").slider("disable");
+});
+var editProf = function(){
+  $(".profile-slider").slider("enable");
+  document.getElementById("editButton1").remove();
+  $("#saveButton1").attr('disabled', false);
+};
+</script>
