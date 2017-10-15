@@ -26,6 +26,11 @@ angular.module('profiles').config(['$stateProvider',
         data: {
           roles: ['user', 'admin']
         }
+      })
+      .state('admin.profile-view', {
+        url: '/profile/:userId',
+        templateUrl: 'modules/profiles/client/views/admin/view-profile-admin.client.view.html',
+        controller: 'AdminProfile'
       });
   }
 ]);
