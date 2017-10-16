@@ -126,9 +126,9 @@ angular.module('profiles').controller('ProfilesController', ['$scope', '$statePa
         };
 
         // Find the current user's profile
-        $scope.findOne = function () {
+        $scope.findOne = function (userId) {
             $scope.currentProfile = Profiles.get(
-                {user: $scope.authentication.user._id},
+                {user: userId},
                 
                 // Function for the view/edit profile view
                 // Needs to be here so that it only gets called after the get() query finishes

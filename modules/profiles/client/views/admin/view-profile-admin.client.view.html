@@ -1,0 +1,82 @@
+<section ng-controller="AdminProfile">
+  <div class="page-header">
+    <h1>Priorities and Satisfaction Ratings</h1>
+  </div>
+  <div class="col-md-12">
+    <form name="profileForm" class="form-horizontal">
+    <fieldset>
+      <h2>Priorities</h2>
+      <p>
+        Their current order of priorities.
+      </p>
+      <ul id="sort1" ui-sortable="sortablePriorities" class="profiles-list">
+        <li  ng-repeat="priority in prioritiesArray | orderBy:'rank'" class="profiles-list-element" ng-bind="priority.name"></li>
+      </ul>
+      <h2>Satisfactions</h2>
+      <p>
+        Their current satisfaction levels.
+      </p>
+
+      <div>
+        <div class="col-md-2">Personal Growth
+        </div>
+        <div class="col-md-4"><div class="profile-slider" ui-slider data-tip min="1" max="10" ng-model="profile.Satisfaction[0].Personal_Growth"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-2">Career
+        </div>
+        <div class="col-md-4"><div class="profile-slider" ui-slider data-tip min="1" max="10" ng-model="profile.Satisfaction[0].Career"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-2">Family and Friends
+        </div>
+        <div class="col-md-4"><div class="profile-slider" ui-slider data-tip min="1" max="10" ng-model="profile.Satisfaction[0].Family_and_Friends"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-2">Health
+        </div>
+        <div class="col-md-4"><div class="profile-slider" ui-slider data-tip min="1" max="10" ng-model="profile.Satisfaction[0].Health"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-2">Physical Environment
+        </div>
+        <div class="col-md-4"><div class="profile-slider" ui-slider data-tip  min="1" max="10" ng-model="profile.Satisfaction[0].Physical_Env"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-2">Romance
+        </div>
+        <div class="col-md-4"><div class="profile-slider" ui-slider data-tip min="1" max="10" ng-model="profile.Satisfaction[0].Romance"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-2">Money
+        </div>
+        <div class="col-md-4"><div class="profile-slider" ui-slider data-tip min="1" max="10" ng-model="profile.Satisfaction[0].Money"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-2">Fun
+        </div>
+        <div class="col-md-4"><div class="profile-slider" ui-slider data-tip min="1" max="10" ng-model="profile.Satisfaction[0].Fun"></div>
+        </div>
+      </div>
+      <div></div>
+      <div ng-show="error" class="text-danger">
+        <strong ng-bind="error"></strong>
+      </div>
+    </fieldset>
+    </form>
+  </div>
+</section>
+
+<script type="text/javascript">
+  $(function(){
+    $(".profile-slider").slider("disable");
+    $("#sort1").sortable("disable");
+  });
+</script>
