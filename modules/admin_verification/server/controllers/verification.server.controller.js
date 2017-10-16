@@ -43,6 +43,16 @@ exports.update = function (req, res) {
   });
 };
 
+exports.list = function(req, res) {
+  Verification.find().sort('code').exec(function(err, verifications) {
+    if(err) {
+      res.status(400).send(err);
+    } else {
+      res.json(verifications);
+    }
+  });
+};
+
 exports.verificationByCode = function (req, res, next, code) {
   Verification.findOne({ 'code': code }).exec(function (err, verification) {
     if (err) {

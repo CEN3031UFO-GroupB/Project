@@ -9,9 +9,9 @@ angular.module('verifications').config(['$stateProvider',
         url: '/verification',
         template: '<ui-view/>'
       })
-      .state('verification.enter', {
+      .state('verification.manage', {
         url: '/:verificationCode',
-        templateUrl: 'modules/admin_verification/client/views/enter-verification.client.view.html'
+        templateUrl: 'modules/admin_verification/client/views/manage-verification.client.view.html'
       });
   }
 ]);
