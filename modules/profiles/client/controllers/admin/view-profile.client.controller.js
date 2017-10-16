@@ -4,7 +4,7 @@ angular.module('profiles').controller('AdminProfile', ['$scope', '$stateParams',
   function ($scope, $stateParams, Authentication, Profiles) {
     $scope.authentication = Authentication;
     $scope.currentProfile = Profiles.get(
-      {user: $stateParams.userId},
+      { user: $stateParams.userId },
       function(prof) {
         $scope.profile = prof;
         console.log(JSON.stringify($scope.profile));
