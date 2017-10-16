@@ -37,7 +37,7 @@ exports.update = function (req, res) {
   var daysElapsed = Math.round(Math.abs((profile.last_modified.getTime() - (new Date()).getTime())/(oneDay)));
   if(daysElapsed < 7*12){
     return res.status(400).send({
-        message: 'Priorities and Satisfaction ratings can be updated every 12 weeks.'
+      message: 'Priorities and Satisfaction ratings can be updated every 12 weeks.'
     });
   }
 
