@@ -44,8 +44,8 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$stat
           $state.go('profile.create', $state.previous.params);
         }
         else{
-          $state.go('admin.users', $state.previous.params)
-        };
+          $state.go('admin.users', $state.previous.params);
+        }
         }).error(function (response) {
           $scope.error = response.message;
         });
