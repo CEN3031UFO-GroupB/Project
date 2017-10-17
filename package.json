@@ -17,7 +17,7 @@
   "scripts": {
     "start": "grunt --force",
     "test": "grunt test",
-    "postinstall": "bower install --config.interactive=false"
+    "postinstall": "bower install --config.interactive=false && grunt build"
   },
   "dependencies": {
     "acl": "~0.4.4",
