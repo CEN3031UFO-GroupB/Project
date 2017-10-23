@@ -6,9 +6,27 @@ angular.module('verifications').controller('VerificationsController', ['$scope',
       $scope.code = '';
       $scope.codeCreate = '';
 	  
+      $scope.buildPager = function () {
+        $scope.pagedItems = [];
+        $scope.itemsPerPage = 15;
+        $scope.currentPage = 1;
+      };
+	  
       Admin.query(function (data) {
         $scope.users = data;
+        $scope.buildPager();
       });
+	  
+	  $scope.figureOutItemsToDisplay = function () {
+        $scope.filterLength = $scope.veriList.length;
+        var begin = (($scope.currentPage - 1) * $scope.itemsPerPage);
+        var end = begin + $scope.itemsPerPage;
+        $scope.pagedItems = $scope.veriList.slice(begin, end);
+    };
+
+    $scope.pageChanged = function () {
+      $scope.figureOutItemsToDisplay();
+    };
 
       $scope.CheckVerification = function () {
         var code = $scope.code;
@@ -62,6 +80,7 @@ angular.module('verifications').controller('VerificationsController', ['$scope',
 			else
                 $scope.veriList[i].user_id = '';
 		}
+        $scope.figureOutItemsToDisplay();
         }, function (error) {
         });
       };

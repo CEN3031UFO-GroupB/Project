@@ -5,14 +5,14 @@
   
   <div class="col-md-12" ng-init="ListVerifications();">
     <div class="tableWrapper">
-      <table class="table table-striped table-hover">
+      <table st-table="pagedItems" class="table table-striped table-hover">
         <tr>
           <th>Code</th>
           <th>Active</th>
           <th>User</th>
           <th>Created</th>
         </tr>
-        <tr ng-repeat="verification in veriList">
+        <tr ng-repeat="verification in pagedItems">
           <td>{{verification.code}}</td>
           <td><span style='color: green;' ng-show="verification.active">Active</span><span style='color: red;' ng-show="!verification.active">Inactive</span></td>
           <td>{{verification.user_id}}</td>
@@ -20,6 +20,7 @@
         </tr>
       </table>
     </div>
+  <pagination boundary-links="true" max-size="8" items-per-page="itemsPerPage" total-items="filterLength" ng-model="currentPage" ng-change="pageChanged()"></pagination>
   </div>
   <div class="col-md-12">
     <form name="verificationCreateForm" class="form-horizontal" ng-submit="CreateVerification();">
