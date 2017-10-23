@@ -3,7 +3,7 @@
     <h1>Admin verification</h1>
   </div>
   
-  <div class="col-md-12" ng-init="ListVerifications();">
+  <div class="col-md-12">
     <div class="tableWrapper">
       <table st-table="pagedItems" class="table table-striped table-hover">
         <tr>
@@ -22,7 +22,7 @@
         </tr>
       </table>
     </div>
-  <pagination boundary-links="true" max-size="8" items-per-page="itemsPerPage" total-items="filterLength" ng-model="currentPage" ng-change="pageChanged()"></pagination>
+  <pagination boundary-links="true" max-size="8" items-per-page="itemsPerPage" total-items="itemLength" ng-model="currentPage" ng-change="pageChanged()"></pagination>
   </div>
   <div class="col-md-12">
     <form name="userVerificationCreateForm" class="form-horizontal" ng-submit="CreateUserVerification();">

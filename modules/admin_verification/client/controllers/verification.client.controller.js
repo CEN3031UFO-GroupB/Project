@@ -7,9 +7,9 @@ angular.module('verifications').controller('VerificationsController', ['$scope',
       $scope.codeCreate = '';
 	  
       $scope.buildPager = function () {
-        $scope.pagedItems = [];
         $scope.itemsPerPage = 15;
         $scope.currentPage = 1;
+		$scope.ListVerifications();
       };
 	  
       Admin.query(function (data) {
@@ -18,7 +18,7 @@ angular.module('verifications').controller('VerificationsController', ['$scope',
       });
 	  
 	  $scope.figureOutItemsToDisplay = function () {
-        $scope.filterLength = $scope.veriList.length;
+		  $scope.itemLength = $scope.veriList.length;
         var begin = (($scope.currentPage - 1) * $scope.itemsPerPage);
         var end = begin + $scope.itemsPerPage;
         $scope.pagedItems = $scope.veriList.slice(begin, end);
@@ -83,7 +83,6 @@ angular.module('verifications').controller('VerificationsController', ['$scope',
       $scope.ListVerifications = function () {
         Verifications.list().then(function (response) { 
 		$scope.veriList = response.data;
-
 		for(var i = 0; i < $scope.veriList.length; i++){
 			if($scope.veriList[i].user_id !== '-1' && $scope.veriList[i].user_id !== ''){
 				var index = $scope.users.findIndex(x => x._id === $scope.veriList[i].user_id);
