@@ -54,10 +54,23 @@ angular.module('verifications').controller('VerificationsController', ['$scope',
           });
       };
 		
-      $scope.CreateVerification = function () {
+      $scope.CreateUserVerification = function () {
         $scope.codeCreate = Math.random().toString(36).substring(6);
 		
-        Verifications.create({ 'code': $scope.codeCreate, 'user_id': '-1', 'active': true, 'created_at': new Date()
+        Verifications.create({ 'code': $scope.codeCreate, 'user_id': '-1', 'active': true, 'created_at': new Date(), 'type': 'user'
+		})
+		.then(function (response) { 
+		$scope.codeCreate = '';
+		$scope.ListVerifications();
+		}, function (error) {
+			
+		});
+      };
+	  
+	  $scope.CreateAdminVerification = function () {
+        $scope.codeCreate = Math.random().toString(36).substring(6);
+		
+        Verifications.create({ 'code': $scope.codeCreate, 'user_id': '-1', 'active': true, 'created_at': new Date(), 'type': 'admin'
 		})
 		.then(function (response) { 
 		$scope.codeCreate = '';
