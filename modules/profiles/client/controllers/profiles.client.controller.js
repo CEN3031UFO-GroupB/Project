@@ -165,8 +165,12 @@ angular.module('profiles').controller('ProfilesController', ['$scope', '$statePa
                     var dateOnProfile = new Date(s.last_modified);
                     var daysElapsed = Math.round(Math.abs((dateOnProfile.getTime() - (new Date()).getTime())/(oneDay)));
 
+                    // Check if the profile is less than 1 day old (grace period)
+                    var createdOn = new Date(s.created_on);
+                    var daysSinceCreated = Math.round(Math.abs((createdOn.getTime() - (new Date()).getTime())/(oneDay)));
+                    
                     // This variable will be used with ng-show on the view to indicate when it's time to update the profile
-                    $scope.profileCanChange = (daysElapsed >= 7*12);
+                    $scope.profileCanChange = (daysElapsed >= 7*12 || createdOn =< 1);
             });
         };
 
