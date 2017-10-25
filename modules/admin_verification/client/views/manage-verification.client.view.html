@@ -3,28 +3,39 @@
     <h1>Admin verification</h1>
   </div>
   
-  <div class="col-md-12" ng-init="ListVerifications();">
+  <div class="col-md-12">
     <div class="tableWrapper">
-      <table class="table table-striped table-hover">
+      <table st-table="pagedItems" class="table table-striped table-hover">
         <tr>
           <th>Code</th>
           <th>Active</th>
           <th>User</th>
           <th>Created</th>
+		  <th>Type</th>
         </tr>
-        <tr ng-repeat="verification in veriList">
+        <tr ng-repeat="verification in pagedItems">
           <td>{{verification.code}}</td>
           <td><span style='color: green;' ng-show="verification.active">Active</span><span style='color: red;' ng-show="!verification.active">Inactive</span></td>
           <td>{{verification.user_id}}</td>
           <td>{{verification.created_at}}</td>
+          <td>{{verification.type}}</td>
         </tr>
       </table>
     </div>
+  <pagination boundary-links="true" max-size="8" items-per-page="itemsPerPage" total-items="itemLength" ng-model="currentPage" ng-change="pageChanged()"></pagination>
   </div>
   <div class="col-md-12">
-    <form name="verificationCreateForm" class="form-horizontal" ng-submit="CreateVerification();">
+    <form name="userVerificationCreateForm" class="form-horizontal" ng-submit="CreateUserVerification();">
   	  <div class="form-group">
-  	    <input type="submit" class="btn btn-primary" value="Generate new Code">
+  	    <input type="submit" class="btn btn-primary" value="Generate new User Code">
+	  </div>
+	  <div ng-show="error" class="text-danger">
+	    <strong ng-bind="error"></strong>
+	  </div>
+    </form>
+	<form name="adminVerificationCreateForm" class="form-horizontal" ng-submit="CreateAdminVerification();">
+  	  <div class="form-group">
+  	    <input type="submit" class="btn btn-primary" value="Generate new Admin Code">
 	  </div>
 	  <div ng-show="error" class="text-danger">
 	    <strong ng-bind="error"></strong>

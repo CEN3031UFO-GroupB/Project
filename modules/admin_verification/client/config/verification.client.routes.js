@@ -6,7 +6,7 @@ angular.module('verifications').config(['$stateProvider',
     $stateProvider
       .state('verification', {
         abstract: true,
-        url: '/verification',
+        url: '/verification/manage',
         template: '<ui-view/>'
       })
       .state('verification.manage', {
