@@ -14,7 +14,8 @@ var VerificationSchema = new Schema({
   },
   user_id: String,
   active: Boolean,
-  created_at: Date
+  created_at: Date,
+  type: String
 });
 
 mongoose.model('Verification', VerificationSchema);

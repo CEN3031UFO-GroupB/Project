@@ -6,9 +6,27 @@ angular.module('verifications').controller('VerificationsController', ['$scope',
       $scope.code = '';
       $scope.codeCreate = '';
 	  
+      $scope.buildPager = function () {
+        $scope.itemsPerPage = 15;
+        $scope.currentPage = 1;
+		$scope.ListVerifications();
+      };
+	  
       Admin.query(function (data) {
         $scope.users = data;
+        $scope.buildPager();
       });
+	  
+	  $scope.figureOutItemsToDisplay = function () {
+		  $scope.itemLength = $scope.veriList.length;
+        var begin = (($scope.currentPage - 1) * $scope.itemsPerPage);
+        var end = begin + $scope.itemsPerPage;
+        $scope.pagedItems = $scope.veriList.slice(begin, end);
+    };
+
+    $scope.pageChanged = function () {
+      $scope.figureOutItemsToDisplay();
+    };
 
       $scope.CheckVerification = function () {
         var code = $scope.code;
@@ -36,10 +54,23 @@ angular.module('verifications').controller('VerificationsController', ['$scope',
           });
       };
 		
-      $scope.CreateVerification = function () {
+      $scope.CreateUserVerification = function () {
         $scope.codeCreate = Math.random().toString(36).substring(6);
 		
-        Verifications.create({ 'code': $scope.codeCreate, 'user_id': '-1', 'active': true, 'created_at': new Date()
+        Verifications.create({ 'code': $scope.codeCreate, 'user_id': '-1', 'active': true, 'created_at': new Date(), 'type': 'user'
+		})
+		.then(function (response) { 
+		$scope.codeCreate = '';
+		$scope.ListVerifications();
+		}, function (error) {
+			
+		});
+      };
+	  
+	  $scope.CreateAdminVerification = function () {
+        $scope.codeCreate = Math.random().toString(36).substring(6);
+		
+        Verifications.create({ 'code': $scope.codeCreate, 'user_id': '-1', 'active': true, 'created_at': new Date(), 'type': 'admin'
 		})
 		.then(function (response) { 
 		$scope.codeCreate = '';
@@ -52,7 +83,6 @@ angular.module('verifications').controller('VerificationsController', ['$scope',
       $scope.ListVerifications = function () {
         Verifications.list().then(function (response) { 
 		$scope.veriList = response.data;
-
 		for(var i = 0; i < $scope.veriList.length; i++){
 			if($scope.veriList[i].user_id !== '-1' && $scope.veriList[i].user_id !== ''){
 				var index = $scope.users.findIndex(x => x._id === $scope.veriList[i].user_id);
@@ -62,6 +92,7 @@ angular.module('verifications').controller('VerificationsController', ['$scope',
 			else
                 $scope.veriList[i].user_id = '';
 		}
+        $scope.figureOutItemsToDisplay();
         }, function (error) {
         });
       };
