@@ -19,6 +19,9 @@ angular.module('profiles').config(['$stateProvider',
       .state('profile.create', {
         url: '/create',
         templateUrl: 'modules/profiles/client/views/create-profile.client.view.html',
+        data: {
+          roles: ['user', 'admin']
+        }
       })
       .state('profile.edit', {
         url: '/edit',
