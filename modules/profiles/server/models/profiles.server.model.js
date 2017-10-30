@@ -8,9 +8,25 @@ var mongoose = require('mongoose'),
 
 /**
  * Profile Schema
+Family
+Health
+Rest and Relaxation
+Faith
+Finance
+Romance
+Friends
+Contribution
+Personal Growth
+Career
+Physical Environment
  */
+
 var ProfileSchema = new Schema({
   last_modified: {
+    type: Date,
+    default: Date.now
+  },
+  created_on: {
     type: Date,
     default: Date.now
   },
@@ -23,18 +39,22 @@ var ProfileSchema = new Schema({
     Romance: Number,
     Friends: Number,
     Contribution: Number,
-    Security: Number,
-    Personal_Growth: Number
-  }],
-  Satisfaction: [{
     Personal_Growth: Number,
     Career: Number,
-    Family_and_Friends: Number,
+    Physical_Environment: Number
+  }],
+  Satisfaction: [{
+    Family: Number,
     Health: Number,
-    Physical_Env: Number,
+    Rest_and_Relaxation: Number,
+    Faith: Number,
+    Finance: Number,
     Romance: Number,
-    Money: Number,
-    Fun: Number
+    Friends: Number,
+    Contribution: Number,
+    Personal_Growth: Number,
+    Career: Number,
+    Physical_Environment: Number
   }],
   user: {
     type: Schema.ObjectId,
