@@ -3,6 +3,7 @@
 angular.module('profiles').controller('AdminProfile', ['$scope', '$stateParams', 'Authentication', 'Profiles',
   function ($scope, $stateParams, Authentication, Profiles) {
     $scope.authentication = Authentication;
+	
     $scope.currentProfile = Profiles.get(
       { user: $stateParams.userId },
       function(prof) {
