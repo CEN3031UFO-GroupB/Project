@@ -61,4 +61,4 @@ var GoalsListSchema = new Schema({
 });
 
 mongoose.model('GoalsList', GoalsListSchema);
-mongoose.model('Goals', GoalsSchema);
+mongoose.model('Goal', GoalsSchema);
