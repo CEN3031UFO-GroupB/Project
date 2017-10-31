@@ -6,6 +6,7 @@
 var path = require('path'),
   mongoose = require('mongoose'),
   Goal = mongoose.model('Goal'),
+  GoalsList = mongoose.model('GoalsList'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   _ = require('lodash');
 
