@@ -10,6 +10,19 @@ var path = require('path'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   _ = require('lodash');
 
+
+function getThisMonday() {
+  d = new Date.now();
+  var day = d.getDay(),
+    diff = d.getDate() - day + (day == 0 ? -6:1);
+  return new Date(d.setDate(diff));
+}
+
+function getNextMonday() {
+  d = new Date.now();
+  return new Date(d.setDate(d.getDate() + 7));
+}
+
 /**
  * Create a Goal
  */
@@ -17,6 +30,7 @@ exports.create = function(req, res) {
   var goal = new Goal(req.body);
   goal.user = req.user;
 
+  //Create a goal in the goals collection
   goal.save(function(err) {
     if (err) {
       return res.status(400).send({
@@ -26,6 +40,17 @@ exports.create = function(req, res) {
       res.jsonp(goal);
     }
   });
+
+  //Append that goal to the user's list
+  GoalsList.findOneAndUpdate({user: goal.user}, {$push: {goals: goal}}).exec(function(err,goal){
+    if(err){
+      console.log(err);
+      return err;
+    } else if(goal){
+      console.log(goal);
+      return goal;
+    }
+  })
 };
 
 /**
@@ -79,9 +104,30 @@ exports.delete = function(req, res) {
 };
 
 /**
- * List of Goals
+ * List current Week's Goals
  */
 exports.list = function(req, res) {
+  GoalsList.find({goals: {
+    week_timestamp: {
+      $gte: getThisMonday(),
+      $lt: getNextMonday()
+    }
+  }
+}).populate('user', 'displayName').exec(function(err, goals) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      res.jsonp(goals);
+    }
+  });
+};
+
+/**
+ * List of All Goals
+ */
+exports.listAll = function(req, res) {
   Goal.find().sort('-created').populate('user', 'displayName').exec(function(err, goals) {
     if (err) {
       return res.status(400).send({
