@@ -77,9 +77,9 @@ exports.delete = function (req, res) {
 exports.list = function (req, res) {
   var userId = '';
   if(req.query.user)
-	  userId = req.query.user;
+    userId = req.query.user;
   else
-	  userId = req.user._id;
+    userId = req.user._id;
   Profile.findOne({ user: userId }).populate('user', 'displayName').exec(function (err, profile) {
     if (err) {
       return res.status(400).send({

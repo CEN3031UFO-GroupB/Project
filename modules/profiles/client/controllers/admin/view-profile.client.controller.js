@@ -16,8 +16,8 @@ angular.module('profiles').controller('AdminProfile', ['$scope', '$stateParams',
             });
           }
         });
-		$scope.Satisfaction = prof.Satisfaction[0];
-		$scope.user = prof.user.displayName;
+        $scope.Satisfaction = prof.Satisfaction[0];
+        $scope.user = prof.user.displayName;
       }
     );
   }
