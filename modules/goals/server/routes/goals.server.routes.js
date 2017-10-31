@@ -12,10 +12,6 @@ module.exports = function(app) {
     .get(goals.list)
     .post(goals.create);
 
-  app.route('/api/goals/future').all(goalsPolicy.isAllowed)
-    .get(goals.listNext)
-    .post(goals.create);
-
   app.route('/api/goals/:goalId').all(goalsPolicy.isAllowed)
     .get(goals.read)
     .put(goals.update)
