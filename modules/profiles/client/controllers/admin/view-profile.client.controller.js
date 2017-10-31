@@ -7,10 +7,8 @@ angular.module('profiles').controller('AdminProfile', ['$scope', '$stateParams',
     $scope.currentProfile = Profiles.get(
       { user: $stateParams.userId },
       function(prof) {
-        $scope.profile = prof;
-        console.log(JSON.stringify($scope.profile));
         $scope.prioritiesArray = [];
-        angular.forEach($scope.profile.Priority[0], function(value,key) {
+        angular.forEach(prof.Priority[0], function(value,key) {
           if(key !== '_id'){
             $scope.prioritiesArray.push({
               name: key.replace('_', ' ').replace('_', ' '),
@@ -18,6 +16,8 @@ angular.module('profiles').controller('AdminProfile', ['$scope', '$stateParams',
             });
           }
         });
+		$scope.Satisfaction = prof.Satisfaction[0];
+		$scope.user = prof.user.displayName;
       }
     );
   }
