@@ -75,7 +75,12 @@ exports.delete = function (req, res) {
  * Only lists the current user's profile
  */
 exports.list = function (req, res) {
-  Profile.findOne({ user: req.user._id }).populate('user', 'displayName').exec(function (err, profile) {
+  var userId = '';
+  if(req.query.user)
+    userId = req.query.user;
+  else
+    userId = req.user._id;
+  Profile.findOne({ user: userId }).populate('user', 'displayName').exec(function (err, profile) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
