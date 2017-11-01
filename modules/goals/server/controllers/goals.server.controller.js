@@ -42,11 +42,11 @@ exports.create = function(req, res) {
   });
 
   //Append that goal to the user's list
-  GoalsList.findOneAndUpdate({user: goal.user}, {$push: {goals: goal}}).exec(function(err,goal){
-    if(err){
+  GoalsList.findOneAndUpdate({user: goal.user}, {$push: {goals: goal}}, {upsert: true}).exec(function(err,goal) {
+    if(err) {
       console.log(err);
       return err;
-    } else if(goal){
+    } else if(goal) {
       console.log(goal);
       return goal;
     }
@@ -84,6 +84,8 @@ exports.update = function(req, res) {
       res.jsonp(goal);
     }
   });
+
+
 };
 
 /**
