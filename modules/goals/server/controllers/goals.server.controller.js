@@ -12,21 +12,19 @@ var path = require('path'),
 
 
 function getThisMonday() {
-  d = new Date();
+  var d = new Date();
   var day = d.getDay();
   var diff = d.getDate() - day + (day == 0 ? -6:1);
   var monday = new Date(d.setDate(diff));
-  monday.setHours(0,0,0,0);
-  return monday;
+  return monday.setHours(0,0,0,0);
 }
 
 function getNextMonday() {
-  d = new Date();
+  var d = new Date();
   var day = d.getDay() + 1;
   var diff = d.getDate() + day + (day == 0 ? -6:1);
   var monday = new Date(d.setDate(diff));
-  monday.setHours(0,0,0,0);
-  return monday;
+  return monday.setHours(0,0,0,0);
 }
 
 /**
@@ -35,7 +33,8 @@ function getNextMonday() {
 exports.create = function(req, res) {
   var goal = new Goal(req.body);
   goal.user = req.user;
-
+  goal.status = 'Not Started';
+  goal.week_timestamp = getThisMonday();
   //Create a goal in the goals collection
   goal.save(function(err) {
     if (err) {
