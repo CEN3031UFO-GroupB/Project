@@ -21,9 +21,7 @@
         </div>
         <div class="form-group col-sm-4" style="padding-left: 0">
           <label for="category">Category</label>
-          <select name="category" id="category" class="form-control" ng-model="categories" required>
-            <option ng-repeat="category in categories" value="{{category}}">{{category}}</option>
-          </select>
+          <select name="category" id="category" class="form-control" ng-options="category for category in categories" ng-model="vm.goal.category" required></select>
           <div ng-messages="vm.form.goalForm.category.$error" role="alert">
             <p class="help-block error-text" ng-message="required">Categorizing your goal is required.</p>
           </div>
