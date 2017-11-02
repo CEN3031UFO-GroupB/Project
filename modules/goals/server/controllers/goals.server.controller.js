@@ -111,22 +111,19 @@ exports.delete = function(req, res) {
 };
 
 /**
- * List current Week's Goals
+ * List User's Goals
  */
 exports.list = function(req, res) {
-  GoalsList.find({goals: {
-    week_timestamp: {
-      $gte: getThisMonday(),
-      $lt: getNextMonday()
-    }
-  }
-}).populate('user', 'displayName').exec(function(err, goals) {
+
+  GoalsList.find({user: req.user
+}).populate('goals.user', 'displayName').exec(function(err, goalsList) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      res.jsonp(goals);
+      console.log(goalsList);
+      res.jsonp(goalsList[0].goals);
     }
   });
 };

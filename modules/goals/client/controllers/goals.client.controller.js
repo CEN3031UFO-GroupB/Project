@@ -18,6 +18,10 @@
     vm.remove = remove;
     vm.save = save;
 
+    //Hard-coded categories. TODO: move them from the profiles controller into an injectable service
+    $scope.categories = ['Family', 'Health', 'Rest and Relaxation', 'Faith', 'Finance', 'Romance', 'Friends',
+                          'Contribution','Personal Growth', 'Career', 'Physical Environment'];
+
     // Remove existing Goal
     function remove() {
       if ($window.confirm('Are you sure you want to delete?')) {
