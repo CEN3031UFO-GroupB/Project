@@ -2,16 +2,33 @@
   <div class="page-header">
     <h1>{{vm.goal._id ? 'Edit Goal' : 'New Goal'}}</h1>
   </div>
-  <div class="col-md-12">
-    <form name="vm.form.goalForm" class="form-horizontal" ng-submit="vm.save(vm.form.goalForm.$valid)" novalidate>
+  <div class="col-md-8">
+    <form name="vm.form.goalForm" ng-submit="vm.save(vm.form.goalForm.$valid)" novalidate>
       <fieldset>
         <div class="form-group" show-errors>
-          <label class="control-label" for="name">Name</label>
-          <input name="name" type="text" ng-model="vm.goal.name" id="name" class="form-control" placeholder="Name" required>
+          <label class="control-label" for="title">Title</label>
+          <input name="name" type="text" ng-model="vm.goal.title" id="title" class="form-control" placeholder="Title" required>
           <div ng-messages="vm.form.goalForm.name.$error" role="alert">
             <p class="help-block error-text" ng-message="required">Goal name is required.</p>
           </div>
         </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="description">Description</label>
+          <input name="description" type="text" ng-model="vm.goal.description" id="description" class="form-control" placeholder="Description" required>
+          <div ng-messages="vm.form.goalForm.description.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">A brief description is required.</p>
+          </div>
+        </div>
+        <div class="form-group col-sm-4" style="padding-left: 0">
+          <label for="category">Category</label>
+          <select name="category" id="category" class="form-control" ng-model="categories" required>
+            <option ng-repeat="category in categories" value="{{category}}">{{category}}</option>
+          </select>
+          <div ng-messages="vm.form.goalForm.category.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Categorizing your goal is required.</p>
+          </div>
+        </div>
+        <div class="clearfix"></div>
         <div class="form-group">
           <button type="submit" class="btn btn-default">{{vm.goal._id ? 'Update' : 'Create'}}</button>
         </div>
