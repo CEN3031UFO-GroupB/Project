@@ -46,6 +46,9 @@ var GoalsSchema = new Schema({
   week_timestamp: {
     type: Date,
     default: Date.now
+  },
+  ranking: {
+    type: String
   }
 });
 
