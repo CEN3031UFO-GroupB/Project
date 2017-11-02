@@ -2,22 +2,28 @@
   <div class="page-header">
     <h1>Goals</h1>
   </div>
-  <div class="list-group">
-    <ul ng-repeat="(key, value) in vm.goals | groupBy: 'status'">
-      {{key}}
-      <a ng-repeat="goal in value"
-         ui-sref="goals.view({ goalId: goal._id })"
-         class="list-group-item">
-        <small class="list-group-item-text">
+
+  <div class="list-group ">
+    <label>Not Started</label>
+    <a ng-repeat="goal in vm.goals"
+       ng-if="goal.status == 'Not Started'"
+       ui-sref="goals.view({ goalId: goal._id })"
+       class="list-group-item row">
+      <div class="col-md-8">
+        <small class="list-group-item-text" style="display:block">
           Created on
           <span ng-bind="goal.created_at | date:'mediumDate'"></span>
           by
           <span ng-if="goal.user" ng-bind="goal.user.displayName"></span>
           <span ng-if="!goal.user">Deleted User</span>
         </small>
-        <h4 class="list-group-item-heading" ng-bind="goal.title"></h4>
-      </a>
-    </ul>
+        <h4 class="list-group-item-heading" style="display:inline">{{goal.title}} </h4>
+        <h4 class="list-group-item-heading" style="display:inline">({{goal.category}})</h4>
+      </div>
+      <div class="col-md-4">
+        <button class="btn" style="float:right" ng-click="changeStatus()">I've started!</button>
+      </div>
+    </a>
   </div>
   <div class="alert alert-warning text-center" ng-if="vm.goals.$resolved && !vm.goals.length">
     No Goals yet, why don't you <a ui-sref="goals.create">create one</a>?
