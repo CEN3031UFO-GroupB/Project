@@ -81,7 +81,8 @@ exports.delete = function(req, res) {
  * List of Rewards
  */
 exports.list = function(req, res) {
-  Reward.find().sort('-created').populate('user', 'displayName').exec(function(err, rewards) {
+  var userId = req.user._id;
+  Reward.find({user: userId}).sort('-created').populate('user', 'displayName').exec(function(err, rewards) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)

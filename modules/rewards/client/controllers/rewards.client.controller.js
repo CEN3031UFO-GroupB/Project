@@ -17,6 +17,7 @@
     vm.form = {};
     vm.remove = remove;
     vm.save = save;
+    vm.claim = claim;
 
     // Remove existing Reward
     function remove() {
@@ -25,8 +26,20 @@
       }
     }
 
-    function list() {
-      vm.rewards = vm.reward.findAll({user: userId});
+    function claim() {
+      vm.reward.claimed = true;
+      vm.reward.$update(successCallback, errorCallback);
+
+      function successCallback(res) {
+        $state.go('rewards.list', {
+          rewardId: res._id
+        });
+      }
+
+      function errorCallback(res) {
+        vm.error = res.data.message;
+      }
+
     }
 
     // Save Reward

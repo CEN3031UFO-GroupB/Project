@@ -20,10 +20,15 @@ var RewardSchema = new Schema({
     type: Date,
     default: Date.now
   },
+  claimed: {
+    type: Boolean,
+    default: false
+  },
   user: {
     type: Schema.ObjectId,
     ref: 'User'
   }
 });
+
 
 mongoose.model('Reward', RewardSchema);
