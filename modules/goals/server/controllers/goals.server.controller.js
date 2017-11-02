@@ -12,15 +12,21 @@ var path = require('path'),
 
 
 function getThisMonday() {
-  d = new Date.now();
-  var day = d.getDay(),
-    diff = d.getDate() - day + (day == 0 ? -6:1);
-  return new Date(d.setDate(diff));
+  d = new Date();
+  var day = d.getDay();
+  var diff = d.getDate() - day + (day == 0 ? -6:1);
+  var monday = new Date(d.setDate(diff));
+  monday.setHours(0,0,0,0);
+  return monday;
 }
 
 function getNextMonday() {
-  d = new Date.now();
-  return new Date(d.setDate(d.getDate() + 7));
+  d = new Date();
+  var day = d.getDay() + 1;
+  var diff = d.getDate() + day + (day == 0 ? -6:1);
+  var monday = new Date(d.setDate(diff));
+  monday.setHours(0,0,0,0);
+  return monday;
 }
 
 /**
