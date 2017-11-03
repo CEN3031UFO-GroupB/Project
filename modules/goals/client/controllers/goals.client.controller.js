@@ -20,7 +20,7 @@
 
     //Hard-coded categories. TODO: move them from the profiles controller into an injectable service
     $scope.categories = ['Family', 'Health', 'Rest and Relaxation', 'Faith', 'Finance', 'Romance', 'Friends',
-                          'Contribution','Personal Growth', 'Career', 'Physical Environment'];
+                          'Contribution', 'Personal Growth', 'Career', 'Physical Environment'];
 
     // Remove existing Goal
     function remove() {
@@ -29,6 +29,10 @@
       }
     }
 
+    $scope.cancel = function() {
+      $state.go('goals.list');
+    };
+
     // Save Goal
     function save(isValid) {
       if (!isValid) {
@@ -36,15 +40,14 @@
         return false;
       }
 
-      // TODO: move create/update logic to service
-      if (vm.goal._id) {
-        vm.goal.$update(successCallback, errorCallback);
-      } else {
-        vm.goal.$save(successCallback, errorCallback);
-      }
+      //Create or update a goal using the GoalsService
+      vm.goal.createOrUpdate()
+        .then(successCallback)
+        .catch(errorCallback);
+
 
       function successCallback(res) {
-        $state.go('goals.view', {
+        $state.go('goals.list', {
           goalId: res._id
         });
       }
