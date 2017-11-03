@@ -123,12 +123,6 @@ exports.list = function(req, res) {
       });
     } else {
       var goalsFinal = goalsList[0].goals;
-      goalsFinal.forEach(function(gl) {
-        var time = new Date(gl.week_timestamp);
-        time = time.getTime()/1000;
-        gl.week_timestamp = time;
-      });
-
       res.jsonp(goalsList[0].goals);
     }
   });
