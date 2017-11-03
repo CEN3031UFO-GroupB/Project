@@ -64,10 +64,9 @@ exports.create = function(req, res) {
 exports.read = function(req, res) {
   // convert mongoose document to JSON
   var goal = req.goal ? req.goal.toJSON() : {};
-
   // Add a custom field to the Article, for determining if the current User is the "owner".
   // NOTE: This field is NOT persisted to the database, since it doesn't exist in the Article model.
-  goal.isCurrentUserOwner = req.user && goal.user && goal.user._id.toString() === req.user._id.toString();
+  goal.isCurrentUserOwner = req.user && goal.user && goal.user.toString() === req.user._id.toString();
 
   res.jsonp(goal);
 };
@@ -79,14 +78,15 @@ exports.update = function(req, res) {
   var goal = req.goal;
 
   goal = _.extend(goal, req.body);
-
-  goal.save(function(err) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      res.jsonp(goal);
+  console.log("Attempting to update");
+  GoalsList.findOneAndUpdate({ user: goal.user, "goals._id": goal._id }, { "$set": { "goals.$": goal } }).exec(function(err,goal) {
+    if(err) {
+      console.log(err);
+      return err;
+    } else if(goal) {
+      console.log(goal);
+      console.log("Successfully updated!");
+      return goal;
     }
   });
 
@@ -116,13 +116,19 @@ exports.delete = function(req, res) {
 exports.list = function(req, res) {
 
   GoalsList.find({user: req.user
-}).populate('goals.user', 'displayName').exec(function(err, goalsList) {
+  }).populate('goals.user', 'displayName').exec(function(err, goalsList) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      console.log(goalsList);
+      var goalsFinal = goalsList[0].goals;
+      goalsFinal.forEach(function(gl) {
+        var time = new Date(gl.week_timestamp);
+        time = time.getTime()/1000;
+        gl.week_timestamp = time;
+      });
+
       res.jsonp(goalsList[0].goals);
     }
   });
@@ -148,13 +154,14 @@ exports.listAll = function(req, res) {
  */
 exports.goalByID = function(req, res, next, id) {
 
+  console.log('Attempting to find goalById for ID:'+id);
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({
       message: 'Goal is invalid'
     });
   }
 
-  Goal.findById(id).populate('user', 'displayName').exec(function (err, goal) {
+  GoalsList.find({ "goals._id": id }).populate('goals.user', 'displayName').exec(function (err, goal) {
     if (err) {
       return next(err);
     } else if (!goal) {
@@ -162,7 +169,7 @@ exports.goalByID = function(req, res, next, id) {
         message: 'No Goal with that identifier has been found'
       });
     }
-    req.goal = goal;
+    req.goal = goal[0].goals.filter(function(el) {return el._id == id})[0];
     next();
   });
 };
