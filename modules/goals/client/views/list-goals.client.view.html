@@ -1,13 +1,13 @@
 <section>
-  <div class="page-header">
-    <h1>Goals</h1>
+  <div class="page-header row">
+    <h1 class="col-md-4">Goals</h1>
+    <button class="btn btn-default" style="float:right;margin-top: 25px;" ng-click="createGoal()">New Goal</button>
   </div>
 
   <div class="list-group ">
-    <label>Not Started</label>
+    <label>Complete</label>
     <a ng-repeat="goal in vm.goals"
-       ng-if="goal.status == 'Not Started'"
-       ui-sref="goals.view({ goalId: goal._id })"
+       ng-if="goal.status == 'Complete'"
        class="list-group-item row">
       <div class="col-md-8">
         <small class="list-group-item-text" style="display:block">
@@ -20,8 +20,58 @@
         <h4 class="list-group-item-heading" style="display:inline">{{goal.title}} </h4>
         <h4 class="list-group-item-heading" style="display:inline">({{goal.category}})</h4>
       </div>
-      <div class="col-md-4">
-        <button class="btn" style="float:right" ng-click="changeStatus()">I've started!</button>
+      <div class="col-md-2">
+        <button class="btn btn-info" style="float:right" ui-sref="goals.view({ goalId: goal._id })">View</button>
+      </div>
+    </a>
+  </div>
+
+  <div class="list-group ">
+    <label>In Progress</label>
+    <a ng-repeat="goal in vm.goals"
+       ng-if="goal.status == 'In Progress'"
+       class="list-group-item row">
+      <div class="col-md-8">
+        <small class="list-group-item-text" style="display:block">
+          Created on
+          <span ng-bind="goal.created_at | date:'mediumDate'"></span>
+          by
+          <span ng-if="goal.user" ng-bind="goal.user.displayName"></span>
+          <span ng-if="!goal.user">Deleted User</span>
+        </small>
+        <h4 class="list-group-item-heading" style="display:inline">{{goal.title}} </h4>
+        <h4 class="list-group-item-heading" style="display:inline">({{goal.category}})</h4>
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-info" style="float:right" ui-sref="goals.view({ goalId: goal._id })">View</button>
+      </div>
+      <div class="col-md-2">
+        <button class="btn" style="float:right" ng-click="markGoalComplete(goal)">I'm Done!</button>
+      </div>
+    </a>
+  </div>
+
+  <div class="list-group ">
+    <label>Not Started</label>
+    <a ng-repeat="goal in vm.goals"
+       ng-if="(goal.status == 'Not Started')"
+       class="list-group-item row">
+      <div class="col-md-8">
+        <small class="list-group-item-text" style="display:block">
+          Created on
+          <span ng-bind="goal.created_at | date:'mediumDate'"></span>
+          by
+          <span ng-if="goal.user" ng-bind="goal.user.displayName"></span>
+          <span ng-if="!goal.user">Deleted User</span>
+        </small>
+        <h4 class="list-group-item-heading" style="display:inline">{{goal.title}} </h4>
+        <h4 class="list-group-item-heading" style="display:inline">({{goal.category}})</h4>
+      </div>
+      <div class="col-md-2">
+          <button class="btn btn-info" style="float:right" ui-sref="goals.view({ goalId: goal._id })">View</button>
+      </div>
+      <div class="col-md-2">
+        <button class="btn" style="float:right" ng-click="markGoalInProgress(goal)">I've started!</button>
       </div>
     </a>
   </div>
