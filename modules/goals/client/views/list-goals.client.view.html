@@ -1,13 +1,15 @@
 <section>
   <div class="page-header row">
-    <h1 class="col-md-4">Goals</h1>
+    <h1 class="col-md-8">Goals</h1>
     <button class="btn btn-default" style="float:right;margin-top: 25px;" ng-click="createGoal()">New Goal</button>
+    <div class="clearfix"></div>
+    <h5 style="font-style: italic; padding-left: 10px">{{diffDays}} days left to finish your goals</h5>
   </div>
 
   <div class="list-group ">
     <label>Complete</label>
     <a ng-repeat="goal in vm.goals"
-       ng-if="goal.status == 'Complete'"
+       ng-if="(goal.status == 'Complete')  && ((goal.week_timestamp | date:'dd/MM/yyyy') == (monday | date:'dd/MM/yyyy'))"
        class="list-group-item row">
       <div class="col-md-8">
         <small class="list-group-item-text" style="display:block">
@@ -29,7 +31,7 @@
   <div class="list-group ">
     <label>In Progress</label>
     <a ng-repeat="goal in vm.goals"
-       ng-if="goal.status == 'In Progress'"
+       ng-if="(goal.status == 'In Progress') && ((goal.week_timestamp | date:'dd/MM/yyyy') == (monday | date:'dd/MM/yyyy'))"
        class="list-group-item row">
       <div class="col-md-8">
         <small class="list-group-item-text" style="display:block">
@@ -54,7 +56,7 @@
   <div class="list-group ">
     <label>Not Started</label>
     <a ng-repeat="goal in vm.goals"
-       ng-if="(goal.status == 'Not Started')"
+       ng-if="(goal.status == 'Not Started') && ((goal.week_timestamp | date:'dd/MM/yyyy') == (monday | date:'dd/MM/yyyy'))"
        class="list-group-item row">
       <div class="col-md-8">
         <small class="list-group-item-text" style="display:block">
@@ -75,6 +77,34 @@
       </div>
     </a>
   </div>
+
+  <hr>
+
+  <div class="list-group ">
+    <h3>Previous Goals</h3>
+    <a ng-repeat="goal in vm.goals"
+       ng-if="(goal.week_timestamp | date:'dd/MM/yyyy') < (monday | date:'dd/MM/yyyy')"
+       class="list-group-item row">
+      <div class="col-md-8">
+        <small class="list-group-item-text" style="display:block">
+          Created on
+          <span ng-bind="goal.created_at | date:'mediumDate'"></span>
+          by
+          <span ng-if="goal.user" ng-bind="goal.user.displayName"></span>
+          <span ng-if="!goal.user">Deleted User</span>
+        </small>
+        <h4 class="list-group-item-heading" style="display:inline">{{goal.title}} </h4>
+        <h4 class="list-group-item-heading" style="display:inline">({{goal.category}})</h4>
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-info" style="float:right" ui-sref="goals.view({ goalId: goal._id })">View</button>
+      </div>
+      <div class="col-md-2">
+        <h5 style="float:right; font-weight: bolder">{{goal.status}}</h5>
+      </div>
+    </a>
+  </div>
+
   <div class="alert alert-warning text-center" ng-if="vm.goals.$resolved && !vm.goals.length">
     No Goals yet, why don't you <a ui-sref="goals.create">create one</a>?
   </div>
