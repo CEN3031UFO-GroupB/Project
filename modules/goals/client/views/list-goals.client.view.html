@@ -11,7 +11,7 @@
     <a ng-repeat="goal in vm.goals"
        ng-if="(goal.status == 'Complete')  && ((goal.week_timestamp | date:'dd/MM/yyyy') == (monday | date:'dd/MM/yyyy'))"
        class="list-group-item row">
-      <div class="col-md-8">
+      <div class="col-md-5">
         <small class="list-group-item-text" style="display:block">
           Created on
           <span ng-bind="goal.created_at | date:'mediumDate'"></span>
@@ -22,6 +22,9 @@
         <h4 class="list-group-item-heading" style="display:inline">{{goal.title}} </h4>
         <h4 class="list-group-item-heading" style="display:inline">({{goal.category}})</h4>
       </div>
+	  <div class="col-md-3">
+		{{goal.priority}}
+	  </div>
       <div class="col-md-2">
         <button class="btn btn-info" style="float:right" ui-sref="goals.view({ goalId: goal._id })">View</button>
       </div>
@@ -33,7 +36,7 @@
     <a ng-repeat="goal in vm.goals"
        ng-if="(goal.status == 'In Progress') && ((goal.week_timestamp | date:'dd/MM/yyyy') == (monday | date:'dd/MM/yyyy'))"
        class="list-group-item row">
-      <div class="col-md-8">
+      <div class="col-md-5">
         <small class="list-group-item-text" style="display:block">
           Created on
           <span ng-bind="goal.created_at | date:'mediumDate'"></span>
@@ -44,6 +47,9 @@
         <h4 class="list-group-item-heading" style="display:inline">{{goal.title}} </h4>
         <h4 class="list-group-item-heading" style="display:inline">({{goal.category}})</h4>
       </div>
+	  <div class="col-md-3">
+		{{goal.priority}}
+	  </div>
       <div class="col-md-2">
         <button class="btn btn-info" style="float:right" ui-sref="goals.view({ goalId: goal._id })">View</button>
       </div>
@@ -58,7 +64,7 @@
     <a ng-repeat="goal in vm.goals"
        ng-if="(goal.status == 'Not Started') && ((goal.week_timestamp | date:'dd/MM/yyyy') == (monday | date:'dd/MM/yyyy'))"
        class="list-group-item row">
-      <div class="col-md-8">
+      <div class="col-md-5">
         <small class="list-group-item-text" style="display:block">
           Created on
           <span ng-bind="goal.created_at | date:'mediumDate'"></span>
@@ -69,6 +75,9 @@
         <h4 class="list-group-item-heading" style="display:inline">{{goal.title}} </h4>
         <h4 class="list-group-item-heading" style="display:inline">({{goal.category}})</h4>
       </div>
+	  <div class="col-md-3">
+		{{goal.priority}}
+	  </div>
       <div class="col-md-2">
           <button class="btn btn-info" style="float:right" ui-sref="goals.view({ goalId: goal._id })">View</button>
       </div>
@@ -85,7 +94,7 @@
     <a ng-repeat="goal in vm.goals"
        ng-if="(goal.week_timestamp | date:'dd/MM/yyyy') < (monday | date:'dd/MM/yyyy')"
        class="list-group-item row">
-      <div class="col-md-8">
+      <div class="col-md-5">
         <small class="list-group-item-text" style="display:block">
           Created on
           <span ng-bind="goal.created_at | date:'mediumDate'"></span>
@@ -96,6 +105,9 @@
         <h4 class="list-group-item-heading" style="display:inline">{{goal.title}} </h4>
         <h4 class="list-group-item-heading" style="display:inline">({{goal.category}})</h4>
       </div>
+	  <div class="col-md-3">
+		{{goal.priority}}
+	  </div>
       <div class="col-md-2">
         <button class="btn btn-info" style="float:right" ui-sref="goals.view({ goalId: goal._id })">View</button>
       </div>
