@@ -14,7 +14,7 @@ var path = require('path'),
 function getThisMonday() {
   var d = new Date();
   var day = d.getDay();
-  var diff = d.getDate() - day + (day == 0 ? -6:1);
+  var diff = d.getDate() - day + (day === 0 ? -6:1);
   var monday = new Date(d.setDate(diff));
   return monday.setHours(0,0,0,0);
 }
@@ -22,7 +22,7 @@ function getThisMonday() {
 function getNextMonday() {
   var d = new Date();
   var day = d.getDay() + 1;
-  var diff = d.getDate() + day + (day == 0 ? -6:1);
+  var diff = d.getDate() + day + (day === 0 ? -6:1);
   var monday = new Date(d.setDate(diff));
   return monday.setHours(0,0,0,0);
 }
@@ -47,7 +47,7 @@ exports.create = function(req, res) {
   });
 
   //Append that goal to the user's list
-  GoalsList.findOneAndUpdate({user: goal.user}, {$push: {goals: goal}}, {upsert: true}).exec(function(err,goal) {
+  GoalsList.findOneAndUpdate({ user: goal.user }, { $push: { goals: goal } }, { upsert: true }).exec(function(err,goal) {
     if(err) {
       console.log(err);
       return err;
@@ -55,7 +55,7 @@ exports.create = function(req, res) {
       console.log(goal);
       return goal;
     }
-  })
+  });
 };
 
 /**
@@ -78,14 +78,14 @@ exports.update = function(req, res) {
   var goal = req.goal;
 
   goal = _.extend(goal, req.body);
-  console.log("Attempting to update");
-  GoalsList.findOneAndUpdate({ user: goal.user, "goals._id": goal._id }, { "$set": { "goals.$": goal } }).exec(function(err,goal) {
+  console.log('Attempting to update');
+  GoalsList.findOneAndUpdate({ user: goal.user, 'goals._id': goal._id }, { '$set': { 'goals.$': goal } }).exec(function(err,goal) {
     if(err) {
       console.log(err);
       return err;
     } else if(goal) {
       console.log(goal);
-      console.log("Successfully updated!");
+      console.log('Successfully updated!');
       return goal;
     }
   });
@@ -99,7 +99,7 @@ exports.update = function(req, res) {
 exports.delete = function(req, res) {
   var goal = req.goal;
   console.log(JSON.stringify(goal));
-  GoalsList.findOneAndUpdate({ user: goal.user }, { "$pull": { goals: { _id: goal._id } } }).exec(function(err,goal) {
+  GoalsList.findOneAndUpdate({ user: goal.user }, { '$pull': { goals: { _id: goal._id } } }).exec(function(err,goal) {
     if(err) {
       console.log(err);
     } else if(goal) {
@@ -113,7 +113,7 @@ exports.delete = function(req, res) {
  */
 exports.list = function(req, res) {
 
-  GoalsList.find({user: req.user
+  GoalsList.find({ user: req.user
   }).populate('goals.user', 'displayName').exec(function(err, goalsList) {
     if (err) {
       return res.status(400).send({
@@ -142,7 +142,7 @@ exports.goalByID = function(req, res, next, id) {
     });
   }
 
-  GoalsList.find({ "goals._id": id }).populate('goals.user', 'displayName').exec(function (err, goal) {
+  GoalsList.find({ 'goals._id': id }).populate('goals.user', 'displayName').exec(function (err, goal) {
     if (err) {
       return next(err);
     } else if (!goal) {
@@ -150,7 +150,7 @@ exports.goalByID = function(req, res, next, id) {
         message: 'No Goal with that identifier has been found'
       });
     }
-    req.goal = goal[0].goals.filter(function(el) {return el._id == id})[0];
+    req.goal = goal[0].goals.filter(function(el) {return el._id === id;})[0];
     next();
   });
 };
