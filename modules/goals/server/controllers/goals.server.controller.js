@@ -94,18 +94,16 @@ exports.update = function(req, res) {
 };
 
 /**
- * Delete an Goal
+ * Delete a Goal
  */
 exports.delete = function(req, res) {
   var goal = req.goal;
-
-  goal.remove(function(err) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      res.jsonp(goal);
+  console.log(JSON.stringify(goal));
+  GoalsList.findOneAndUpdate({ user: goal.user }, { "$pull": { goals: { _id: goal._id } } }).exec(function(err,goal) {
+    if(err) {
+      console.log(err);
+    } else if(goal) {
+      res.json({ success: true, msg: 'Goal deleted' });
     }
   });
 };
@@ -122,26 +120,15 @@ exports.list = function(req, res) {
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      var goalsFinal = goalsList[0].goals;
-      res.jsonp(goalsList[0].goals);
+      if (goalsList[0] === undefined) {
+        res.jsonp(goalsList);
+      } else {
+        res.jsonp(goalsList[0].goals);
+      }
     }
   });
 };
 
-/**
- * List of All Goals
- */
-exports.listAll = function(req, res) {
-  Goal.find().sort('-created').populate('user', 'displayName').exec(function(err, goals) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      res.jsonp(goals);
-    }
-  });
-};
 
 /**
  * Goal middleware
