@@ -57,9 +57,7 @@
       }
 
       function successCallback(res) {
-        $state.go('rewards.view', {
-          rewardId: res._id
-        });
+        $state.go('rewards.list');
       }
 
       function errorCallback(res) {
