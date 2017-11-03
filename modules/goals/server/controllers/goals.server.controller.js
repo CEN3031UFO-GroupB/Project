@@ -7,6 +7,7 @@ var path = require('path'),
   mongoose = require('mongoose'),
   Goal = mongoose.model('Goal'),
   GoalsList = mongoose.model('GoalsList'),
+  schedule = require('node-schedule'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   _ = require('lodash');
 
@@ -154,3 +155,14 @@ exports.goalByID = function(req, res, next, id) {
     next();
   });
 };
+
+
+//Function to run weekly, every Wednesday, to notify users of upcoming goals.
+//Notifications will be sent via MailGun to the users' email.
+//Cron-style scheduling: '* * 15 * * 3', i.e. every Wednesday at 3 pm.
+var rule = new schedule.RecurrenceRule();
+rule.second = 10; //Execute function whenever it is 10 seconds into the minute for testing.
+
+var weeklyGoalsNotifications = schedule.scheduleJob(rule, function(){
+  console.log('Job executing!');
+});
