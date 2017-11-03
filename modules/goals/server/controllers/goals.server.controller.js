@@ -14,7 +14,7 @@ var path = require('path'),
 function getThisMonday() {
   var d = new Date();
   var day = d.getDay();
-  var diff = d.getDate() - day + (day === 0 ? -6:1);
+  var diff = d.getDate() - day + (day == 0 ? -6:1);
   var monday = new Date(d.setDate(diff));
   return monday.setHours(0,0,0,0);
 }
@@ -22,7 +22,7 @@ function getThisMonday() {
 function getNextMonday() {
   var d = new Date();
   var day = d.getDay() + 1;
-  var diff = d.getDate() + day + (day === 0 ? -6:1);
+  var diff = d.getDate() + day + (day == 0 ? -6:1);
   var monday = new Date(d.setDate(diff));
   return monday.setHours(0,0,0,0);
 }
@@ -66,7 +66,7 @@ exports.read = function(req, res) {
   var goal = req.goal ? req.goal.toJSON() : {};
   // Add a custom field to the Article, for determining if the current User is the "owner".
   // NOTE: This field is NOT persisted to the database, since it doesn't exist in the Article model.
-  goal.isCurrentUserOwner = req.user && goal.user && goal.user.toString() === req.user._id.toString();
+  goal.isCurrentUserOwner = req.user && goal.user && goal.user.toString() == req.user._id.toString();
 
   res.jsonp(goal);
 };
@@ -150,7 +150,7 @@ exports.goalByID = function(req, res, next, id) {
         message: 'No Goal with that identifier has been found'
       });
     }
-    req.goal = goal[0].goals.filter(function(el) {return el._id === id;})[0];
+    req.goal = goal[0].goals.filter(function(el) {return el._id == id;})[0];
     next();
   });
 };

@@ -35,7 +35,7 @@
     function getThisMonday () {
       var d = new Date();
       var day = d.getDay();
-      var diff = d.getDate() - day + (day === 0 ? -6:1);
+      var diff = d.getDate() - day + (day == 0 ? -6:1);
       var monday = new Date(d.setDate(diff));
       monday.setHours(0, 0, 0, 0);
       return monday;
