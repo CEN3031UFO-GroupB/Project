@@ -46,7 +46,7 @@
         },
         data: {
           roles: ['user', 'admin'],
-          pageTitle: 'Edit Goal {{ goalResolve.name }}'
+          pageTitle: 'Edit Goal {{ goalResolve.title }}'
         }
       })
       .state('goals.view', {
@@ -58,7 +58,7 @@
           goalResolve: getGoal
         },
         data: {
-          pageTitle: 'Goal {{ goalResolve.name }}'
+          pageTitle: 'Goal {{ goalResolve.title }}'
         }
       });
   }
