@@ -20,6 +20,10 @@
       return monday;
     }
     $scope.monday = getThisMonday();
+    var today = new Date();
+    var timeDiff = Math.abs(today.getTime() - $scope.monday.getTime());
+    $scope.diffDays = 7 - Math.ceil(timeDiff / (1000 * 3600 * 24));
+
 
     $scope.status = ['Complete', 'In Progress', 'Not Started'];
 
