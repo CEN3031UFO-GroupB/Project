@@ -10,7 +10,8 @@ var path = require('path'),
   User = mongoose.model('User'),
   schedule = require('node-schedule'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
-  _ = require('lodash');
+  _ = require('lodash'),
+  mailgun = require('mailgun-js')({apiKey: 'key-8d0e07bc2e0f0c6332233b23a8242850', domain: 'sandboxb26a50f3d0844386a5071d5431553e72.mailgun.org'});
 
 
 function getThisMonday() {
@@ -162,7 +163,7 @@ exports.goalByID = function(req, res, next, id) {
 //Notifications will be sent via MailGun to the users' email.
 //Cron-style scheduling: '* * 15 * * 3', i.e. every Wednesday at 3 pm.
 var rule = new schedule.RecurrenceRule();
-rule.minute = 17; //Execute function whenever it is 17 minutes into the hour for testing.
+rule.hour = 10; //Execute function whenever it is 10 minutes into the hour for testing.
 
 var weeklyGoalsNotifications = schedule.scheduleJob(rule, function(){
   console.log('Sending goal reminders!');	
@@ -184,14 +185,34 @@ var weeklyGoalsNotifications = schedule.scheduleJob(rule, function(){
             for(var j = 0; j < goals.length; j++) {
               var goal = goals[j]._doc;
 
-              if(goal.week_timestamp.getTime() === currentMonday)
+			  //Only check for goals which have not yet been completed
+              if(goal.week_timestamp.getTime() === currentMonday && goal.status !== 'Complete')
                 goalsToNotify.push(goal);
             }
 			
             //If there are current goals, send an email
             if(goalsToNotify.length > 0) {
               console.log('Sending reminder to ' + userObj.email + '!');	
-              
+			  
+			  var body = 'Hi ' + userObj.displayName + ',\n';
+              body += 'there are still some goals which have not been finished this week:\n\n';
+			  
+			  for(var k = 0; k < goalsToNotify.length; k++) {
+			    body += '- ' + goalsToNotify[k].title + ' (' + goalsToNotify[k].category + ')\n';
+			  }
+			  
+			  body += '\n\n Have a great week!';
+			  
+              var data = {
+                from: 'Sandra Roach <mailgun@sandboxb26a50f3d0844386a5071d5431553e72.mailgun.org>',
+                to: userObj.email,
+                subject: 'Sandra Roach: Weekly Goal Reminder',
+                text: body
+              };
+
+              mailgun.messages().send(data, function (error, body) {
+                
+              });
             }
           }
         });
