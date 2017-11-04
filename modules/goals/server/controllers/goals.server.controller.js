@@ -11,7 +11,8 @@ var path = require('path'),
   schedule = require('node-schedule'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   _ = require('lodash'),
-  mailgun = require('mailgun-js')({apiKey: 'key-8d0e07bc2e0f0c6332233b23a8242850', domain: 'sandboxb26a50f3d0844386a5071d5431553e72.mailgun.org'});
+  config = require(path.resolve('./config/env/development.js')),
+  mailgun = require('mailgun-js')({ apiKey: config.mailGun.api_key, domain: 'sandboxb26a50f3d0844386a5071d5431553e72.mailgun.org' });
 
 
 function getThisMonday() {
@@ -163,12 +164,12 @@ exports.goalByID = function(req, res, next, id) {
 //Notifications will be sent via MailGun to the users' email.
 //Cron-style scheduling: '* * 15 * * 3', i.e. every Wednesday at 3 pm.
 var rule = new schedule.RecurrenceRule();
-rule.hour = 10; //Execute function whenever it is 10 minutes into the hour for testing.
+rule.minute = 10; //Execute function whenever it is 10 minutes into the hour for testing.
 
 var weeklyGoalsNotifications = schedule.scheduleJob(rule, function(){
   console.log('Sending goal reminders!');	
   GoalsList.find({}).exec(function(error, goalslistObj) {
-	var goalslist = goalslistObj;
+    var goalslist = goalslistObj;
 	
     for(var i = 0; i < goalslist.length; i++) {
       
@@ -194,14 +195,14 @@ var weeklyGoalsNotifications = schedule.scheduleJob(rule, function(){
             if(goalsToNotify.length > 0) {
               console.log('Sending reminder to ' + userObj.email + '!');	
 			  
-			  var body = 'Hi ' + userObj.displayName + ',\n';
+              var body = 'Hi ' + userObj.displayName + ',\n';
               body += 'there are still some goals which have not been finished this week:\n\n';
 			  
-			  for(var k = 0; k < goalsToNotify.length; k++) {
-			    body += '- ' + goalsToNotify[k].title + ' (' + goalsToNotify[k].category + ')\n';
-			  }
+              for(var k = 0; k < goalsToNotify.length; k++) {
+                body += '- ' + goalsToNotify[k].title + ' (' + goalsToNotify[k].category + ')\n';
+              }
 			  
-			  body += '\n\n Have a great week!';
+              body += '\n\n Have a great week!';
 			  
               var data = {
                 from: 'Sandra Roach <mailgun@sandboxb26a50f3d0844386a5071d5431553e72.mailgun.org>',
@@ -216,7 +217,7 @@ var weeklyGoalsNotifications = schedule.scheduleJob(rule, function(){
             }
           }
         });
-	  })(goalslist[i]);
+      })(goalslist[i]);
     }
   });
 });

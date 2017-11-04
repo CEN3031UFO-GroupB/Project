@@ -99,5 +99,8 @@ module.exports = {
         roles: ['user', 'admin']
       }
     }
+  },
+  mailGun: {
+    api_key: 'key-8d0e07bc2e0f0c6332233b23a8242850'
   }
 };
