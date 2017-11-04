@@ -24,6 +24,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$stat
       Verifications.read($scope.credentials.registrationKey).then(function (response) {
         $scope.errorMsg = '';
         $scope.verification = response.data;
+        $scope.credentials.roles = response.data.type;
         $http.post('/api/auth/signup', $scope.credentials).success(function (response) {
           // If successful we assign the response to the global user model
           $scope.authentication.user = response;
