@@ -7,6 +7,7 @@ var path = require('path'),
   mongoose = require('mongoose'),
   Goal = mongoose.model('Goal'),
   GoalsList = mongoose.model('GoalsList'),
+  User = mongoose.model('User'),
   schedule = require('node-schedule'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   _ = require('lodash');
@@ -161,8 +162,40 @@ exports.goalByID = function(req, res, next, id) {
 //Notifications will be sent via MailGun to the users' email.
 //Cron-style scheduling: '* * 15 * * 3', i.e. every Wednesday at 3 pm.
 var rule = new schedule.RecurrenceRule();
-rule.second = 10; //Execute function whenever it is 10 seconds into the minute for testing.
+rule.minute = 17; //Execute function whenever it is 17 minutes into the hour for testing.
 
 var weeklyGoalsNotifications = schedule.scheduleJob(rule, function(){
-  console.log('Job executing!');
+  console.log('Sending goal reminders!');	
+  GoalsList.find({}).exec(function(error, goalslistObj) {
+	var goalslist = goalslistObj;
+	
+    for(var i = 0; i < goalslist.length; i++) {
+      
+      var userId = mongoose.Types.ObjectId(goalslist[i]._doc.user.id).toString();
+      (function(goalslistUser) {
+        User.findById(userId, '-salt -password').exec(function (err, user) {
+          var userObj = user._doc;
+          var currentMonday = getThisMonday();
+
+          if(goalslistUser._doc && goalslistUser._doc.goals.length > 0){
+            var goalsToNotify = [];
+            var goals = goalslistUser._doc.goals;
+
+            for(var j = 0; j < goals.length; j++) {
+              var goal = goals[j]._doc;
+
+              if(goal.week_timestamp.getTime() === currentMonday)
+                goalsToNotify.push(goal);
+            }
+			
+            //If there are current goals, send an email
+            if(goalsToNotify.length > 0) {
+              console.log('Sending reminder to ' + userObj.email + '!');	
+              
+            }
+          }
+        });
+	  })(goalslist[i]);
+    }
+  });
 });
