@@ -92,27 +92,31 @@ angular.module('profiles').controller('ProfilesController', ['$scope', '$statePa
         $scope.update = function () {
             if(confirm("You will not be able to make changes for 12 weeks after saving. \n Are you sure you want to save your profile?")){
                 $scope.error = null;
+                $scope.currentProfile = Profiles.get(
+                {user: $scope.authentication.user._id},
 
+                function(result){
                 var profile = $scope.currentProfile;
-                profile.Priority = {
-                    Family: $scope.profile.priorities.findIndex(x => x.name === "Family") + 1,
-                    Health: $scope.profile.priorities.findIndex(x => x.name === "Health") + 1,
-                    Rest_and_Relaxation: $scope.profile.priorities.findIndex(x => x.name === "Rest and Relaxation") + 1,
-                    Faith: $scope.profile.priorities.findIndex(x => x.name === "Faith") + 1,
-                    Finance: $scope.profile.priorities.findIndex(x => x.name === "Finance") + 1,
-                    Romance: $scope.profile.priorities.findIndex(x => x.name === "Romance") + 1,
-                    Friends: $scope.profile.priorities.findIndex(x => x.name === "Friends") + 1,
-                    Contribution: $scope.profile.priorities.findIndex(x => x.name === "Contribution") + 1,
-                    Personal_Growth: $scope.profile.priorities.findIndex(x => x.name === "Personal Growth") + 1,
-                    Career: $scope.profile.priorities.findIndex(x => x.name === "Career") + 1,
-                    Physical_Environment: $scope.profile.priorities.findIndex(x => x.name === "Physical Environment") + 1,
-                };
-                profile.Satisfaction = $scope.profile.satisfactions;
+                    profile.Priority = {
+                        Family: $scope.profile.priorities.findIndex(x => x.name === "Family") + 1,
+                        Health: $scope.profile.priorities.findIndex(x => x.name === "Health") + 1,
+                        Rest_and_Relaxation: $scope.profile.priorities.findIndex(x => x.name === "Rest and Relaxation") + 1,
+                        Faith: $scope.profile.priorities.findIndex(x => x.name === "Faith") + 1,
+                        Finance: $scope.profile.priorities.findIndex(x => x.name === "Finance") + 1,
+                        Romance: $scope.profile.priorities.findIndex(x => x.name === "Romance") + 1,
+                        Friends: $scope.profile.priorities.findIndex(x => x.name === "Friends") + 1,
+                        Contribution: $scope.profile.priorities.findIndex(x => x.name === "Contribution") + 1,
+                        Personal_Growth: $scope.profile.priorities.findIndex(x => x.name === "Personal Growth") + 1,
+                        Career: $scope.profile.priorities.findIndex(x => x.name === "Career") + 1,
+                        Physical_Environment: $scope.profile.priorities.findIndex(x => x.name === "Physical Environment") + 1,
+                    };
+                    profile.Satisfaction = $scope.profile.satisfactions;
 
-                profile.$update(function () {
-                    $location.path('profile/view');
-                }, function (errorResponse) {
-                    $scope.error = errorResponse.data.message;
+                    profile.$update(function () {
+                        $location.path('profile/view');
+                    }, function (errorResponse) {
+                        $scope.error = errorResponse.data.message;
+                    });
                 });
             }
         };
@@ -141,7 +145,6 @@ angular.module('profiles').controller('ProfilesController', ['$scope', '$statePa
                     });
 
                     // Set the scroller's values to those on the user's profile
-                    console.log(result.Satisfaction[0]);
                     $scope.profile.satisfactions = result.Satisfaction[0];
                     
                     // Check if it's been 12 weeks since last changed
@@ -154,7 +157,7 @@ angular.module('profiles').controller('ProfilesController', ['$scope', '$statePa
                     var daysSinceCreated = Math.round(Math.abs((createdOn.getTime() - (new Date()).getTime())/(oneDay)));
                     
                     // This variable will be used with ng-show on the view to indicate when it's time to update the profile
-                    $scope.profileCanChange = (daysElapsed >= 7*12 || createdOn <= 1);
+                    $scope.profileCanChange = (daysElapsed >= 7*12 || daysSinceCreated <= 1);
             });
         };
 

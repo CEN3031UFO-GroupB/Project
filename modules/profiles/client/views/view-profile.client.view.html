@@ -9,7 +9,7 @@
         You can update your priorities and satisfactions!
         </strong>
         </p>
-        <input class="btn btn-primary" value="Edit" onclick="editProf()">
+        <input class="btn btn-primary" value="Edit" ui-sref="profile.edit">
      </div>
 
     <form name="profileForm" class="form-horizontal" ng-submit="update();">
@@ -92,8 +92,6 @@
       </div>
     </div>
 
-
-
     <div></div>
         <div class="form-group">
           <input id="saveButton1" type="submit" class="btn btn-primary" value="Save" disabled="true">
@@ -108,13 +106,16 @@
 
 <script type="text/javascript">
 $(function(){
-  $(".profile-slider").slider("disable");
-  $("#sort1").sortable("disable");
+  disableProf();
 });
 var editProf = function(){
   $(".profile-slider").slider("enable");
   $("#sort1").sortable("enable");
   document.getElementById("editButton1").remove();
   $("#saveButton1").attr('disabled', false);
+};
+var disableProf = function(){
+  $(".profile-slider").slider("disable");
+  $("#sort1").sortable("disable");
 };
 </script>

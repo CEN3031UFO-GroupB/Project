@@ -23,6 +23,13 @@ angular.module('profiles').config(['$stateProvider',
           roles: ['user', 'admin']
         }
       })
+      .state('profile.edit', {
+        url: '/edit',
+        templateUrl: 'modules/profiles/client/views/edit-profile.client.view.html',
+        data: {
+          roles: ['user', 'admin']
+        }
+      })
       .state('admin.profile-view', {
         url: '/profile/:userId',
         templateUrl: 'modules/profiles/client/views/admin/view-profile-admin.client.view.html',
