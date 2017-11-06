@@ -11,15 +11,16 @@
     "url": "https://github.com/meanjs/mean.git"
   },
   "engines": {
-    "node": ">=0.10.28",
+    "node": "6.11.3",
     "npm": ">=1.4.28"
   },
   "scripts": {
-    "start": "grunt",
+    "start": "grunt --force",
     "test": "grunt test",
     "postinstall": "bower install --config.interactive=false"
   },
   "dependencies": {
+    "@angular/core": "^5.0.0",
     "acl": "~0.4.4",
     "async": "^1.3.0",
     "body-parser": "^1.13.1",
@@ -43,11 +44,13 @@
     "helmet": "~0.9.1",
     "jasmine-core": "^2.3.4",
     "lodash": "^3.10.0",
+    "mailgun-js": "^0.13.1",
     "method-override": "^2.3.3",
     "mocha": "~1.20.0",
     "mongoose": "~4.2.3",
     "morgan": "^1.6.1",
     "multer": "~1.0.5",
+    "node-schedule": "^1.2.5",
     "nodemailer": "^1.4.0",
     "owasp-password-strength-test": "^1.3.0",
     "passport": "~0.2.2",
@@ -112,7 +115,7 @@
     "karma-jasmine": "~0.3.6",
     "karma-ng-html2js-preprocessor": "^0.1.2",
     "karma-phantomjs-launcher": "~0.2.0",
-    "load-grunt-tasks": "^3.2.0",
+    "load-grunt-tasks": "^3.5.2",
     "mock-fs": "~3.4.0",
     "run-sequence": "^1.1.1",
     "should": "^7.0.1",

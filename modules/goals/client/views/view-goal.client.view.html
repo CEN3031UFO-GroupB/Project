@@ -1,0 +1,31 @@
+<section>
+  <div class="page-header">
+    <h1 ng-bind="vm.goal.title"></h1>
+  </div>
+  <div class="pull-right">
+    <a class="btn btn-primary"
+       ui-sref="goals.edit({ goalId: vm.goal._id })">
+      <i class="glyphicon glyphicon-edit"></i> Edit
+    </a>
+    <a class="btn btn-danger" ng-click="vm.remove()">
+      <i class="glyphicon glyphicon-trash"></i> Delete
+    </a>
+  </div>
+  <small>
+    <em class="text-muted">
+      Posted on
+      <span ng-bind="vm.goal.created_at | date:'mediumDate'"></span>
+      by
+      <span ng-if="vm.goal.user"
+            ng-bind="vm.goal.user.displayName"></span>
+      <span ng-if="!vm.goal.user">Deleted User</span>
+    </em>
+  </small>
+  <p class="lead" ng-bind="vm.goal.description"></p>
+  <p> For the week of
+    <span ng-bind="vm.goal.week_timestamp | date:'mediumDate'"></span>
+  </p>
+  <p> Status:
+    <span ng-bind="vm.goal.status"></span>
+  </p>
+</section>
