@@ -7,7 +7,7 @@
 
   GoalsListController.$inject = ['$scope', '$state', '$window', 'Authentication', 'GoalsService', 'PriorityService', 'Profiles'];
 
-  function GoalsListController($scope, $state, $window, Authentication, GoalsService, PriorityService, Profiles) {	
+  function GoalsListController($scope, $state, $window, Authentication, GoalsService, PriorityService, Profiles) {
     var vm = this;
 
 	//Add priorities to goals
@@ -32,7 +32,7 @@
       });
     })();
 
-    function getThisMonday () {
+    function getThisMonday() {
       var d = new Date();
       var day = d.getDay();
       var diff = d.getDate() - day + (day == 0 ? -6:1);
