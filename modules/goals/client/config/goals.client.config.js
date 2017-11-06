@@ -5,7 +5,8 @@ angular.module('goals').run(['Menus',
     // Set top bar menu items
     Menus.addMenuItem('topbar', {
       title: 'Goals',
-      state: 'goals.list'
+      state: 'goals.list',
+      roles: ['user']
     });
   }
 ]);
