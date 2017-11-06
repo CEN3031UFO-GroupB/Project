@@ -60,6 +60,15 @@
         data: {
           pageTitle: 'Goal {{ goalResolve.title }}'
         }
+      })
+      .state('admin.goals-view', {
+        url: '/:goalId',
+        templateUrl: 'modules/goals/client/views/admin/view-goals-admin.client.view.html',
+        controller: 'GoalsListController',
+        controllerAs: 'vm',
+        data: {
+          pageTitle: 'Goals List'
+        }
       });
   }
 
