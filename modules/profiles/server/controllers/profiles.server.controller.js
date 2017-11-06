@@ -35,7 +35,8 @@ exports.update = function (req, res) {
   // Return error message if not
   var oneDay = 24*60*60*1000;
   var daysElapsed = Math.round(Math.abs((profile.last_modified.getTime() - (new Date()).getTime())/(oneDay)));
-  if(daysElapsed < 7*12){
+  var daysSinceCreated = Math.round(Math.abs((profile.created_on.getTime() - (new Date()).getTime())/(oneDay)));
+  if(daysElapsed < 7*12 && daysSinceCreated > 1){
     return res.status(400).send({
       message: 'Priorities and Satisfaction ratings can be updated every 12 weeks.'
     });
@@ -74,7 +75,12 @@ exports.delete = function (req, res) {
  * Only lists the current user's profile
  */
 exports.list = function (req, res) {
-  Profile.findOne({ user: req.user._id }).populate('user', 'displayName').exec(function (err, profile) {
+  var userId = '';
+  if(req.query.user)
+    userId = req.query.user;
+  else
+    userId = req.user._id;
+  Profile.findOne({ user: userId }).populate('user', 'displayName').exec(function (err, profile) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)

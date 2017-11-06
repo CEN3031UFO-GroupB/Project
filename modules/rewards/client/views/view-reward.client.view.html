@@ -1,0 +1,22 @@
+<section>
+  <div class="page-header">
+    <h1 ng-bind="vm.reward.name"></h1>
+  </div>
+  <div class="pull-right"
+       ng-show="vm.reward.isCurrentUserOwner">
+    <a class="btn btn-primary"
+       ng-click="vm.claim()">
+      Claim!
+    </a>
+    <a class="btn btn-warning" ng-click="vm.remove()">
+      Delete
+    </a>
+  </div>
+  <small>
+    <em class="text-muted">
+      Reward added on
+      <span ng-bind="vm.reward.created | date:'mediumDate'"></span>
+    </em>
+  </small>
+  <p class="lead" ng-bind="vm.reward.content"></p>
+</section>

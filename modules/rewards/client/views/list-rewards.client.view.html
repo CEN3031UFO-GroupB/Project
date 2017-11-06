@@ -1,0 +1,45 @@
+<section>
+  
+  <div class="page-header">
+    <h1>Rewards</h1>
+  </div>
+  <h3 ng-if="!(vm.rewards.$resolved && !vm.rewards.length)">Unclaimed</h3>
+  <div class="list-group">
+    <a ng-repeat="reward in vm.rewards" ng-if="!reward.claimed" ng-hide="vm.u_empty"
+       ui-sref="rewards.view({ rewardId: reward._id })"
+       class="list-group-item">
+      <h4 class="list-group-item-heading" ng-bind="reward.name"></h4>
+      <small class="list-group-item-text">
+        Reward added on
+        <span ng-bind="reward.created | date:'mediumDate'"></span>
+      </small>
+        <div class="alert alert-warning text-center" ng-if="vm.u_empty">
+    No Rewards yet, why don't you <a ui-sref="rewards.create">add one</a>?
+  </div>
+
+    </a>
+  </div>
+
+  <div></div>
+  <h3 ng-if="!(vm.rewards.$resolved && !vm.rewards.length)">Claimed</h3>
+  <div class="list-group">
+    <a ng-repeat="reward in vm.rewards" ng-if="reward.claimed"
+       ui-sref="rewards.view({ rewardId: reward._id })"
+       class="list-group-item">
+      <h4 class="list-group-item-heading" ng-bind="reward.name"></h4>
+
+      <small class="list-group-item-text">
+        Reward added on
+        <span ng-bind="reward.created | date:'mediumDate'"></span>
+      </small>
+    </a>
+  </div>
+
+  <div class="alert alert-info text-center" ng-if="!(vm.rewards.$resolved && !vm.rewards.length)">
+    <a ui-sref="rewards.create">Add a reward</a>
+  </div>
+
+  <div class="alert alert-warning text-center" ng-if="vm.rewards.$resolved && !vm.rewards.length">
+    No Rewards yet, why don't you <a ui-sref="rewards.create">add one</a>?
+  </div>
+</section>
