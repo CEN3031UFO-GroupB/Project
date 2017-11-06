@@ -70,7 +70,11 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$stat
         $scope.authentication.user = response;
 
         // And redirect to the previous or home page
-        $state.go($state.previous.state.name || 'home', $state.previous.params);
+        if ($scope.authentication.user.roles[0] === 'user') {
+          $state.go('profile.create', $state.previous.params);
+        } else {
+          $state.go('admin.users', $state.previous.params);
+        }
       }).error(function (response) {
         $scope.error = response.message;
       });
