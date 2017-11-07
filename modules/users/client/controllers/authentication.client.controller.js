@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('users').controller('AuthenticationController', ['$scope', '$state', '$http', '$location', '$window', 'Authentication', 'PasswordValidator','Verifications',
-  function ($scope, $state, $http, $location, $window, Authentication, PasswordValidator, Verifications) {
+angular.module('users').controller('AuthenticationController', ['$scope', '$state', '$http', '$location', '$window', 'Authentication', 'PasswordValidator','Verifications', 'Profiles',
+  function ($scope, $state, $http, $location, $window, Authentication, PasswordValidator, Verifications, Profiles) {
     $scope.authentication = Authentication;
     $scope.popoverMsg = PasswordValidator.getPopoverMsg();
 
@@ -71,7 +71,12 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$stat
 
         // And redirect to the previous or home page
         if ($scope.authentication.user.roles[0] === 'user') {
-          $state.go('profile.create', $state.previous.params);
+          Profiles.get({ user: response._id }, function(result){
+            if(result.Priority)
+              $state.go('home', $state.previous.params);
+            else
+              $state.go('profile.create', $state.previous.params);
+          });
         } else {
           $state.go('admin.users', $state.previous.params);
         }
