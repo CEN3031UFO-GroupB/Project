@@ -41,12 +41,12 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$stat
                //Error
           });
           // And redirect to the profile creation page upon signup IF USER else Admin Dashboard
-        if($scope.authentication.user.roles[0] === 'user'){
-          $state.go('profile.create', $state.previous.params);
-        }
-        else{
-          $state.go('admin.users', $state.previous.params);
-        }
+          if($scope.authentication.user.roles[0] === 'user'){
+            $state.go('profile.create', $state.previous.params);
+          }
+          else{
+            $state.go('admin.users', $state.previous.params);
+          }
         }).error(function (response) {
           $scope.error = response.message;
         });

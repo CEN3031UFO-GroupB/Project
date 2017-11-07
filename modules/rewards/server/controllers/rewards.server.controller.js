@@ -82,7 +82,7 @@ exports.delete = function(req, res) {
  */
 exports.list = function(req, res) {
   var userId = req.user._id;
-  Reward.find({user: userId}).sort('-created').populate('user', 'displayName').exec(function(err, rewards) {
+  Reward.find({ user: userId }).sort('-created').populate('user', 'displayName').exec(function(err, rewards) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
