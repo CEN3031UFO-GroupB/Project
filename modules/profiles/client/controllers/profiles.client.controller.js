@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('profiles').controller('ProfilesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Profiles',
-    function ($scope, $stateParams, $location, Authentication, Profiles) {
+angular.module('profiles').controller('ProfilesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Profiles', 'orderByFilter',
+    function ($scope, $stateParams, $location, Authentication, Profiles, orderByFilter) {
         $scope.authentication = Authentication;
         $scope.profile = {
             priorities: [
@@ -141,8 +141,8 @@ angular.module('profiles').controller('ProfilesController', ['$scope', '$statePa
                                 rank: value
                             });
                         }
-
                     });
+                    $scope.profile.priorities = orderByFilter($scope.prioritiesArray, 'rank');
 
                     // Set the scroller's values to those on the user's profile
                     $scope.profile.satisfactions = result.Satisfaction[0];
