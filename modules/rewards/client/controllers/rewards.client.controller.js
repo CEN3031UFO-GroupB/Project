@@ -28,6 +28,7 @@
 
     function claim() {
       vm.reward.claimed = true;
+      vm.reward.claimed_on = Date.now();
       vm.reward.$update(successCallback, errorCallback);
 
       function successCallback(res) {

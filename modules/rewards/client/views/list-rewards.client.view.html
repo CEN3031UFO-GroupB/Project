@@ -28,14 +28,14 @@
   <h3 ng-if="!(vm.claimedRewards.$resolved && !vm.claimedRewards.length)">Claimed</h3>
   <!-- items being paged -->
   <div class="list-group">
-    <a ng-repeat="reward in vm.claimedItems" ng-if="reward.claimed"
+    <a ng-repeat="reward in (vm.claimedItems | orderBy: claimed_on)" ng-if="reward.claimed"
        ui-sref="rewards.view({ rewardId: reward._id })"
        class="list-group-item">
       <h4 class="list-group-item-heading" ng-bind="reward.name"></h4>
 
       <small class="list-group-item-text">
-        Reward added on
-        <span ng-bind="reward.created | date:'mediumDate'"></span>
+        Claimed on
+        <span ng-bind="reward.claimed_on | date:'mediumDate'"></span>
       </small>
     </a>
   </div>
