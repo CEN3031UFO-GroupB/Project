@@ -16,6 +16,10 @@ module.exports = function(app) {
     .get(goals.read)
     .put(goals.update)
     .delete(goals.delete);
+	
+  app.route('/api/notifications')
+    .get(goals.notificationsRead)
+    .post(goals.notificationsUpdate);
 
   // Finish by binding the Goal middleware
   app.param('goalId', goals.goalByID);

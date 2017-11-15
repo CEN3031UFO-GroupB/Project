@@ -1,0 +1,6 @@
+{
+    day: 3,
+	time: 14,
+	body: 'there are still some goals which have not been finished this week:\n\n',
+	ending: '\n\n Have a great week!'
+}

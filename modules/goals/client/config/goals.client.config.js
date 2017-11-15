@@ -8,5 +8,11 @@ angular.module('goals').run(['Menus',
       state: 'goals.list',
       roles: ['user']
     });
+	
+    Menus.addMenuItem('topbar', {
+      title: 'Notification Settings',
+      state: 'notifications.update',
+      roles: ['admin']
+    });
   }
 ]);
