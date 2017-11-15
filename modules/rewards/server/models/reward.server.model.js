@@ -27,6 +27,9 @@ var RewardSchema = new Schema({
   user: {
     type: Schema.ObjectId,
     ref: 'User'
+  },
+  claimed_on: {
+    type: Date
   }
 });
 
