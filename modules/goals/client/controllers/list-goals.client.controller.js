@@ -54,12 +54,14 @@
 
     $scope.markGoalInProgress = function (goal) {
       goal.status = 'In Progress';
+      goal.started_at = new Date();
       console.log(JSON.stringify(goal));
       GoalsService.update(goal);
     };
 
     $scope.markGoalComplete = function (goal) {
       goal.status = 'Complete';
+      goal.completed_at = new Date();
       console.log(JSON.stringify(goal));
       GoalsService.update(goal);
     };

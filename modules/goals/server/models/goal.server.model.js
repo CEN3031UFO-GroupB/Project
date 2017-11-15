@@ -1,5 +1,5 @@
 'use strict';
-
+//TODO: Add updated_at pre clause
 /**
  * Module dependencies.
  */
@@ -37,15 +37,23 @@ var GoalsSchema = new Schema({
   },
   created_at: {
     type: Date,
-    default: Date.now
+    default: new Date()
+  },
+  started_at: {
+    type: Date,
+    default: null
+  },
+  completed_at: {
+    type: Date,
+    default: null
   },
   updated_at: {
     type: Date,
-    default: Date.now
+    default: new Date()
   },
   week_timestamp: {
     type: Date,
-    default: Date.now
+    default: new Date()
   },
   ranking: {
     type: String
