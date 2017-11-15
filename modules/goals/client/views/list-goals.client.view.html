@@ -1,36 +1,74 @@
 <container>
   <div class="page-header row">
-    <h1 class="col-md-8">Goals</h1>
+    <h1 class="col-md-8">My Goals</h1>
     <button class="btn btn-default" style="float:right;margin-top: 25px;" ng-click="createGoal()">New Goal</button>
     <div class="clearfix"></div>
-    <h5 style="font-style: italic; padding-left: 10px">{{diffDays}} days left to finish your goals</h5>
+    <h5 style="font-style: italic; padding-left: 10px">{{7 - diffDays}} days left to finish your goals</h5>
   </div>
   <div class="row" id="currentWeek">
     <div class="list-group col-md-4">
-      <label>To Do</label>
+      <h4 style="font-weight: bolder">To Do</h4>
       <div ng-repeat="goal in vm.goals"
            ng-if="(goal.status == 'Not Started')"
            class="list-group-item"
             style="margin-bottom: 5px; border-left: 5px solid #7e7877">
-        <h4 class="list-group-item-heading" style="display:inline">{{goal.title}} </h4>
+        <div class="row">
+          <div class="col-md-6" style="padding-right: 0px;">
+            <h4 class="list-group-item-heading" style="display:block">{{goal.title}} </h4>
+            <h5 class="list-group-item-heading" style="display:inline">{{goal.category}} </h5>
+            <small class="list-group-item-text" style="display:block">Created on {{goal.created_at | date:'mediumDate'}} </small>
+          </div>
+          <div class="col-md-3">
+            <h5 class="list-group-item-info" style="display:inline-block; vertical-align: middle; margin-top:20px">{{goal.priority}} </h5>
+          </div>
+          <div class="col-md-2">
+            <button class="btn" style="padding-top: 0; padding-bottom: 0; margin-top: 6px; margin-bottom: 5px" ui-sref="goals.view({ goalId: goal._id })">View</button>
+            <button class="btn btn-primary" style="padding-top: 0; padding-bottom: 0" ng-click="markGoalInProgress(goal)">Start</button>
+          </div>
+        </div>
       </div>
     </div>
     <div class="list-group col-md-4">
-      <label>In Progress</label>
+      <h4 style="font-weight: bolder">In Progress</h4>
       <div ng-repeat="goal in vm.goals"
            ng-if="(goal.status == 'In Progress')"
            class="list-group-item"
-           style="margin-bottom: 5px; border-left: 5px solid #2b5e7e">
-        <h4 class="list-group-item-heading" style="display:inline">{{goal.title}} </h4>
+           style="margin-bottom: 5px; border-left: 5px solid #347fa5">
+        <div class="row">
+          <div class="col-md-6" style="padding-right: 0px;">
+            <h4 class="list-group-item-heading" style="display:block">{{goal.title}} </h4>
+            <h5 class="list-group-item-heading" style="display:inline">{{goal.category}} </h5>
+            <small class="list-group-item-text" style="display:block">Created on {{goal.created_at | date:'mediumDate'}} </small>
+          </div>
+          <div class="col-md-3">
+            <h5 class="list-group-item-info" style="display:inline-block; vertical-align: middle; margin-top:20px">{{goal.priority}} </h5>
+          </div>
+          <div class="col-md-2">
+            <button class="btn" style="padding-top: 0; padding-bottom: 0; margin-top: 6px; margin-bottom: 5px" ui-sref="goals.view({ goalId: goal._id })">View</button>
+            <button class="btn" style="padding-top: 0; padding-bottom: 0; padding-left: 8px; padding-right: 8px; background-color: #2fcc00; color: white;" ng-click="markGoalComplete(goal)">Finish</button>
+          </div>
+        </div>
       </div>
     </div>
     <div class="list-group col-md-4">
-      <label>Completed</label>
+      <h4 style="font-weight: bolder">Completed</h4>
       <div ng-repeat="goal in vm.goals"
-           ng-if="(goal.status == 'Completed') && ((goal.week_timestamp | date:'dd/MM/yyyy') == (monday | date:'dd/MM/yyyy'))"
+           ng-if="(goal.status == 'Complete') && ((goal.completed_at | date:'dd/MM/yyyy') < (monday | date:'dd/MM/yyyy'))"
            class="list-group-item"
-           style="margin-bottom: 5px; border-left: 5px solid #0f9e02">
-        <h4 class="list-group-item-heading" style="display:inline">{{goal.title}} </h4>
+           style="margin-bottom: 5px; border-left: 5px solid #2fcc00">
+        <div class="row">
+          <div class="col-md-6" style="padding-right: 0px;">
+            <h4 class="list-group-item-heading" style="display:block">{{goal.title}} </h4>
+            <h5 class="list-group-item-heading" style="display:inline">{{goal.category}} </h5>
+            <small class="list-group-item-text" style="display:block">Created on {{goal.created_at | date:'mediumDate'}} </small>
+          </div>
+          <div class="col-md-3">
+            <h5 class="list-group-item-info" style="display:inline-block; vertical-align: middle; margin-top:20px">{{goal.priority}} </h5>
+          </div>
+          <div class="col-md-2">
+            <button class="btn" style="padding-top: 0; padding-bottom: 0; margin-top: 20px;" ui-sref="goals.view({ goalId: goal._id })">View</button>
+            </div>
+        </div>
       </div>
     </div>
   </div>
@@ -40,113 +78,23 @@
   </div>
 </container>
 
-<div class="list-group col-4">
-  <label>To Do</label>
-  <a ng-repeat="goal in vm.goals"
-     ng-if="(goal.status == 'Not Started')"
-     class="list-group-item row">
-    <div class="col-md-5">
-      <h4 class="list-group-item-heading" style="display:inline">{{goal.title}} </h4>
-      <h4 class="list-group-item-heading" style="display:inline">({{goal.category}})</h4>
-      <small class="list-group-item-text" style="display:block">
-        Created on
-        <span ng-bind="goal.created_at | date:'mediumDate'"></span>
-        by
-        <span ng-if="goal.user" ng-bind="goal.user.displayName"></span>
-        <span ng-if="!goal.user">Deleted User</span>
-      </small>
-    </div>
-    <div class="col-md-3">
-      {{goal.priority}}
-    </div>
-    <div class="col-md-2">
-      <button class="btn btn-info" style="float:right" ui-sref="goals.view({ goalId: goal._id })">View</button>
-    </div>
-  </a>
-</div>
-
-<div class="list-group col-4">
-  <label>In Progress</label>
-  <a ng-repeat="goal in vm.goals"
-     ng-if="(goal.status == 'In Progress')"
-     class="list-group-item row">
-    <div class="col-md-5">
-      <h4 class="list-group-item-heading" style="display:inline">{{goal.title}} </h4>
-      <h4 class="list-group-item-heading" style="display:inline">({{goal.category}})</h4>
-      <small class="list-group-item-text" style="display:block">
-        Created on
-        <span ng-bind="goal.created_at | date:'mediumDate'"></span>
-        by
-        <span ng-if="goal.user" ng-bind="goal.user.displayName"></span>
-        <span ng-if="!goal.user">Deleted User</span>
-      </small>
-    </div>
-    <div class="col-md-3">
-      {{goal.priority}}
-    </div>
-    <div class="col-md-2">
-      <button class="btn btn-info" style="float:right" ui-sref="goals.view({ goalId: goal._id })">View</button>
-    </div>
-    <div class="col-md-2">
-      <button class="btn" style="float:right" ng-click="markGoalComplete(goal)">I'm Done!</button>
-    </div>
-  </a>
-</div>
-
-<div class="list-group col-4">
-  <label>Completed</label>
-  <a ng-repeat="goal in vm.goals"
-     ng-if="(goal.status == 'Completed') && ((goal.week_timestamp | date:'dd/MM/yyyy') == (monday | date:'dd/MM/yyyy'))"
-     class="list-group-item row">
-    <div class="col-md-5">
-      <h4 class="list-group-item-heading" style="display:inline">{{goal.title}} </h4>
-      <h4 class="list-group-item-heading" style="display:inline">({{goal.category}})</h4>
-      <small class="list-group-item-text" style="display:block">
-        Created on
-        <span ng-bind="goal.created_at | date:'mediumDate'"></span>
-        by
-        <span ng-if="goal.user" ng-bind="goal.user.displayName"></span>
-        <span ng-if="!goal.user">Deleted User</span>
-      </small>
-    </div>
-    <div class="col-md-3">
-      {{goal.priority}}
-    </div>
-    <div class="col-md-2">
-      <button class="btn btn-info" style="float:right" ui-sref="goals.view({ goalId: goal._id })">View</button>
-    </div>
-    <div class="col-md-2">
-      <button class="btn" style="float:right" ng-click="markGoalInProgress(goal)">I've started!</button>
-    </div>
-  </a>
-</div>
-
 <hr>
-
-<div class="row">
-  <h3>Previously Completed Goals</h3>
-  <a ng-repeat="goal in vm.goals"
-     ng-if="(goal.status == 'Completed') && (goal.week_timestamp | date:'dd/MM/yyyy') < (monday | date:'dd/MM/yyyy')"
-     class="list-group-item row">
-    <div class="col-md-5">
-      <small class="list-group-item-text" style="display:block">
-        Created on
-        <span ng-bind="goal.created_at | date:'mediumDate'"></span>
-        by
-        <span ng-if="goal.user" ng-bind="goal.user.displayName"></span>
-        <span ng-if="!goal.user">Deleted User</span>
-      </small>
-      <h4 class="list-group-item-heading" style="display:inline">{{goal.title}} </h4>
-      <h4 class="list-group-item-heading" style="display:inline">({{goal.category}})</h4>
-    </div>
-    <div class="col-md-3">
-      {{goal.priority}}
-    </div>
-    <div class="col-md-2">
-      <button class="btn btn-info" style="float:right" ui-sref="goals.view({ goalId: goal._id })">View</button>
-    </div>
-    <div class="col-md-2">
-      <h5 style="float:right; font-weight: bolder">{{goal.status}}</h5>
-    </div>
-  </a>
+<h1 class="col-md-8">Previously Completed Goals</h1>
+<div class="list-group">
+  <table st-table="vm.goals" id="goals-table" class="table table-striped">
+    <thead>
+    <th style="width:130px">Title</th>
+    <th style="width:130px">Category</th>
+    <th style="width:130px">Started On</th>
+    <th style="width:130px">Completed On</th>
+    </thead>
+    <tbody>
+    <tr ng-repeat="goal in vm.goals" >
+      <td ng-bind="goal.title"></td>
+      <td ng-bind="goal.category"></td>
+      <td ng-bind="(goal.started_at | date:'mediumDate')"></td>
+      <td ng-bind="(goal.completed_at | date:'mediumDate')"></td>
+    </tr>
+    </tbody>
+  </table>
 </div>
