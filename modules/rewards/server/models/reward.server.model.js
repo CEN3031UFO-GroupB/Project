@@ -30,6 +30,10 @@ var RewardSchema = new Schema({
   },
   claimed_on: {
     type: Date
+  },
+  points: {
+    type: Number,
+    default: 10
   }
 });
 
