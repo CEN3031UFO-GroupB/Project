@@ -6,10 +6,16 @@
     <form name="vm.form.rewardForm" class="form-horizontal" ng-submit="vm.save(vm.form.rewardForm.$valid)" novalidate>
       <fieldset>
         <div class="form-group" show-errors>
-          <label class="control-label" for="name">Name</label>
+          <label class="control-label" for="name">Name of the reward: </label>
           <input name="name" type="text" ng-model="vm.reward.name" id="name" class="form-control" placeholder="Name" required>
+          <br>
+          <label for="points">Type of reward: </label>
+          <select class="form-control" id="points" ng-model="vm.reward.points" placeholder="Select the amount of points required for this reward" required>
+            <option>Weekly (10 points)</option>
+            <option>Monthly (30 points)</option>
+          </select>
           <div ng-messages="vm.form.rewardForm.name.$error" role="alert">
-            <p class="help-block error-text" ng-message="required">Reward name is required.</p>
+            <p class="help-block error-text" ng-message="required">All fields are required.</p>
           </div>
         </div>
         <div class="form-group">

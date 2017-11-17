@@ -49,7 +49,13 @@
         $scope.$broadcast('show-errors-check-validity', 'vm.form.rewardForm');
         return false;
       }
-
+      if (vm.reward.points === 'Weekly (10 points)') {
+        vm.reward.points = 10;
+      } else if (vm.reward.points === 'Monthly (30 points)') {
+        vm.reward.points = 30;
+      } else {
+        return false;
+      }
       // TODO: move create/update logic to service
       if (vm.reward._id) {
         vm.reward.$update(successCallback, errorCallback);
