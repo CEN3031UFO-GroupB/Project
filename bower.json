@@ -18,7 +18,8 @@
     "angular-ui-sortable": "jquery/jquery-ui/angular-ui-sortable#^0.17.2",
     "jquery-ui": "^1.12.1",
     "angular-ui-slider": "^0.4.0",
-    "angular-smart-table": "^2.1.8"
+    "angular-smart-table": "^2.1.8",
+    "lodash": "^4.17.4"
   },
   "resolutions": {
     "angular": "~1.3"

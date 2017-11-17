@@ -3,6 +3,11 @@
   <div class="page-header">
     <h1>Rewards</h1>
   </div>
+
+  <div class="alert alert-info text-center" ng-if="!(vm.rewards.$resolved && !vm.rewards.length)">
+    <a ui-sref="rewards.create">Add a reward</a>
+  </div>
+
   <h3 ng-if="!(vm.rewards.$resolved && !vm.rewards.length)">Unclaimed</h3>
   <div class="list-group">
     <a ng-repeat="reward in vm.rewards" ng-if="!reward.claimed" ng-hide="vm.u_empty"
@@ -20,24 +25,39 @@
     </a>
   </div>
 
-  <div></div>
-  <h3 ng-if="!(vm.rewards.$resolved && !vm.rewards.length)">Claimed</h3>
+  <h3 ng-if="!(vm.claimedRewards.$resolved && !vm.claimedRewards.length)">Claimed</h3>
+  <!-- items being paged -->
   <div class="list-group">
-    <a ng-repeat="reward in vm.rewards" ng-if="reward.claimed"
+    <a ng-repeat="reward in (vm.claimedItems | orderBy: claimed_on)" ng-if="reward.claimed"
        ui-sref="rewards.view({ rewardId: reward._id })"
        class="list-group-item">
       <h4 class="list-group-item-heading" ng-bind="reward.name"></h4>
 
       <small class="list-group-item-text">
-        Reward added on
-        <span ng-bind="reward.created | date:'mediumDate'"></span>
+        Claimed on
+        <span ng-bind="reward.claimed_on | date:'mediumDate'"></span>
       </small>
     </a>
   </div>
+  <!-- pager -->
+  <ul ng-if="vm.claimedPager.pages.length" class="pagination">
+      <li ng-class="{disabled:vm.claimedPager.currentPage === 1}">
+          <a ng-click="vm.setPageClaimed(1)">First</a>
+      </li>
+      <li ng-class="{disabled:vm.claimedPager.currentPage === 1}">
+          <a ng-click="vm.setPageClaimed(vm.claimedPager.currentPage - 1)">Previous</a>
+      </li>
+      <li ng-repeat="page in vm.claimedPager.pages" ng-class="{active:vm.claimedPager.currentPage === page}">
+          <a ng-click="vm.setPageClaimed(page)">{{page}}</a>
+      </li>               
+      <li ng-class="{disabled:vm.claimedPager.currentPage === vm.claimedPager.totalPages}">
+          <a ng-click="vm.setPageClaimed(vm.claimedPager.currentPage + 1)">Next</a>
+      </li>
+      <li ng-class="{disabled:vm.claimedPager.currentPage === vm.claimedPager.totalPages}">
+          <a ng-click="vm.setPageClaimed(vm.claimedPager.totalPages)">Last</a>
+      </li>
+  </ul>
 
-  <div class="alert alert-info text-center" ng-if="!(vm.rewards.$resolved && !vm.rewards.length)">
-    <a ui-sref="rewards.create">Add a reward</a>
-  </div>
 
   <div class="alert alert-warning text-center" ng-if="vm.rewards.$resolved && !vm.rewards.length">
     No Rewards yet, why don't you <a ui-sref="rewards.create">add one</a>?
