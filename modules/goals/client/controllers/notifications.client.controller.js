@@ -1,15 +1,18 @@
-(function () {
-  'use strict';
+'use strict';
 
-  // Notifications controller
-  angular
-    .module('goals')
-    .controller('NotificationsController', GoalsController);
+angular.module('goals').controller('NotificationsController', ['$scope', '$stateParams', '$location', 'Authentication', 'NotificationsService',
+    function ($scope, $stateParams, $location, Authentication, NotificationsService) {
+      $scope.authentication = Authentication;
+      $scope.notification = {};
+      $scope.notification.day = 5;
+      $scope.notification.time = 18;
+      $scope.notification.description = 'test description';
+      $scope.notification.ending = 'test ending';
 
-  NotificationsController.$inject = ['$scope', '$state', '$window', 'Authentication', 'goalResolve'];
+      $scope.update = function() {
+        debugger;
 
-  function NotificationsController ($scope, $state, $window, Authentication, goal) {
-	  
+        NotificationsService.update($scope.notification);
+      };
     }
-  }
-}());
+]);
