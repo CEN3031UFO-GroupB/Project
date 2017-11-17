@@ -4,7 +4,7 @@ angular.module('goals').controller('NotificationsController', ['$scope', '$state
     function ($scope, $stateParams, $location, Authentication, Notifications) {
       $scope.authentication = Authentication;
       $scope.notification = {};
-	  $scope.message = '';
+      $scope.message = '';
 
       $scope.load = function() {
         var notification = Notifications.read()
@@ -21,14 +21,13 @@ angular.module('goals').controller('NotificationsController', ['$scope', '$state
           return false;
         }
 	  
-        Notifications.update($scope.notification)
-		  .then(function (response) {
-            $scope.message = 'Update was successful!';
-			$scope.messageClass = "success";
-		  }, function (error) {
-            $scope.message = 'An error occured!';
-			$scope.messageClass = "error";
-          });
+        Notifications.update($scope.notification).then(function (response) {
+          $scope.message = 'Update was successful!';
+          $scope.messageClass = 'success';
+        }, function (error) {
+          $scope.message = 'An error occured!';
+          $scope.messageClass = 'error';
+        });
       };
     }
 ]);
