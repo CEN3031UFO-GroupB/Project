@@ -20,7 +20,9 @@ module.exports = {
         'public/lib/owasp-password-strength-test/owasp-password-strength-test.js',
         'public/lib/angular-ui-sortable/sortable.js',
         'public/lib/angular-ui-slider/src/slider.js',
-        'public/lib/angular-smart-table/dist/smart-table.js'
+        'public/lib/angular-smart-table/dist/smart-table.js',
+        'public/lib/chart.js/dist/Chart.js',
+        'public/lib/angular-chart.js/dist/angular-chart.js',
       ],
       tests: ['public/lib/angular-mocks/angular-mocks.js']
     },
