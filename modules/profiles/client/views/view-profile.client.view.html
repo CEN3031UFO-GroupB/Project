@@ -19,7 +19,7 @@
         Your current order of priorities.
         </p>
         <ul id="sort1" ui-sortable="sortablePriorities" ng-model="profile.priorities" class="profiles-list">
-          <li  ng-repeat="priority in prioritiesArray | orderBy:'rank'" class="profiles-list-element">{{ priority.name }}</li>
+          <li  ng-repeat="priority in prioritiesArray | orderBy: 'rank'" class="profiles-list-element">{{ priority.name }}</li>
         </ul>
     <h2>Satisfactions</h2>
     <p>
