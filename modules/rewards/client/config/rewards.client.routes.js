@@ -20,6 +20,7 @@
         controller: 'RewardsListController',
         controllerAs: 'vm',
         data: {
+          roles: ['user', 'admin'],
           pageTitle: 'Rewards List'
         }
       })
@@ -58,6 +59,7 @@
           rewardResolve: getReward
         },
         data: {
+          roles: ['user', 'admin'],
           pageTitle: 'Reward {{ rewardResolve.name }}'
         }
       });
