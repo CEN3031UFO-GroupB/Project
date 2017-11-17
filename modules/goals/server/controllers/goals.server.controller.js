@@ -13,8 +13,7 @@ var path = require('path'),
   _ = require('lodash'),
   config = require(path.resolve('./config/env/development.js')),
   mailgun = require('mailgun-js')({ apiKey: config.mailGun.api_key, domain: 'sandboxb26a50f3d0844386a5071d5431553e72.mailgun.org' }),
-  fs = require('fs'),
-  notificationSettings = require(path.resolve('./modules/goals/server/data/notification.json'));
+  fs = require('fs');
 
 
 function getThisMonday() {
@@ -166,9 +165,8 @@ exports.goalByID = function(req, res, next, id) {
  * Get the current Notification setting
  */
 exports.notificationsRead = function(req, res) {
-  var notification = JSON.parse(notificationSettings);
-
-
+  var notification = JSON.parse(fs.readFileSync(path.resolve('./modules/goals/server/data/notification.json')).toString());
+  
   res.jsonp(notification);
 };
 
@@ -177,8 +175,9 @@ exports.notificationsRead = function(req, res) {
  * Update the current Notification setting
  */
 exports.notificationsUpdate = function(req, res) {
-  var notification = req.notification;
+  var notification = req.body;
 
+  fs.writeFile(path.resolve('./modules/goals/server/data/notification.json'), JSON.stringify(notification), "utf8", function() { });
 
   res.jsonp(notification);
 };

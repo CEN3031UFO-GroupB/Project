@@ -1,18 +1,34 @@
 'use strict';
 
-angular.module('goals').controller('NotificationsController', ['$scope', '$stateParams', '$location', 'Authentication', 'NotificationsService',
-    function ($scope, $stateParams, $location, Authentication, NotificationsService) {
+angular.module('goals').controller('NotificationsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Notifications',
+    function ($scope, $stateParams, $location, Authentication, Notifications) {
       $scope.authentication = Authentication;
       $scope.notification = {};
-      $scope.notification.day = 5;
-      $scope.notification.time = 18;
-      $scope.notification.description = 'test description';
-      $scope.notification.ending = 'test ending';
+	  $scope.message = '';
 
-      $scope.update = function() {
-        debugger;
+      $scope.load = function() {
+        var notification = Notifications.read()
+          .then(function (response) {
+            $scope.notification = response.data;
+          }, function (error) {
 
-        NotificationsService.update($scope.notification);
+          });
+      };
+
+      $scope.update = function(isValid) {
+        if (!isValid) {
+          $scope.$broadcast('show-errors-check-validity', 'updateForm');
+          return false;
+        }
+	  
+        Notifications.update($scope.notification)
+		  .then(function (response) {
+            $scope.message = 'Update was successful!';
+			$scope.messageClass = "success";
+		  }, function (error) {
+            $scope.message = 'An error occured!';
+			$scope.messageClass = "error";
+          });
       };
     }
 ]);
