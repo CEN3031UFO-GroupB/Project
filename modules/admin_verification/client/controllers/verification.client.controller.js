@@ -87,7 +87,8 @@ angular.module('verifications').controller('VerificationsController', ['$scope',
 			if($scope.veriList[i].user_id !== '-1' && $scope.veriList[i].user_id !== ''){
 				var index = $scope.users.findIndex(x => x._id === $scope.veriList[i].user_id);
 
-				$scope.veriList[i].user_id = $scope.users[index].displayName;
+                if(index && index != '-1')
+                  $scope.veriList[i].user_id = $scope.users[index].displayName;
 			}
 			else
                 $scope.veriList[i].user_id = '';
