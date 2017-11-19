@@ -61,6 +61,7 @@
 
     $scope.markGoalComplete = function (goal) {
       goal.status = 'Complete';
+      vm.goals.points += 4;
       goal.completed_at = new Date();
       console.log(JSON.stringify(goal));
       GoalsService.update(goal);
