@@ -1,5 +1,5 @@
 (function (app) {
   'use strict';
 
-  app.registerModule('goals', ['chart.js']);
+  app.registerModule('goals', ['angularMoment', 'chart.js']);
 }(ApplicationConfiguration));
