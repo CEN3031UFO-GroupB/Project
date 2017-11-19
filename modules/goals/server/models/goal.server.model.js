@@ -68,6 +68,10 @@ var GoalsListSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'User'
   },
+  points: {
+    type: Number,
+    default: 0
+  },
   goals: [GoalsSchema]
 });
 
