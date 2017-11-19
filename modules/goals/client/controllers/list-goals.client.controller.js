@@ -5,9 +5,9 @@
     .module('goals')
     .controller('GoalsListController', GoalsListController);
 
-  GoalsListController.$inject = ['$scope', '$state', '$window', 'Authentication', 'GoalsService', 'PriorityService', 'Profiles'];
+  GoalsListController.$inject = ['$scope', '$state', '$window', 'Authentication', 'GoalsService', 'GoalsPointsService', 'PriorityService', 'Profiles'];
 
-  function GoalsListController($scope, $state, $window, Authentication, GoalsService, PriorityService, Profiles) {
+  function GoalsListController($scope, $state, $window, Authentication, GoalsService, GoalsPointsService, PriorityService, Profiles) {
     var vm = this;
 
 	//Add priorities to goals
@@ -15,7 +15,6 @@
       GoalsService.query().$promise.then(function(value) {
         vm.goals = value;
         var userId = '';
-
         if(vm.goals.length > 0)
         {				
           userId = vm.goals[0].user._id;
@@ -29,6 +28,13 @@
             }
           });
         }
+      });
+    })();
+
+    (function (){
+      GoalsPointsService.get().$promise.then(function(value) {
+        vm.points = value.points;
+        console.log(value);
       });
     })();
 
@@ -61,7 +67,8 @@
 
     $scope.markGoalComplete = function (goal) {
       goal.status = 'Complete';
-      vm.goals.points += 4;
+      // TODO: Change the amount of points added to be based on the ranking of the goal
+      goal.points = 4;
       goal.completed_at = new Date();
       console.log(JSON.stringify(goal));
       GoalsService.update(goal);

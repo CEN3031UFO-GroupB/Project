@@ -6,6 +6,14 @@
     <h5 style="font-style: italic; padding-left: 10px">{{diffDays}} days left to finish your goals</h5>
   </div>
 
+  <div class="progress" ng-init="getPoints()">
+    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{vm.points}}"
+    aria-valuemin="0" style="width:{{vm.point*10}}%; min-width: 15%">
+      You have {{vm.points}} points
+    </div>
+  </div>
+
+
   <div class="list-group ">
     <label>Complete</label>
     <a ng-repeat="goal in vm.goals"

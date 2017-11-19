@@ -83,7 +83,16 @@ exports.update = function(req, res) {
 
   goal = _.extend(goal, req.body);
   console.log('Attempting to update');
-  GoalsList.findOneAndUpdate({ user: goal.user, 'goals._id': goal._id }, { '$set': { 'goals.$': goal } }).exec(function(err,goal) {
+
+  if(goal.points){
+    GoalsList.findOneAndUpdate({ user: goal.user}, {$inc: { points: goal.points } }).exec(function(err,goal) {
+      if(err) {
+        console.log(err);
+        return err;
+      } 
+    });
+  }
+  GoalsList.findOneAndUpdate({ user: goal.user, 'goals._id': goal._id }, {'$set': { 'goals.$': goal } }).exec(function(err,goal) {
     if(err) {
       console.log(err);
       return err;
@@ -129,6 +138,32 @@ exports.list = function(req, res) {
       } else {
         res.jsonp(goalsList[0].goals);
       }
+    }
+  });
+};
+
+exports.goalsPoints = function(req, res) {
+  GoalsList.find({ user: req.user
+  }).populate('goals.user', 'displayName').exec(function(err, goalsList) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+        res.jsonp(goalsList[0]);
+    }
+  });
+};
+// TODO: make this actually update the points
+exports.goalsPointsUpdate = function(req, res) {
+  GoalsList.find({ user: req.user
+  }).populate('goals.user', 'displayName').exec(function(err, goalsList) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+        res.jsonp(goalsList);
     }
   });
 };
