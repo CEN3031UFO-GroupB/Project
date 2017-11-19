@@ -53,7 +53,7 @@
     <div class="list-group col-md-4">
       <h4 style="font-weight: bolder">Completed</h4>
       <div ng-repeat="goal in vm.goals"
-           ng-if="(goal.status == 'Complete') && ((goal.completed_at | date:'dd/MM/yyyy') < (monday | date:'dd/MM/yyyy'))"
+           ng-if="(goal.status == 'Complete') && ((goal.completed_at | date:'dd/MM/yyyy') > (monday | date:'dd/MM/yyyy'))"
            class="list-group-item"
            style="margin-bottom: 5px; border-left: 5px solid #2fcc00">
         <div class="row">
@@ -81,7 +81,7 @@
 <hr>
 <h1 class="col-md-8">Previously Completed Goals</h1>
 <div class="list-group">
-  <table st-table="vm.goals" id="goals-table" class="table table-striped">
+  <table st-table="vm.oldGoals" id="goals-table" class="table table-striped">
     <thead>
     <th style="width:130px">Title</th>
     <th style="width:130px">Category</th>
@@ -89,7 +89,7 @@
     <th style="width:130px">Completed On</th>
     </thead>
     <tbody>
-    <tr ng-repeat="goal in vm.goals" >
+    <tr ng-repeat="goal in vm.oldGoals" >
       <td ng-bind="goal.title"></td>
       <td ng-bind="goal.category"></td>
       <td ng-bind="(goal.started_at | date:'mediumDate')"></td>
@@ -97,4 +97,6 @@
     </tr>
     </tbody>
   </table>
+  <hr>
+
 </div>
