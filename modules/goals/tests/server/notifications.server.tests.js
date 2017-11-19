@@ -36,7 +36,7 @@ describe('Goal Notifications Tests', function () {
       username: 'felixoe',
       password: 'test123456!A'
     };
-      done();
+    done();
   });
 
   it('should be able to retrieve notifications settings', function (done) {
@@ -48,30 +48,30 @@ describe('Goal Notifications Tests', function () {
         if (signinErr) {
           return done(signinErr);
         }
-		
-		var userId = signinRes.body._id;
+
+        var userId = signinRes.body._id;
 
         // Retrieve current settings
-		agent.get('/api/notifications')
-		  .end(function (settingsGetErr, settingsGetRes) {
-			// Handle Settings retrieve error
-			if (settingsGetErr) {
-			  return done(settingsGetErr);
-			}
+        agent.get('/api/notifications')
+        .end(function (settingsGetErr, settingsGetRes) {
+          // Handle Settings retrieve error
+          if (settingsGetErr) {
+            return done(settingsGetErr);
+          }
 			
-			// Get Settings
-			var settings = settingsGetRes.body;
+          // Get Settings
+          var settings = settingsGetRes.body;
 
-			// Set assertions
-			(settings.body).should.not.be.equal('');
-			(settings.ending).should.not.be.equal('');
-			(settings.greeting).should.not.be.equal('');
-			(parseInt(settings.day)).should.be.a.Number();
-			(parseInt(settings.time)).should.be.a.Number();
+          // Set assertions
+          (settings.body).should.not.be.equal('');
+          (settings.ending).should.not.be.equal('');
+          (settings.greeting).should.not.be.equal('');
+          (parseInt(settings.day)).should.be.a.Number();
+          (parseInt(settings.time)).should.be.a.Number();
 
-			// Call the assertion callback
-			done();
-		  });
+          // Call the assertion callback
+          done();
+        });
       });
   });
 });
