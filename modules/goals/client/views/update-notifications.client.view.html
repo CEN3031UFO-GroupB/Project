@@ -1,0 +1,90 @@
+<section>
+  <div class="page-header">
+    <h1>Notifications Settings</h1>
+	<p>
+	  Please use this page to personalize the automatic goal reminders, which are being sent via email.
+	  The email body, ending, and greeting is editable. Furthermore, you are able to set the specific day and time
+	  the emails will be sent to your users on a weekly basis. (Note: The changes might take up to a day to be applied)
+	</p>
+  </div>
+  <div class="col-md-8" ng-controller="NotificationsController" ng-init="load();">
+    <form name="updateForm" ng-submit="update(updateForm.$valid);" novalidate>
+      <fieldset>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="day">Day</label>
+		  <select id="day" name="day" ng-model="notification.day">
+		    <option value="0">Sunday</option>
+		    <option value="1">Monday</option>
+		    <option value="2">Tuesday</option>
+		    <option value="3">Wednesday</option>
+		    <option value="4">Thursday</option>
+		    <option value="5">Friday</option>
+		    <option value="6">Saturday</option>
+		  </select>
+		  <label class="control-label" for="time">Time</label>
+		  <select id="time" name="time" ng-model="notification.time">
+		    <option value="0">12 am</option>
+		    <option value="1">1 am</option>
+		    <option value="2">2 am</option>
+		    <option value="3">3 am</option>
+		    <option value="4">4 am</option>
+		    <option value="5">5 am</option>
+		    <option value="6">6 am</option>
+		    <option value="7">7 am</option>
+		    <option value="8">8 am</option>
+		    <option value="9">9 am</option>
+		    <option value="10">10 am</option>
+		    <option value="11">11 am</option>
+		    <option value="12">12 pm</option>
+		    <option value="13">1 pm</option>
+		    <option value="14">2 pm</option>
+		    <option value="15">3 pm</option>
+		    <option value="16">4 pm</option>
+		    <option value="17">5 pm</option>
+		    <option value="18">6 pm</option>
+		    <option value="19">7 pm</option>
+		    <option value="20">8 pm</option>
+		    <option value="21">9 pm</option>
+		    <option value="22">10 pm</option>
+		    <option value="23">11 pm</option>
+		  </select>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="greeting">Greeting</label>
+          <input name="greeting" type="text" ng-model="notification.greeting" id="greeting" class="form-control" placeholder="Ending" required>
+          <div ng-messages="updateForm.greeting.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">A greeting is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="body">Body</label>
+          <textarea name="body" rows="4" cols="50" ng-model="notification.body" id="body" class="form-control" placeholder="Body" required></textarea>
+          <div ng-messages="updateForm.body.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">A body is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="ending">Ending</label>
+          <input name="ending" type="text" ng-model="notification.ending" id="ending" class="form-control" placeholder="Ending" required>
+          <div ng-messages="updateForm.ending.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">An ending is required.</p>
+          </div>
+        </div>
+		<div class="form-group" show-errors>
+          <label class="control-label" for="preview">Preview</label>
+          <div class="preview-area">{{notification.greeting}} (user),<br />{{notification.body}}<br /><br />- Example goal 1 (Romance)<br />- Example goal 2 (Family)<br />- Example goal 3 (Rest and Relaxation)<br /><br />{{notification.ending}}
+		  </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary" onclick="return confirm('Are you sure you want to update the weekly email reminder?');">Update</button>
+		  <span ng-class="messageClass">{{message}}</span>
+        </div>
+
+        <div ng-show="vm.error" class="text-danger">
+          <strong ng-bind="vm.error"></strong>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</section>

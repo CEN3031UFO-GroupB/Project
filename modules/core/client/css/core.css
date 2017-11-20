@@ -37,6 +37,22 @@ a:hover .header-profile-image {
 }
 
 .navbar-logo {
-	max-height: 40px;
-	margin-top: 2px;
+  max-height: 40px;
+  margin-top: 2px;
+}
+
+.preview-area {
+  background-color: #cccccc;
+  width: 100%;
+  padding: 25px;
+  border-radius: 5px;
+  white-space: pre;
+}
+
+.error {
+	color: #dd0c0c;
+}
+
+.success {
+	color: #00ad08;
 }
