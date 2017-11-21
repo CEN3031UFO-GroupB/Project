@@ -33,8 +33,8 @@
 
     (function (){
       GoalsPointsService.get().$promise.then(function(value) {
-        vm.points = value.points;
-        console.log(value);
+        vm.goalPoints = { goalPoints: {_id: value._id, points: value.points} };
+        vm.points = vm.goalPoints.goalPoints.points;
       });
     })();
 
@@ -67,11 +67,16 @@
 
     $scope.markGoalComplete = function (goal) {
       goal.status = 'Complete';
-      // TODO: Change the amount of points added to be based on the ranking of the goal
-      goal.points = 4;
       goal.completed_at = new Date();
       console.log(JSON.stringify(goal));
       GoalsService.update(goal);
+
+      // Increment user's points
+      vm.goalPoints.goalPoints.points += 4;
+      GoalsPointsService.update(vm.goalPoints);
+      vm.points += 4;
+      console.log(JSON.stringify(vm.goalPoints));
+
     };
 
   }

@@ -150,20 +150,23 @@ exports.goalsPoints = function(req, res) {
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-        res.jsonp(goalsList[0]);
+        var r = {_id: goalsList[0]._id, points: goalsList[0].points};
+        res.jsonp(r);
     }
   });
 };
 // TODO: make this actually update the points
 exports.goalsPointsUpdate = function(req, res) {
-  GoalsList.find({ user: req.user
-  }).populate('goals.user', 'displayName').exec(function(err, goalsList) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-        res.jsonp(goalsList);
+  var goalPoints = req.body.goalPoints;
+  console.log('Attempting to update Points');
+
+  GoalsList.findOneAndUpdate({ _id: goalPoints._id}, {'$set': { points: goalPoints.points } }).exec(function(err,goalP) {
+    if(err) {
+      console.log('Failed to update points');
+      return err;
+    } else if(goalP) {
+      console.log('Successfully updated points!');
+      return goalP;
     }
   });
 };
