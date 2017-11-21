@@ -50,9 +50,13 @@ a:hover .header-profile-image {
 }
 
 .error {
-	color: #dd0c0c;
+  color: #dd0c0c;
 }
 
 .success {
-	color: #00ad08;
+  color: #00ad08;
+}
+
+.checkboxLabel {
+  margin-right: 5px !important;
 }
