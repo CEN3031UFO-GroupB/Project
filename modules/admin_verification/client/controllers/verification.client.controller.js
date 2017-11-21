@@ -83,6 +83,19 @@ angular.module('verifications').controller('VerificationsController', ['$scope',
       $scope.ListVerifications = function () {
         Verifications.list().then(function (response) { 
 		$scope.veriList = response.data;
+
+		//Filter by active
+		if($scope.checkboxActive) {
+          $scope.veriList = $scope.veriList.filter(function(code){
+            return code.active !== false;
+          });
+		}
+		
+		//Sort by date
+        $scope.veriList.sort(function(a, b) { 
+          return new Date(b.created_at) - new Date(a.created_at);
+        });
+
 		for(var i = 0; i < $scope.veriList.length; i++){
 			if($scope.veriList[i].user_id !== '-1' && $scope.veriList[i].user_id !== ''){
 				var index = $scope.users.findIndex(x => x._id === $scope.veriList[i].user_id);
