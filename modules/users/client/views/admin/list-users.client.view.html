@@ -15,23 +15,24 @@
         <th style="width:130px">Name</th>
         <th style="width:130px">Email</th>
         <th style="width:130px">Role</th>
+		<th>Goals Completed (4 weeks)</th>
+        <th>Goals Completed (past week)</th>
+        <th>Actions</th>
       </thead>
       <tbody>
         <tr ng-repeat="user in pagedItems">
           <td ng-bind="user.displayName"></td>
           <td ng-bind="user.email"></td>
           <td ng-bind="user.roles"></td>
+          <td ng-bind="user.fourWeeks"></td>
+          <td ng-bind="user.pastWeek"></td>
           <td>
             <a ui-sref="admin.profile-view({userId: user._id})">
               <button type="button">Profile</button>
             </a>
-          </td>
-          <td>
-            <a>
+            <a ui-sref="admin.goals-view({userId: user._id})">
               <button type="button">Goals</button>
             </a>
-          </td>
-          <td>
             <a ui-sref="admin.user({userId: user._id})">
               <button type="button">Account Info</button>
             </a>

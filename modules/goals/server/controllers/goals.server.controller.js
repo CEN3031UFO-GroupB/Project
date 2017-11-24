@@ -117,8 +117,11 @@ exports.delete = function(req, res) {
  * List User's Goals
  */
 exports.list = function(req, res) {
+  var userReq = req.user._doc._id;
+  if(req.query.user && req.user._doc.roles[0] === 'admin')
+    userReq = req.query.user;
 
-  GoalsList.find({ user: req.user
+  GoalsList.find({ 'user': mongoose.Types.ObjectId(userReq)
   }).populate('goals.user', 'displayName').exec(function(err, goalsList) {
     if (err) {
       return res.status(400).send({

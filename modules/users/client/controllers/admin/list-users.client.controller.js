@@ -1,10 +1,16 @@
 'use strict';
 
-angular.module('users.admin').controller('UserListController', ['$scope', '$filter', 'Admin',
-  function ($scope, $filter, Admin) {
+angular.module('users.admin').controller('UserListController', ['$scope', '$filter', 'Admin', 'GoalsService',
+  function ($scope, $filter, Admin, GoalsService) {
     Admin.query(function (data) {
       $scope.users = data;
       $scope.buildPager();
+      
+	  for(var i = 0; i < $scope.users.length; i++) {
+        GoalsService.query({ user: $scope.users[i]._id }, function(value) {
+          
+        });
+	  }
     });
 
     $scope.buildPager = function () {
