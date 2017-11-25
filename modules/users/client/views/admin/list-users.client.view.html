@@ -1,5 +1,5 @@
 <section>
-  <div class="page-header">
+  <div class="page-header" ng-init="checkboxUser = true; loadData();">
     <div class="row">
       <div class="col-md-4">
         <h1>Users</h1>
@@ -10,6 +10,7 @@
     </div>
   </div>
   <div class="list-group">
+    <label><input type="checkbox" name="checkboxUser" value="checkboxUser" ng-model="checkboxUser" ng-click="loadData()" class="checkboxLabel">Only show Users</label>
     <table st-table="pagedItems" id="user-table" class="table table-striped">
       <thead>
         <th style="width:130px">Name</th>
