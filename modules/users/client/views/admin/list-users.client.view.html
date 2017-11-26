@@ -15,27 +15,27 @@
       <thead>
         <th style="width:130px">Name</th>
         <th style="width:130px">Email</th>
-        <th style="width:130px">Role</th>
-		<th>Goals Completed (4 weeks)</th>
-        <th>Goals Completed (past week)</th>
+		<th>Goals completed<br /># of goals started<br />(past 4 weeks)</th>
+        <th>Goals completed<br /># of goals started<br />(past week)</th>
+        <th>Goals completed<br /># of goals started<br />(current week)</th>
         <th>Actions</th>
       </thead>
       <tbody>
         <tr ng-repeat="user in pagedItems">
           <td ng-bind="user.displayName"></td>
           <td ng-bind="user.email"></td>
-          <td ng-bind="user.roles"></td>
           <td ng-bind="user.fourWeeks"></td>
           <td ng-bind="user.pastWeek"></td>
+		  <td ng-bind="user.currentWeek"></td>
           <td>
-            <a ui-sref="admin.profile-view({userId: user._id})">
-              <button type="button">Profile</button>
-            </a>
-            <a ui-sref="admin.goals-view({userId: user._id})">
-              <button type="button">Goals</button>
-            </a>
             <a ui-sref="admin.user({userId: user._id})">
               <button type="button">Account Info</button>
+            </a>
+            <a ui-sref="admin.profile-view({userId: user._id})" ng-show="user.roles[0] === 'user'">
+              <button type="button">Profile</button>
+            </a>
+            <a ui-sref="admin.goals-view({userId: user._id})" ng-show="user.roles[0] === 'user'">
+              <button type="button">Goals</button>
             </a>
           </td>
         </tr>
@@ -44,4 +44,11 @@
   </div>
 
   <pagination boundary-links="true" max-size="8" items-per-page="itemsPerPage" total-items="filterLength" ng-model="currentPage" ng-change="pageChanged()"></pagination>
+  
+  <h2>Goals started/completed</h2>
+  <p>Displays a bar chart with the goals which were started and/or completed within the past five weeks or the current week.</p>
+  <div class="list-group">
+    <canvas id="bar" class="chart chart-bar" chart-data="data" chart-labels="labels" chart-series="series">
+    </canvas>
+  </div>
 </section>
