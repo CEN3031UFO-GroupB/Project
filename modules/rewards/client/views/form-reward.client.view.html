@@ -11,8 +11,8 @@
           <br>
           <label for="points">Type of reward: </label>
           <select class="form-control" id="points" ng-model="vm.reward.points" placeholder="Select the amount of points required for this reward" required>
-            <option>Weekly (10 points)</option>
-            <option>Monthly (30 points)</option>
+            <option value=10>Weekly (10 points)</option>
+            <option value=30>Monthly (30 points)</option>
           </select>
           <div ng-messages="vm.form.rewardForm.name.$error" role="alert">
             <p class="help-block error-text" ng-message="required">All fields are required.</p>

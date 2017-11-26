@@ -6,9 +6,9 @@
     .module('rewards')
     .controller('RewardsController', RewardsController);
 
-  RewardsController.$inject = ['$scope', '$state', '$window', 'Authentication', 'rewardResolve'];
+  RewardsController.$inject = ['$scope', '$state', '$window', 'Authentication', 'rewardResolve', 'GoalsPointsService'];
 
-  function RewardsController ($scope, $state, $window, Authentication, reward) {
+  function RewardsController ($scope, $state, $window, Authentication, reward, GoalsPointsService) {
     var vm = this;
 
     vm.authentication = Authentication;
@@ -27,20 +27,29 @@
     }
 
     function claim() {
-      vm.reward.claimed = true;
-      vm.reward.claimed_on = Date.now();
-      vm.reward.$update(successCallback, errorCallback);
+      if(vm.reward.points > vm.goalPoints.goalPoints.points){
+        vm.error = 'You don\'t have enough points to claim this rewards.';
+        return;
+      } else {
+        vm.reward.claimed = true;
+        vm.reward.claimed_on = Date.now();
+        vm.reward.$update(rewardUpdateSuccess, errorCallback);
 
-      function successCallback(res) {
-        $state.go('rewards.list', {
-          rewardId: res._id
-        });
+        function rewardUpdateSuccess(res){
+          vm.goalPoints.goalPoints.points -= vm.reward.points;
+          GoalsPointsService.update(vm.goalPoints, successCallback);
+        }
+
+        function successCallback(res) {
+          $state.go('rewards.list', {
+            rewardId: res._id
+          });
+        }
+
+        function errorCallback(res) {
+          vm.error = res.data.message;
+        }
       }
-
-      function errorCallback(res) {
-        vm.error = res.data.message;
-      }
-
     }
 
     // Save Reward
@@ -49,14 +58,7 @@
         $scope.$broadcast('show-errors-check-validity', 'vm.form.rewardForm');
         return false;
       }
-      if (vm.reward.points === 'Weekly (10 points)') {
-        vm.reward.points = 10;
-      } else if (vm.reward.points === 'Monthly (30 points)') {
-        vm.reward.points = 30;
-      } else {
-        return false;
-      }
-      // TODO: move create/update logic to service
+
       if (vm.reward._id) {
         vm.reward.$update(successCallback, errorCallback);
       } else {
@@ -71,5 +73,13 @@
         vm.error = res.data.message;
       }
     }
+
+    function getPoints(){
+      GoalsPointsService.get({user: vm.authentication.user._id}, function(value){
+        vm.goalPoints = { goalPoints: {_id: value._id, points: value.points} };
+        vm.points = vm.goalPoints.goalPoints.points;
+      });
+    };
+    getPoints();
   }
 }());
