@@ -7,6 +7,11 @@ var goalsPolicy = require('../policies/goals.server.policy'),
   goals = require('../controllers/goals.server.controller');
 
 module.exports = function(app) {
+  // Route for getting user's accumulated points
+  app.route('/api/goals/points')
+    .get(goals.goalsPoints)
+    .put(goals.goalsPointsUpdate);
+
   // Goals Routes
   app.route('/api/goals').all(goalsPolicy.isAllowed)
     .get(goals.list)
@@ -20,6 +25,7 @@ module.exports = function(app) {
   app.route('/api/notifications')
     .get(goals.notificationsRead)
     .post(goals.notificationsUpdate);
+
 
   // Finish by binding the Goal middleware
   app.param('goalId', goals.goalByID);

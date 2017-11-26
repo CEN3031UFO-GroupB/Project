@@ -84,7 +84,16 @@ exports.update = function(req, res) {
 
   goal = _.extend(goal, req.body);
   console.log('Attempting to update');
-  GoalsList.findOneAndUpdate({ user: goal.user, 'goals._id': goal._id }, { '$set': { 'goals.$': goal } }).exec(function(err,goal) {
+
+  if(goal.points){
+    GoalsList.findOneAndUpdate({ user: goal.user}, {$inc: { points: goal.points } }).exec(function(err,goal) {
+      if(err) {
+        console.log(err);
+        return err;
+      } 
+    });
+  }
+  GoalsList.findOneAndUpdate({ user: goal.user, 'goals._id': goal._id }, {'$set': { 'goals.$': goal } }).exec(function(err,goal) {
     if(err) {
       console.log(err);
       return err;
@@ -130,6 +139,35 @@ exports.list = function(req, res) {
       } else {
         res.jsonp(goalsList[0].goals);
       }
+    }
+  });
+};
+
+exports.goalsPoints = function(req, res) {
+  GoalsList.find({ user: req.user
+  }).populate('goals.user', 'displayName').exec(function(err, goalsList) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+        var r = {_id: goalsList[0]._id, points: goalsList[0].points};
+        res.jsonp(r);
+    }
+  });
+};
+// TODO: make this actually update the points
+exports.goalsPointsUpdate = function(req, res) {
+  var goalPoints = req.body.goalPoints;
+  console.log('Attempting to update Points');
+
+  GoalsList.findOneAndUpdate({ _id: goalPoints._id}, {'$set': { points: goalPoints.points } }).exec(function(err,goalP) {
+    if(err) {
+      console.log('Failed to update points');
+      return err;
+    } else if(goalP) {
+      console.log('Successfully updated points!');
+      return goalP;
     }
   });
 };
