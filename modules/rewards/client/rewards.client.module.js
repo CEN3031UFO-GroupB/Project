@@ -1,6 +1,6 @@
 (function (app) {
   'use strict';
-  app.registerModule('rewards');
+  app.registerModule('rewards', ['goals']);
 
 
 }(ApplicationConfiguration));
