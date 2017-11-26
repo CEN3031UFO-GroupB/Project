@@ -12,7 +12,8 @@ var path = require('path'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   _ = require('lodash'),
   config = require(path.resolve('./config/env/development.js')),
-  mailgun = require('mailgun-js')({ apiKey: config.mailGun.api_key, domain: 'sandboxb26a50f3d0844386a5071d5431553e72.mailgun.org' });
+  mailgun = require('mailgun-js')({ apiKey: config.mailGun.api_key, domain: 'sandboxb26a50f3d0844386a5071d5431553e72.mailgun.org' }),
+  fs = require('fs');
 
 
 function getThisMonday() {
@@ -83,7 +84,16 @@ exports.update = function(req, res) {
 
   goal = _.extend(goal, req.body);
   console.log('Attempting to update');
-  GoalsList.findOneAndUpdate({ user: goal.user, 'goals._id': goal._id }, { '$set': { 'goals.$': goal } }).exec(function(err,goal) {
+
+  if(goal.points){
+    GoalsList.findOneAndUpdate({ user: goal.user}, {$inc: { points: goal.points } }).exec(function(err,goal) {
+      if(err) {
+        console.log(err);
+        return err;
+      } 
+    });
+  }
+  GoalsList.findOneAndUpdate({ user: goal.user, 'goals._id': goal._id }, {'$set': { 'goals.$': goal } }).exec(function(err,goal) {
     if(err) {
       console.log(err);
       return err;
@@ -133,6 +143,35 @@ exports.list = function(req, res) {
   });
 };
 
+exports.goalsPoints = function(req, res) {
+  GoalsList.find({ user: req.user
+  }).populate('goals.user', 'displayName').exec(function(err, goalsList) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+        var r = {_id: goalsList[0]._id, points: goalsList[0].points};
+        res.jsonp(r);
+    }
+  });
+};
+// TODO: make this actually update the points
+exports.goalsPointsUpdate = function(req, res) {
+  var goalPoints = req.body.goalPoints;
+  console.log('Attempting to update Points');
+
+  GoalsList.findOneAndUpdate({ _id: goalPoints._id}, {'$set': { points: goalPoints.points } }).exec(function(err,goalP) {
+    if(err) {
+      console.log('Failed to update points');
+      return err;
+    } else if(goalP) {
+      console.log('Successfully updated points!');
+      return goalP;
+    }
+  });
+};
+
 
 /**
  * Goal middleware
@@ -160,11 +199,49 @@ exports.goalByID = function(req, res, next, id) {
 };
 
 
+/**
+ * Get the current Notification setting
+ */
+exports.notificationsRead = function(req, res) {
+  var notification = JSON.parse(fs.readFileSync(path.resolve('./modules/goals/server/data/notification.json')).toString());
+  
+  res.jsonp(notification);
+};
+
+
+/**
+ * Update the current Notification setting
+ */
+exports.notificationsUpdate = function(req, res) {
+  var notification = req.body;
+
+  fs.writeFile(path.resolve('./modules/goals/server/data/notification.json'), JSON.stringify(notification), 'utf8', function() { });
+
+  res.jsonp(notification);
+};
+
+
+//Update Notification time
+var scheduleRule = new schedule.RecurrenceRule();
+scheduleRule.minute = new schedule.Range(0, 59, 1);
+
 //Function to run weekly, every Wednesday, to notify users of upcoming goals.
 //Notifications will be sent via MailGun to the users' email.
 //Cron-style scheduling: '* * 15 * * 3', i.e. every Wednesday at 3 pm.
 var rule = new schedule.RecurrenceRule();
-rule.minute = 10; //Execute function whenever it is 10 minutes into the hour for testing.
+var notificationSettings = JSON.parse(fs.readFileSync(path.resolve('./modules/goals/server/data/notification.json')).toString());
+rule.dayOfWeek = parseInt(notificationSettings.day);
+rule.hour = parseInt(notificationSettings.time);
+rule.minute = 0;
+
+//TODO: Update rule dynamically
+//Update scheduling time according to notifications settings
+//var updateNotificationTime = schedule.scheduleJob(scheduleRule, function(){
+//  var notificationSettings = JSON.parse(fs.readFileSync(path.resolve('./modules/goals/server/data/notification.json')).toString());
+//  rule.dayOfWeek = parseInt(notificationSettings.day);
+//  rule.hour = parseInt(notificationSettings.time);
+//  rule.minute = 26;
+//});
 
 var weeklyGoalsNotifications = schedule.scheduleJob(rule, function(){
   console.log('Sending goal reminders!');	
@@ -194,15 +271,16 @@ var weeklyGoalsNotifications = schedule.scheduleJob(rule, function(){
             //If there are current goals, send an email
             if(goalsToNotify.length > 0) {
               console.log('Sending reminder to ' + userObj.email + '!');	
+              var notificationSettings = JSON.parse(fs.readFileSync(path.resolve('./modules/goals/server/data/notification.json')).toString());
 			  
-              var body = 'Hi ' + userObj.displayName + ',\n';
-              body += 'there are still some goals which have not been finished this week:\n\n';
+              var body = notificationSettings.greeting + ' ' + userObj.displayName + ',\n';
+              body += notificationSettings.body + '\n\n';
 			  
               for(var k = 0; k < goalsToNotify.length; k++) {
                 body += '- ' + goalsToNotify[k].title + ' (' + goalsToNotify[k].category + ')\n';
               }
 			  
-              body += '\n\n Have a great week!';
+              body += '\n\n' + notificationSettings.ending;
 			  
               var data = {
                 from: 'Sandra Roach <mailgun@sandboxb26a50f3d0844386a5071d5431553e72.mailgun.org>',

@@ -5,9 +5,9 @@
     .module('goals')
     .controller('GoalsListController', GoalsListController);
 
-  GoalsListController.$inject = ['$scope', '$state', '$window', 'Authentication', 'GoalsService', 'PriorityService', 'Profiles'];
+  GoalsListController.$inject = ['$scope', '$state', '$window', 'Authentication', 'GoalsService', 'GoalsPointsService', 'PriorityService', 'Profiles'];
 
-  function GoalsListController($scope, $state, $window, Authentication, GoalsService, PriorityService, Profiles) {
+  function GoalsListController($scope, $state, $window, Authentication, GoalsService, GoalsPointsService, PriorityService, Profiles) {
     var vm = this;
 
 	//Add priorities to goals
@@ -15,7 +15,6 @@
       GoalsService.query().$promise.then(function(value) {
         vm.goals = value;
         var userId = '';
-
         if(vm.goals.length > 0)
         {				
           userId = vm.goals[0].user._id;
@@ -29,6 +28,13 @@
             }
           });
         }
+      });
+    })();
+
+    (function (){
+      GoalsPointsService.get().$promise.then(function(value) {
+        vm.goalPoints = { goalPoints: {_id: value._id, points: value.points} };
+        vm.points = vm.goalPoints.goalPoints.points;
       });
     })();
 
@@ -64,6 +70,13 @@
       goal.completed_at = new Date();
       console.log(JSON.stringify(goal));
       GoalsService.update(goal);
+
+      // Increment user's points
+      vm.goalPoints.goalPoints.points += 4;
+      GoalsPointsService.update(vm.goalPoints);
+      vm.points += 4;
+      console.log(JSON.stringify(vm.goalPoints));
+
     };
 
   }

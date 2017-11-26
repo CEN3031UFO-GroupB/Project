@@ -69,6 +69,15 @@
         data: {
           pageTitle: 'Goals List'
         }
+      })
+      .state('goals.notifications', {
+        url: '/notifications',
+        templateUrl: 'modules/goals/client/views/update-notifications.client.view.html',
+        controller: 'NotificationsController',
+        data: {
+          roles: ['admin'],
+          pageTitle: 'Notification Settings'
+        }
       });
   }
 
