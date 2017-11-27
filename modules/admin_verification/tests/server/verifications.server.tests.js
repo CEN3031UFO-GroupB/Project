@@ -32,8 +32,8 @@ describe('Verifications Tests', function () {
   beforeEach(function (done) {
     // Create admin credentials
     credentials = {
-      username: 'felixoe',
-      password: 'test123456!A'
+      username: '',
+      password: ''
     };
     done();
   });

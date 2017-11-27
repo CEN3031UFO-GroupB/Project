@@ -33,8 +33,8 @@ describe('Goals Tests', function () {
   beforeEach(function (done) {
     // Create user credentials
     credentials = {
-      username: 'felixoeu',
-      password: 'test123456!A'
+      username: '',
+      password: ''
     };
     done();
   });

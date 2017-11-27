@@ -33,8 +33,8 @@ describe('Goal Notifications Tests', function () {
   beforeEach(function (done) {
     // Create user credentials
     credentials = {
-      username: 'felixoe',
-      password: 'test123456!A'
+      username: '',
+      password: ''
     };
     done();
   });
