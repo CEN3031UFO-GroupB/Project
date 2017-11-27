@@ -1,12 +1,13 @@
 <section>
   
-  <div class="page-header">
-    <h1>Rewards</h1>
+  <div class="page-header row">
+    <h1 class="col-md-8">Rewards</h1>
+    <a style="float:right;margin-top: 25px;" ui-sref="rewards.create">Add a reward</a>
+
   </div>
 
   <div class="alert alert-info text-center">
     <p><h4> You have {{ vm.points }} points! You can claim a reward if you have enough points.</h4></p>
-    <a ui-sref="rewards.create">Add a reward</a>
   </div>
   <h3 ng-if="!(vm.rewards.$resolved && !vm.rewards.length)">Unclaimed</h3>
   <div class="list-group">
