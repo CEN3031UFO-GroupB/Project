@@ -174,7 +174,7 @@ exports.goalsPointsUpdate = function(req, res) {
       return err;
     } else if(goalP) {
       console.log('Successfully updated points!');
-      return goalP;
+      return res.jsonp(goalP);
     }
   });
 };

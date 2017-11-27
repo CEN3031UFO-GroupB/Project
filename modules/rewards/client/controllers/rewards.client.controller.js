@@ -37,12 +37,14 @@
 
         function rewardUpdateSuccess(res){
           vm.goalPoints.goalPoints.points -= vm.reward.points;
-          GoalsPointsService.update(vm.goalPoints);
+          GoalsPointsService.update(vm.goalPoints, pointUpdateSuccess)
+        }
+
+        function pointUpdateSuccess(res){
           $state.go('rewards.list', {
             rewardId: res._id
           });
         }
-
 
         function errorCallback(res) {
           vm.error = res.data.message;
