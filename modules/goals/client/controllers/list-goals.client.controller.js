@@ -73,9 +73,9 @@
       GoalsService.update(goal);
 
       // Increment user's points
-      vm.goalPoints.goalPoints.points += 4;
+      vm.goalPoints.goalPoints.points += 5;
       GoalsPointsService.update(vm.goalPoints);
-      vm.points += 4;
+      vm.points += 5;
       console.log(JSON.stringify(vm.goalPoints));
 
     };
