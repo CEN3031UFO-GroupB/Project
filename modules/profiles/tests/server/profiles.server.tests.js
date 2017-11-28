@@ -5,7 +5,6 @@ var should = require('should'),
   path = require('path'),
   mongoose = require('mongoose'),
   User = mongoose.model('User'),
-  Goal = mongoose.model('Goal'),
   express = require(path.resolve('./config/lib/express'));
 
 /**
@@ -20,7 +19,7 @@ var app,
 /**
  * Goal routes tests
  */
-describe('Goal Notifications Tests', function () {
+describe('Profiles Tests User', function () {
 
   before(function (done) {
     // Get application
@@ -38,8 +37,8 @@ describe('Goal Notifications Tests', function () {
     };
     done();
   });
-
-  it('should be able to retrieve notifications settings', function (done) {
+  
+    it('user should be able to retrieve own profile', function (done) {
     agent.post('/api/auth/signin')
       .send(credentials)
       .expect(200)
@@ -51,23 +50,21 @@ describe('Goal Notifications Tests', function () {
 
         var userId = signinRes.body._id;
 
-        // Retrieve current settings
-        agent.get('/api/notifications')
-        .end(function (settingsGetErr, settingsGetRes) {
-          // Handle Settings retrieve error
-          if (settingsGetErr) {
-            return done(settingsGetErr);
+        // Retrieve all profiles
+        agent.get('/api/profiles/')
+        .end(function (profilesGetErr, profilesGetRes) {
+          // Handle profiles retrieve error
+          if (profilesGetErr) {
+            return done(profilesGetErr);
           }
 			
-          // Get Settings
-          var settings = settingsGetRes.body;
+          // Get profiles
+          var profile = profilesGetRes.body;
 
           // Set assertions
-          (settings.body).should.not.be.equal('');
-          (settings.ending).should.not.be.equal('');
-          (settings.greeting).should.not.be.equal('');
-          (parseInt(settings.day)).should.be.a.Number();
-          (parseInt(settings.time)).should.be.a.Number();
+          (profile).should.not.be.null;
+          (profile.Satisfaction).should.not.be.null;
+          (profile.Priority).should.not.be.null;
 
           // Call the assertion callback
           done();
