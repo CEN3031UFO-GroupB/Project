@@ -1,7 +1,7 @@
 <container>
   <div class="page-header row">
     <h1 class="col-md-8">{{name}} Goals</h1>
-    <button class="btn btn-default" style="float:right;margin-top: 25px;" ng-click="createGoal()">New Goal</button>
+    <button class="btn btn-default" style="float:right;margin-top: 25px;" ng-click="createGoal()" ng-hide="auth.user.roles[0] == 'admin'">New Goal</button>
     <div class="clearfix"></div>
     <h5 style="font-style: italic; padding-left: 10px">{{diffDays}} days left to finish your goals</h5>
   </div>
@@ -14,10 +14,10 @@
            class="list-group-item"
             style="margin-bottom: 5px;">
         <div class="row">
-          <div class="col-md-1" style="position: relative; height: 50px; padding-bottom: 0px; margin-bottom: 0px; bottom: 0px;">
+          <div class="col-md-1" style="position: relative; height: 50px; padding: 0px; margin-bottom: 0px; bottom: 0px;">
             <div style="background-color: #347fa5; width:1px;
             transform: rotate(-90deg); transform-origin: top left;
-            position: absolute; bottom: 0px; left: 2px"> {{goal.priority}}</div>
+            position: absolute; left: 2px; height: 100%; width: 100%;"> {{goal.priority}}</div>
           </div>
           <div class="col-md-7" style="padding-right: 0px;">
             <h4 class="list-group-item-heading" style="display:block; font-weight: bold">{{goal.title}} </h4>
