@@ -1,25 +1,27 @@
 <container>
   <div class="page-header row">
-    <h1 class="col-md-8">My Goals</h1>
+    <h1 class="col-md-8">{{name}} Goals</h1>
     <button class="btn btn-default" style="float:right;margin-top: 25px;" ng-click="createGoal()">New Goal</button>
     <div class="clearfix"></div>
-    <h5 style="font-style: italic; padding-left: 10px">{{7 - diffDays}} days left to finish your goals</h5>
+    <h5 style="font-style: italic; padding-left: 10px">{{diffDays}} days left to finish your goals</h5>
   </div>
+  <h2 class="row">Current Goals</h2>
   <div class="row" id="currentWeek">
     <div class="list-group col-md-4">
       <h4 style="font-weight: bolder">To Do</h4>
       <div ng-repeat="goal in vm.goals"
            ng-if="(goal.status == 'Not Started')"
            class="list-group-item"
-            style="margin-bottom: 5px; border-left: 5px solid #7e7877">
+            style="margin-bottom: 5px;">
         <div class="row">
-          <div class="col-md-6" style="padding-right: 0px;">
-            <h4 class="list-group-item-heading" style="display:block">{{goal.title}} </h4>
-            <h5 class="list-group-item-heading" style="display:inline">{{goal.category}} </h5>
-            <small class="list-group-item-text" style="display:block">Created on {{goal.created_at | date:'mediumDate'}} </small>
+          <div class="col-md-1" style="position: relative; height: 50px; padding-bottom: 0px; margin-bottom: 0px; bottom: 0px;">
+            <div style="background-color: #347fa5; width:1px;
+            transform: rotate(-90deg); transform-origin: top left;
+            position: absolute; bottom: 0px; left: 2px"> {{goal.priority}}</div>
           </div>
-          <div class="col-md-3">
-            <h5 class="list-group-item-info" style="display:inline-block; vertical-align: middle; margin-top:20px">{{goal.priority}} </h5>
+          <div class="col-md-7" style="padding-right: 0px;">
+            <h4 class="list-group-item-heading" style="display:block; font-weight: bold">{{goal.title}} </h4>
+            <h5 class="list-group-item-heading" style="display:inline">{{goal.category}} </h5>
           </div>
           <div class="col-md-2">
             <button class="btn" style="padding-top: 0; padding-bottom: 0; margin-top: 6px; margin-bottom: 5px" ui-sref="goals.view({ goalId: goal._id })">View</button>
@@ -79,7 +81,7 @@
 </container>
 
 <hr>
-<h1 class="col-md-8">Previously Completed Goals</h1>
+<h2 class="col-md-8">Previously Completed Goals</h2>
 <div class="list-group">
   <table st-table="vm.oldGoals" id="goals-table" class="table table-striped">
     <thead>
@@ -97,6 +99,10 @@
     </tr>
     </tbody>
   </table>
-  <hr>
-
+</div>
+<hr>
+<div>
+  <canvas id="bar" class="chart chart-line"
+          chart-data="data" chart-labels="labels" chart-options="options" chart-series="series">
+  </canvas>
 </div>
