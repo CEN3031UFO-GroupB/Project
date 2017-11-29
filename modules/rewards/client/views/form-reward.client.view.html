@@ -6,10 +6,18 @@
     <form name="vm.form.rewardForm" class="form-horizontal" ng-submit="vm.save(vm.form.rewardForm.$valid)" novalidate>
       <fieldset>
         <div class="form-group" show-errors>
-          <label class="control-label" for="name">Name</label>
+          <label class="control-label" for="name">Name of the reward: </label>
           <input name="name" type="text" ng-model="vm.reward.name" id="name" class="form-control" placeholder="Name" required>
+          <br>
+          <label for="points">Type of reward: </label>
+          <select class="form-control" id="points" ng-model="vm.reward.points" placeholder="Amount of points required" required>
+            <option value=3>Weekly (3 points)</option>
+            <option value=12>Monthly (12 points)</option>
+            <option value=36>Quarterly (36 points)</option>
+            <option value=140>Yearly (140 points)</option>
+          </select>
           <div ng-messages="vm.form.rewardForm.name.$error" role="alert">
-            <p class="help-block error-text" ng-message="required">Reward name is required.</p>
+            <p class="help-block error-text" ng-message="required">All fields are required.</p>
           </div>
         </div>
         <div class="form-group">
@@ -20,5 +28,44 @@
         </div>
       </fieldset>
     </form>
+    <br><br><br>
   </div>
 </section>
+
+<section>
+  <div class="page-header">
+    <h3>Example Rewards for each Type</h3>
+  </div>
+  <div class="col-md-12">
+    <div><span style="text-decoration: underline;">Weekly Goals</span>&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>&nbsp;3pts</strong></div>
+    <div>Treat yourself to a smoothie</div>
+    <div>Watch a movie</div>
+    <div>Play your favorite game</div>
+    <div>Cook your favorite meal</div>
+    <div>Go for a run, walk, bike ride</div>
+    <div>Buy something new: water bottle, plant, etc</div>
+    <div>&nbsp;</div>
+    <div><span style="text-decoration: underline;">Monthly Goals</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>12pts</strong></div>
+    <div>Get a massage/manicure/pedicure</div>
+    <div>Attend a concert or sporting event</div>
+    <div>Go out to a fancy dinner</div>
+    <div>Get a new hairstyle</div>
+    <div>Hang out with friends</div>
+    <div>Work on your hobby</div>
+    <div>&nbsp;</div>
+    <div><span style="text-decoration: underline;">Quarterly Goals</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>36pts</strong></div>
+    <div>Plan a road trip</div>
+    <div>Take a mini vacation</div>
+    <div>Schedule a lazy day</div>
+    <div>Visit a winery</div>
+    <div>Go camping/horseback riding/canoeing</div>
+    <div>&nbsp;</div>
+    <div><span style="text-decoration: underline;">Yearly Goals</span>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>&nbsp;140pts</strong></div>
+    <div>Buy a home stereo/car/house</div>
+    <div>Donate to a charity</div>
+    <div>Take a vacation</div>
+    <div>Throw a party</div>
+    <br><br><br><br>
+  </div>
+</section>
+

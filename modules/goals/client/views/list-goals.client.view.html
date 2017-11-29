@@ -6,7 +6,7 @@
     <h5 style="font-style: italic; padding-left: 10px">{{diffDays}} days left to finish your goals</h5>
   </div>
 
-  <div ng-init="getPoints()">
+  <div ng-init="updatePoints();">
     <p>You have {{vm.points}} points</p>
     <p ng-if="vm.points >= 10">You have enough points to <a ui-sref="rewards.list">claim a reward!</a></p>
     <div class="progress">

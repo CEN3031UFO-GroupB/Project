@@ -16,6 +16,34 @@
         method: 'PUT'
       }
     });
+
+
+    angular.extend(Points.prototype, {
+      createOrUpdate: function () {
+        var points = this;
+        return createOrUpdate(points);
+      }
+    });
+
     return Points;
+
+    function createOrUpdate(points) {
+      return points.$update(onSuccess, onError);
+
+
+      function onSuccess(points) {
+        var success = points.data;
+      }
+
+      function onError(errorResponse) {
+        var error = errorResponse.data;
+        handleError(error);
+      }
+
+      function handleError(error) {
+        console.log(error);
+      }
+
+    }
   }
 }());

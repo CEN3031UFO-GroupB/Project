@@ -154,8 +154,15 @@ exports.goalsPoints = function(req, res) {
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-        var r = {_id: goalsList[0]._id, points: goalsList[0].points};
-        res.jsonp(r);
+        if (goalsList[0]) {
+          var r = {_id: goalsList[0]._id, points: goalsList[0].points};
+          res.jsonp(r);
+        } else {
+          // Need this in case goalslist does not exist
+          // Client controller will try to update after a goal is created
+          var r = {_id: 0, points: 0};
+          res.jsonp(r);
+        }
     }
   });
 };
@@ -170,7 +177,7 @@ exports.goalsPointsUpdate = function(req, res) {
       return err;
     } else if(goalP) {
       console.log('Successfully updated points!');
-      return goalP;
+      return res.jsonp(goalP);
     }
   });
 };
