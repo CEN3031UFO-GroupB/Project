@@ -83,13 +83,20 @@ exports.update = function(req, res) {
 
   goal = _.extend(goal, req.body);
   console.log('Attempting to update');
-  GoalsList.findOneAndUpdate({ user: goal.user, 'goals._id': goal._id }, { '$set': { 'goals.$': goal } }).exec(function(err,goal) {
+  GoalsList.findOneAndUpdate({ user: goal.user, 'goals._id': goal._id }, { '$set': { 'goals.$': goal } }).exec(function(err,newGoal) {
     if(err) {
       console.log(err);
       return err;
-    } else if(goal) {
-      console.log(goal);
-      console.log('Successfully updated!');
+    } else if(newGoal) {
+      //console.log("Old Goal ID:" + goal._id);
+      for(var i = 0; i < newGoal.goals.length; i++){
+        //console.log(newGoal.goals[i]._id);
+        if(JSON.stringify(newGoal.goals[i]._id) == JSON.stringify(goal._id)){
+          //console.log("MATCH:"+newGoal.goals[i]);
+          console.log('Successfully updated!');
+          return newGoal.goals[i];
+        }
+      }
       return goal;
     }
   });
@@ -132,6 +139,32 @@ exports.list = function(req, res) {
     }
   });
 };
+
+/**
+ * List User's Goals for Admin
+ */
+exports.adminList = function(req, res) {
+
+  var oid = mongoose.Types.ObjectId(req.params.userId);
+  console.log('OID:' + oid);
+  //console.log(req);
+
+  GoalsList.find({ user: oid
+  }).populate('goals.user', 'displayName').exec(function(err, goalsList) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      if (goalsList[0] === undefined) {
+        res.jsonp(goalsList);
+      } else {
+        res.jsonp(goalsList[0].goals);
+      }
+    }
+  });
+};
+
 
 
 /**
