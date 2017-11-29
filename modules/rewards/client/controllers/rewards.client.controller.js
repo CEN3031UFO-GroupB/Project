@@ -22,7 +22,14 @@
     // Remove existing Reward
     function remove() {
       if ($window.confirm('Are you sure you want to delete?')) {
-        vm.reward.$remove($state.go('rewards.list'));
+        vm.reward.$remove(successCallback, errorCallback);
+      }
+
+      function successCallback(res){
+        $state.go('rewards.list');
+      }
+      function errorCallback(res) {
+          vm.error = res.data.message;
       }
     }
 

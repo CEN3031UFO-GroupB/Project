@@ -2,17 +2,18 @@
   
   <div class="page-header row">
     <h1 class="col-md-8">Rewards</h1>
-    <a style="float:right;margin-top: 25px;" ui-sref="rewards.create">Add a reward</a>
+    <a id="addLink" style="float:right;margin-top: 25px;" ui-sref="rewards.create">Add a reward</a>
 
   </div>
 
   <div class="alert alert-info text-center">
     <p><h4> You have {{ vm.points }} points! You can claim a reward if you have enough points.</h4></p>
   </div>
-  <h3 ng-if="!(vm.rewards.$resolved && !vm.rewards.length)">Unclaimed</h3>
+
+  <h3>Unclaimed</h3>
   <div class="list-group">
     <h4>Weekly Rewards</h4>
-    <a ng-repeat="reward in vm.rewards" ng-if="!reward.claimed && reward.points < 30" ng-hide="vm.u_empty"
+    <a ng-repeat="reward in vm.rewards" ng-if="!reward.claimed && reward.points == 3" ng-hide="vm.u_empty"
        ui-sref="rewards.view({ rewardId: reward._id })"
        class="list-group-item">
       <h4 class="list-group-item-heading" ng-bind="reward.name"> </h4>
@@ -24,24 +25,52 @@
       </small>
     </a>
     <br>
+    
     <h4>Monthly Rewards</h4>
-    <a ng-repeat="reward in vm.rewards" ng-if="!reward.claimed && reward.points >= 30" ng-hide="vm.u_empty"
+    <a ng-repeat="reward in vm.rewards" ng-if="!reward.claimed && reward.points == 12" ng-hide="vm.u_empty"
        ui-sref="rewards.view({ rewardId: reward._id })"
        class="list-group-item">
       <h4 class="list-group-item-heading">
         {{reward.name}}
-       
       </h4>
       <span class="badge badge-pill badge-primary">Points Required: {{reward.points}}</span>
       <small class="list-group-item-text">
         Reward added on
         <span ng-bind="reward.created | date:'mediumDate'"></span>
       </small>
-
     </a>
+    <br>
+    <h4>Quarterly Rewards</h4>
+    <a ng-repeat="reward in vm.rewards" ng-if="!reward.claimed && reward.points == 36" ng-hide="vm.u_empty"
+       ui-sref="rewards.view({ rewardId: reward._id })"
+       class="list-group-item">
+      <h4 class="list-group-item-heading">
+        {{reward.name}}
+      </h4>
+      <span class="badge badge-pill badge-primary">Points Required: {{reward.points}}</span>
+      <small class="list-group-item-text">
+        Reward added on
+        <span ng-bind="reward.created | date:'mediumDate'"></span>
+      </small>
+    </a>
+    <br>
+    <h4>Yearly Rewards</h4>
+    <a ng-repeat="reward in vm.rewards" ng-if="!reward.claimed && reward.points == 140" ng-hide="vm.u_empty"
+       ui-sref="rewards.view({ rewardId: reward._id })"
+       class="list-group-item">
+      <h4 class="list-group-item-heading">
+        {{reward.name}}
+      </h4>
+      <span class="badge badge-pill badge-primary">Points Required: {{reward.points}}</span>
+      <small class="list-group-item-text">
+        Reward added on
+        <span ng-bind="reward.created | date:'mediumDate'"></span>
+      </small>
+    </a>
+    <br>
   </div>
 
-  <h3 ng-if="!vm.claimedRewards.$resolved || !vm.claimedRewards.length">Claimed</h3>
+  <h3 ng-if="vm.claimedItems.length">Claimed</h3>
   <!-- items being paged -->
   <div class="list-group">
     <a ng-repeat="reward in (vm.claimedItems | orderBy: claimed_on)" ng-if="reward.claimed"

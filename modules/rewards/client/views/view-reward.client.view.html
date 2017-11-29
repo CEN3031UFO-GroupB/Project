@@ -7,13 +7,13 @@
   </div>
   <div class="pull-right"
        ng-show="vm.reward.isCurrentUserOwner">
-    <a class="btn btn-primary"
+    <button class="btn btn-primary"
        ng-click="vm.claim()" ng-if="vm.reward.points <= vm.goalPoints.goalPoints.points">
       Claim!
-    </a>
-    <a class="btn btn-warning" ng-click="vm.remove()">
+    </button>
+    <button class="btn btn-warning" ng-click="vm.remove()">
       Delete
-    </a>
+    </button>
   </div>
   <small>
     <em class="text-muted">
