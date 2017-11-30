@@ -67,15 +67,27 @@
     };
 
     $scope.markGoalComplete = function (goal) {
+      var numPoints = 3;
+      var p = goal.priority;
+      if(p === 'Support'){
+        numPoints = 4;
+      } else if(p === 'Maintenance'){
+        numPoints = 3;
+      } else if(p === 'Cut/Shift'){
+        numPoints = 2;
+      } else if(p === 'Minimize'){
+        numPoints = 1;
+      }
+
       goal.status = 'Complete';
       goal.completed_at = new Date();
       console.log(JSON.stringify(goal));
       GoalsService.update(goal);
 
       // Increment user's points
-      vm.goalPoints.goalPoints.points += 5;
+      vm.goalPoints.goalPoints.points += numPoints;
       GoalsPointsService.update(vm.goalPoints);
-      vm.points += 5;
+      vm.points += numPoints;
       console.log(JSON.stringify(vm.goalPoints));
 
     };
