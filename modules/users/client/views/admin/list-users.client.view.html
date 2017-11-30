@@ -18,6 +18,7 @@
 		<th>Goals completed<br /># of goals started<br />(past 4 weeks)</th>
         <th>Goals completed<br /># of goals started<br />(past week)</th>
         <th>Goals completed<br /># of goals started<br />(current week)</th>
+        <th style="width:80px">Points</th>
         <th>Actions</th>
       </thead>
       <tbody>
@@ -27,6 +28,7 @@
           <td ng-bind="user.fourWeeks"></td>
           <td ng-bind="user.pastWeek"></td>
 		  <td ng-bind="user.currentWeek"></td>
+		  <td ng-bind="user.points"></td>
           <td>
             <a ui-sref="admin.user({userId: user._id})">
               <button type="button">Account Info</button>

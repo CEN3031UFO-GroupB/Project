@@ -33,7 +33,7 @@
 
     function updatePoints(){
       GoalsPointsService.get().$promise.then(function(value) {
-        vm.goalPoints = { goalPoints: {_id: value._id, points: value.points} };
+        vm.goalPoints = { goalPoints: { _id: value._id, points: value.points } };
         vm.points = vm.goalPoints.goalPoints.points;
       });
     };

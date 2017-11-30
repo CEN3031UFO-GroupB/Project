@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('users.admin').controller('UserListController', ['$scope', '$filter', 'Admin', 'GoalsService',
-  function ($scope, $filter, Admin, GoalsService) {
+angular.module('users.admin').controller('UserListController', ['$scope', '$filter', 'Admin', 'GoalsService', 'GoalsPointsService',
+  function ($scope, $filter, Admin, GoalsService, GoalsPointsService) {
 	  
     $scope.data = [new Array(5+1).join('0').split('').map(parseFloat),new Array(5+1).join('0').split('').map(parseFloat)];
 
@@ -84,6 +84,13 @@ angular.module('users.admin').controller('UserListController', ['$scope', '$filt
               if(userIndex >= 0 && goalsStartedCurrent !== 0)
                 $scope.users[userIndex].currentWeek = ((goalsCompletedCurrent / goalsStartedCurrent)*100).toFixed(1) + '% / ' + goalsStartedCurrent;
 		    }
+          });
+		  
+		  GoalsPointsService.get({ user: $scope.users[i]._id }, function(value) {
+            var userIndex = $scope.users.findIndex(x => x._id === value.userId);
+			
+            if(userIndex >= 0)
+              $scope.users[userIndex].points = value.points;
           });
 	    }
       });
