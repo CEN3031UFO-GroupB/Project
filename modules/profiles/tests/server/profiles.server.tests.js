@@ -38,7 +38,7 @@ describe('Profiles Tests User', function () {
     done();
   });
   
-    it('user should be able to retrieve own profile', function (done) {
+  it('user should be able to retrieve own profile', function (done) {
     agent.post('/api/auth/signin')
       .send(credentials)
       .expect(200)

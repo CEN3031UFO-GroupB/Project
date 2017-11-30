@@ -72,7 +72,7 @@ describe('Goals Tests', function () {
       });
   });
   
-    it('should be able to retrieve a goal', function (done) {
+  it('should be able to retrieve a goal', function (done) {
     agent.post('/api/auth/signin')
       .send(credentials)
       .expect(200)

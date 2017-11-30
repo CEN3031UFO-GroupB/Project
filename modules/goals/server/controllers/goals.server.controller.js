@@ -86,14 +86,14 @@ exports.update = function(req, res) {
   console.log('Attempting to update');
 
   if(goal.points){
-    GoalsList.findOneAndUpdate({ user: goal.user}, {$inc: { points: goal.points } }).exec(function(err,goal) {
+    GoalsList.findOneAndUpdate({ user: goal.user }, { $inc: { points: goal.points } }).exec(function(err,goal) {
       if(err) {
         console.log(err);
         return err;
       } 
     });
   }
-  GoalsList.findOneAndUpdate({ user: goal.user, 'goals._id': goal._id }, {'$set': { 'goals.$': goal } }).exec(function(err,goal) {
+  GoalsList.findOneAndUpdate({ user: goal.user, 'goals._id': goal._id }, { '$set': { 'goals.$': goal } }).exec(function(err,goal) {
     if(err) {
       console.log(err);
       return err;
@@ -147,22 +147,26 @@ exports.list = function(req, res) {
 };
 
 exports.goalsPoints = function(req, res) {
-  GoalsList.find({ user: req.user
+  var userReq = req.user._doc._id;
+  if(req.query.user && req.user._doc.roles[0] === 'admin')
+    userReq = req.query.user;
+
+  GoalsList.find({ 'user': mongoose.Types.ObjectId(userReq)
   }).populate('goals.user', 'displayName').exec(function(err, goalsList) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-        if (goalsList[0]) {
-          var r = {_id: goalsList[0]._id, points: goalsList[0].points};
-          res.jsonp(r);
-        } else {
-          // Need this in case goalslist does not exist
-          // Client controller will try to update after a goal is created
-          var r = {_id: 0, points: 0};
-          res.jsonp(r);
-        }
+      if (goalsList[0]) {
+        var r = { _id: goalsList[0]._id, points: goalsList[0].points, userId: mongoose.Types.ObjectId(goalsList[0]._doc.user.id).toString() };
+        res.jsonp(r);
+      } else {
+        // Need this in case goalslist does not exist
+        // Client controller will try to update after a goal is created
+        var r = { _id: 0, points: 0, userId: '' };
+        res.jsonp(r);
+      }
     }
   });
 };
@@ -171,7 +175,7 @@ exports.goalsPointsUpdate = function(req, res) {
   var goalPoints = req.body.goalPoints;
   console.log('Attempting to update Points');
 
-  GoalsList.findOneAndUpdate({ _id: goalPoints._id}, {'$set': { points: goalPoints.points } }).exec(function(err,goalP) {
+  GoalsList.findOneAndUpdate({ _id: goalPoints._id }, { '$set': { points: goalPoints.points } }).exec(function(err,goalP) {
     if(err) {
       console.log('Failed to update points');
       return err;
