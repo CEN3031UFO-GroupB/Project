@@ -5,12 +5,14 @@
     .module('goals')
     .controller('GoalsListController', GoalsListController);
 
-  GoalsListController.$inject = ['$scope', '$state', '$window', 'Authentication', 'GoalsService', 'PriorityService', 'PerformanceService', 'Profiles', 'moment'];
+  GoalsListController.$inject = ['$scope', '$state', '$stateParams', 'Authentication', 'GoalsService', 'PriorityService', 'PerformanceService', 'Profiles', 'moment'];
 
-  function GoalsListController($scope, $state, $window, Authentication, GoalsService, PriorityService, PerformanceService, Profiles, moment) {
+  function GoalsListController($scope, $state, $stateParams, Authentication, GoalsService, PriorityService, PerformanceService, Profiles, moment) {
     var vm = this;
     vm.oldGoals = [];
+    $scope.auth = Authentication;
 
+    //Function to return the date at 00:00:00 of the current week's Monday
     function getThisMonday() {
       var d = new Date();
       var day = d.getDay();
@@ -20,77 +22,149 @@
       return monday;
     }
 
-	//Add priorities to goals
-    (function() {
-      GoalsService.query().$promise.then(function(value) {
-        vm.goals = value;
-        var userId = '';
+    if ($scope.auth.user.roles[0] == 'admin') {
+      $scope.name = $stateParams.userDisplayName.concat("'s");
+      (function () {
+        GoalsService.adminGoal.query({userId: $stateParams.userId}).$promise.then(function (value) {
+          vm.goals = value;
+          var userId = '';
+          if (vm.goals.length > 0) {
+            userId = vm.goals[0].user._id;
 
-        if(vm.goals.length > 0)
-        {				
-          userId = vm.goals[0].user._id;
+            Profiles.get({user: userId}, function (value) {
+              $scope.userProfile = value;
 
-          Profiles.get({ user: userId }, function(value) {
-            $scope.userProfile = value;
-
-            for(var i = 0; i < vm.goals.length; i++) {
-              var priority = PriorityService.getPriority($scope.userProfile, vm.goals[i].category);
-              vm.goals[i].priority = priority;
-              if(vm.goals[i].completed_at){
-                if(new Date(vm.goals[i].completed_at).getTime() < getThisMonday().getTime()){
-                  vm.oldGoals.push(vm.goals[i]);
+              for (var i = 0; i < vm.goals.length; i++) {
+                var priority = PriorityService.getPriority($scope.userProfile, vm.goals[i].category);
+                vm.goals[i].priority = priority;
+                if (vm.goals[i].completed_at) {
+                  if (new Date(vm.goals[i].completed_at).getTime() < getThisMonday().getTime()) {
+                    vm.oldGoals.push(vm.goals[i]);
+                  }
                 }
               }
-            }
-            vm.performanceData = PerformanceService.getPerformance(vm.oldGoals);
-            console.log(vm.performanceData.weeks);
-            $scope.labels = vm.performanceData.weeks;
-            $scope.series = ['Started', 'Completed'];
-            $scope.data = [vm.performanceData.starts, vm.performanceData.finishes];
-            $scope.type = 'line';
-            //Chart options
-            $scope.options = {
-              legend: {
-                display: true,
-                position: 'right',
-              },
-              responsive: true,
-              scales: {
-                xAxes: [{
-                  //stacked: true,
-                  type: 'time',
-                  distribution: 'linear',
-                  time: {
-                    displayFormats: {
-                      week: 'MM-DD-YYYY'
-                    },
-                    isoWeekday: true,
-                    unit: 'week',
-                    tooltipFormat: 'MM-DD-YYYY',
-                    max: getThisMonday(),
-                  }
-                }],
-                yAxes: [{
-                  //stacked: true,
-                  ticks:{
-                    min: 0,
-                    max: 5,
-                    fixedStepSize: 1,
-                  }
-                }],
-                bounds: 'ticks',
-              }
-            };
-          });
-        }
-      });
-    })();
+              vm.performanceData = PerformanceService.getPerformance(vm.oldGoals);
+              $scope.labels = vm.performanceData.weeks;
+              $scope.series = ['Started', 'Completed'];
+              $scope.data = [vm.performanceData.starts, vm.performanceData.finishes];
+              $scope.type = 'line';
 
+            });
+          }
+        });
+      })();
+    } else {
+      $scope.name = 'My';
+      //Add priorities to goals
+      (function () {
+        GoalsService.Goal.query().$promise.then(function (value) {
+          vm.goals = value;
+          var userId = '';
+
+          if (vm.goals.length > 0) {
+            userId = vm.goals[0].user._id;
+
+            Profiles.get({user: userId}, function (value) {
+              $scope.userProfile = value;
+
+              for (var i = 0; i < vm.goals.length; i++) {
+                var priority = PriorityService.getPriority($scope.userProfile, vm.goals[i].category);
+                vm.goals[i].priority = priority;
+                if (vm.goals[i].completed_at) {
+                  if (new Date(vm.goals[i].completed_at).getTime() < getThisMonday().getTime()) {
+                    vm.oldGoals.push(vm.goals[i]);
+                  }
+                }
+              }
+              vm.performanceData = PerformanceService.getPerformance(vm.oldGoals);
+              $scope.labels = vm.performanceData.weeks;
+              $scope.series = ['Started', 'Completed'];
+              $scope.data = [vm.performanceData.starts, vm.performanceData.finishes];
+              $scope.type = 'line';
+
+            });
+          }
+        });
+      })();
+    }
+
+      //Chart options
+      $scope.options = {
+        legend: {
+          display: true,
+          position: 'right',
+        },
+        responsive: true,
+        scales: {
+          xAxes: [{
+            //stacked: true,
+            type: 'time',
+            distribution: 'linear',
+            time: {
+              displayFormats: {
+                week: 'MM-DD-YYYY'
+              },
+              isoWeekday: true,
+              unit: 'week',
+              tooltipFormat: 'MM-DD-YYYY',
+              max: getThisMonday(),
+            }
+          }],
+          yAxes: [{
+            //stacked: true,
+            ticks:{
+              min: 0,
+              max: 5,
+              fixedStepSize: 1,
+            }
+          }],
+          bounds: 'ticks',
+        }
+      };
 
     $scope.monday = getThisMonday();
     var today = new Date();
     var timeDiff = Math.abs(today.getTime() - $scope.monday.getTime());
     $scope.diffDays = 7 - Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+    //CSS to be applied to the To Do goals column via ng-style to accommodate for longer titles
+    $scope.todoCSS = function (goal) {
+      if (goal.title.length <= 24) {
+        return { 'border-right': '65px solid #505050',
+          'padding-left': '10px',
+          'margin-left': '-55px', };
+      } else {
+        return { 'border-right': '69px solid #505050',
+          'padding-left': '14px',
+          'margin-left': '-63px', };
+      }
+    };
+
+    //CSS to be applied to the In Prog goals column via ng-style to accommodate for longer titles
+    $scope.inProgressCSS = function (goal) {
+      if (goal.title.length <= 24) {
+        return { 'border-right': '65px solid #347fa5',
+          'padding-left': '10px',
+          'margin-left': '-55px', };
+      } else {
+        return { 'border-right': '69px solid #347fa5',
+          'padding-left': '14px',
+          'margin-left': '-63px', };
+      }
+    };
+
+    //CSS to be applied to the Completed goals column via ng-style to accommodate for longer titles
+    $scope.completedCSS = function (goal) {
+      if (goal.title.length <= 24) {
+        return { 'border-right': '60px solid #30bb00',
+          'padding-left': '5px',
+          'margin-left': '-45px', };
+      } else {
+        return { 'border-right': '70px solid #30bb00',
+          'padding-left': '14px',
+          'margin-left': '-64px', };
+      }
+    };
 
 
     $scope.status = ['Complete', 'In Progress', 'Not Started'];
@@ -103,14 +177,14 @@
       goal.status = 'In Progress';
       goal.started_at = new Date();
       console.log(JSON.stringify(goal));
-      GoalsService.update(goal);
+      GoalsService.Goal.update(goal);
     };
 
     $scope.markGoalComplete = function (goal) {
       goal.status = 'Complete';
       goal.completed_at = new Date();
       console.log(JSON.stringify(goal));
-      GoalsService.update(goal);
+      GoalsService.Goal.update(goal);
     };
 
   }
