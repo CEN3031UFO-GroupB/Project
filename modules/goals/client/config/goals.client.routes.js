@@ -61,9 +61,9 @@
           pageTitle: 'Goal {{ goalResolve.title }}'
         }
       })
-      .state('admin.goals-view', {
-        url: '/:goalId',
-        templateUrl: 'modules/goals/client/views/admin/view-goals-admin.client.view.html',
+      .state('admin.goals-list', {
+        url: '/goals/:userId/:userDisplayName',
+        templateUrl: 'modules/goals/client/views/list-goals.client.view.html',
         controller: 'GoalsListController',
         controllerAs: 'vm',
         data: {
@@ -75,7 +75,7 @@
   getGoal.$inject = ['$stateParams', 'GoalsService'];
 
   function getGoal($stateParams, GoalsService) {
-    return GoalsService.get({
+    return GoalsService.Goal.get({
       goalId: $stateParams.goalId
     }).$promise;
   }
@@ -83,6 +83,6 @@
   newGoal.$inject = ['GoalsService'];
 
   function newGoal(GoalsService) {
-    return new GoalsService();
+    return new GoalsService.Goal();
   }
 }());
