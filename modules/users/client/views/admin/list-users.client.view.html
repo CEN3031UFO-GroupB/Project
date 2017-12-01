@@ -36,7 +36,7 @@
             <a ui-sref="admin.profile-view({userId: user._id})" ng-show="user.roles[0] === 'user'">
               <button type="button">Profile</button>
             </a>
-            <a ui-sref="admin.goals-view({userId: user._id})" ng-show="user.roles[0] === 'user'">
+            <a ui-sref="admin.goals-list({userId: user._id, userDisplayName: user.displayName})" ng-show="user.roles[0] === 'user'">
               <button type="button">Goals</button>
             </a>
           </td>

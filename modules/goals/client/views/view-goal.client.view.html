@@ -13,19 +13,18 @@
   </div>
   <small>
     <em class="text-muted">
-      Posted on
+      Created on
       <span ng-bind="vm.goal.created_at | date:'mediumDate'"></span>
-      by
-      <span ng-if="vm.goal.user"
-            ng-bind="vm.goal.user.displayName"></span>
-      <span ng-if="!vm.goal.user">Deleted User</span>
     </em>
   </small>
   <p class="lead" ng-bind="vm.goal.description"></p>
-  <p> For the week of
-    <span ng-bind="vm.goal.week_timestamp | date:'mediumDate'"></span>
-  </p>
   <p> Status:
     <span ng-bind="vm.goal.status"></span>
+  </p>
+  <p ng-hide="vm.goal.started_at == null"> Started on
+    <span ng-bind="vm.goal.started_at | date:'mediumDate'"></span>
+  </p>
+  <p ng-hide="vm.goal.completed_at == null"> Completed on
+    <span ng-bind="vm.goal.completed_at | date:'mediumDate'"></span>
   </p>
 </section>

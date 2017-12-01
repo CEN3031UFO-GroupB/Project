@@ -10,11 +10,18 @@
 
   function GoalsService($resource) {
     var Goal = $resource('api/goals/:goalId', {
-      goalId: '@_id'
+      goalId: '@_id',
     }, {
       update: {
-        method: 'PUT'
-      }
+        method: 'PUT',
+      },
+    });
+    var adminGoal = $resource('api/admin/goals/:userId', {
+      userId: '@_id',
+    }, {
+      update: {
+        method: 'PUT',
+      },
     });
 
     angular.extend(Goal.prototype, {
@@ -24,7 +31,9 @@
       }
     });
 
-    return Goal;
+    return { Goal: Goal,
+      adminGoal: adminGoal,
+    };
 
     function createOrUpdate(goal) {
       if (goal._id) {
@@ -34,18 +43,18 @@
       }
 
       function onSuccess(goal) {
-        var success = goal.data;
       }
 
       function onError(errorResponse) {
+        console.log(errorResponse);
         var error = errorResponse.data;
         handleError(error);
       }
+    }
 
-      function handleError(error) {
-        console.log(error);
-      }
-
+    function handleError(error) {
+      console.log(error);
+      alert(error);
     }
   }
 }());

@@ -27,6 +27,9 @@ module.exports = function(app) {
     .post(goals.notificationsUpdate);
 
 
+  app.route('/api/admin/goals/:userId').all(goalsPolicy.isAllowed)
+    .get(goals.adminList);
+
   // Finish by binding the Goal middleware
   app.param('goalId', goals.goalByID);
 };

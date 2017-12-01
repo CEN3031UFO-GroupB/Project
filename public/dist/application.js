@@ -106,12 +106,7 @@ angular.element(document).ready(function () {
 'use strict';
 
 // Use Applicaion configuration module to register a new module
-ApplicationConfiguration.registerModule('verifications');
-'use strict';
-
-// Use Applicaion configuration module to register a new module
-ApplicationConfiguration.registerModule('articles');
-
+ApplicationConfiguration.registerModule('verifications', ['smart-table']);
 'use strict';
 
 // Use Applicaion configuration module to register a new module
@@ -124,10 +119,22 @@ ApplicationConfiguration.registerModule('core');
 ApplicationConfiguration.registerModule('core.admin', ['core']);
 ApplicationConfiguration.registerModule('core.admin.routes', ['ui.router']);
 
+(function (app) {
+  'use strict';
+
+  app.registerModule('goals', ['chart.js']);
+}(ApplicationConfiguration));
+
 'use strict';
 
 // Use Applicaion configuration module to register a new module
 ApplicationConfiguration.registerModule('profiles', ['ui.sortable', 'ui.slider']);
+(function (app) {
+  'use strict';
+  app.registerModule('rewards');
+
+
+}(ApplicationConfiguration));
 'use strict';
 
 // Use Applicaion configuration module to register a new module
@@ -137,13 +144,34 @@ ApplicationConfiguration.registerModule('users.admin.routes', ['core.admin.route
 
 'use strict';
 
+// Configuring the AdminVerifications module
+angular.module('verifications').run(['Menus',
+  function (Menus) {
+    // Add the verification dropdown item
+    Menus.addMenuItem('topbar', {
+      title: 'Verification Codes',
+      state: 'verifications',
+      type: 'dropdown',
+      roles: ['admin']
+    });
+
+    // Add the dropdown create item
+    Menus.addSubMenuItem('topbar', 'verifications', {
+      title: 'Manage Verification Codes',
+      state: 'verification.manage',
+      roles: ['admin']
+    });
+  }
+]);
+'use strict';
+
 angular.module('verifications').config(['$stateProvider',
   function ($stateProvider) {
     // Verifications state routing
     $stateProvider
       .state('verification', {
         abstract: true,
-        url: '/verification',
+        url: '/verification/manage',
         template: '<ui-view/>'
       })
       .state('verification.manage', {
@@ -160,9 +188,27 @@ angular.module('verifications').controller('VerificationsController', ['$scope',
       $scope.code = '';
       $scope.codeCreate = '';
 	  
+      $scope.buildPager = function () {
+        $scope.itemsPerPage = 15;
+        $scope.currentPage = 1;
+		$scope.ListVerifications();
+      };
+	  
       Admin.query(function (data) {
         $scope.users = data;
+        $scope.buildPager();
       });
+	  
+	  $scope.figureOutItemsToDisplay = function () {
+		  $scope.itemLength = $scope.veriList.length;
+        var begin = (($scope.currentPage - 1) * $scope.itemsPerPage);
+        var end = begin + $scope.itemsPerPage;
+        $scope.pagedItems = $scope.veriList.slice(begin, end);
+    };
+
+    $scope.pageChanged = function () {
+      $scope.figureOutItemsToDisplay();
+    };
 
       $scope.CheckVerification = function () {
         var code = $scope.code;
@@ -190,10 +236,23 @@ angular.module('verifications').controller('VerificationsController', ['$scope',
           });
       };
 		
-      $scope.CreateVerification = function () {
+      $scope.CreateUserVerification = function () {
         $scope.codeCreate = Math.random().toString(36).substring(6);
 		
-        Verifications.create({ 'code': $scope.codeCreate, 'user_id': '-1', 'active': true, 'created_at': new Date()
+        Verifications.create({ 'code': $scope.codeCreate, 'user_id': '-1', 'active': true, 'created_at': new Date(), 'type': 'user'
+		})
+		.then(function (response) { 
+		$scope.codeCreate = '';
+		$scope.ListVerifications();
+		}, function (error) {
+			
+		});
+      };
+	  
+	  $scope.CreateAdminVerification = function () {
+        $scope.codeCreate = Math.random().toString(36).substring(6);
+		
+        Verifications.create({ 'code': $scope.codeCreate, 'user_id': '-1', 'active': true, 'created_at': new Date(), 'type': 'admin'
 		})
 		.then(function (response) { 
 		$scope.codeCreate = '';
@@ -206,7 +265,6 @@ angular.module('verifications').controller('VerificationsController', ['$scope',
       $scope.ListVerifications = function () {
         Verifications.list().then(function (response) { 
 		$scope.veriList = response.data;
-
 		for(var i = 0; i < $scope.veriList.length; i++){
 			if($scope.veriList[i].user_id !== '-1' && $scope.veriList[i].user_id !== ''){
 				var index = $scope.users.findIndex(x => x._id === $scope.veriList[i].user_id);
@@ -216,6 +274,7 @@ angular.module('verifications').controller('VerificationsController', ['$scope',
 			else
                 $scope.veriList[i].user_id = '';
 		}
+        $scope.figureOutItemsToDisplay();
         }, function (error) {
         });
       };
@@ -246,179 +305,14 @@ angular.module('verifications').factory('Verifications', ['$http',
 ]);
 'use strict';
 
-// Configuring the Articles module
-angular.module('articles').run(['Menus',
-  function (Menus) {
-    // Add the articles dropdown item
-    Menus.addMenuItem('topbar', {
-      title: 'Articles',
-      state: 'articles',
-      type: 'dropdown',
-      roles: ['*']
-    });
-
-    // Add the dropdown list item
-    Menus.addSubMenuItem('topbar', 'articles', {
-      title: 'List Articles',
-      state: 'articles.list'
-    });
-
-    // Add the dropdown create item
-    Menus.addSubMenuItem('topbar', 'articles', {
-      title: 'Create Articles',
-      state: 'articles.create',
-      roles: ['user']
-    });
-  }
-]);
-
-'use strict';
-
-// Setting up route
-angular.module('articles').config(['$stateProvider',
-  function ($stateProvider) {
-    // Articles state routing
-    $stateProvider
-      .state('articles', {
-        abstract: true,
-        url: '/articles',
-        template: '<ui-view/>'
-      })
-      .state('articles.list', {
-        url: '',
-        templateUrl: 'modules/articles/client/views/list-articles.client.view.html'
-      })
-      .state('articles.create', {
-        url: '/create',
-        templateUrl: 'modules/articles/client/views/create-article.client.view.html',
-        data: {
-          roles: ['user', 'admin']
-        }
-      })
-      .state('articles.view', {
-        url: '/:articleId',
-        templateUrl: 'modules/articles/client/views/view-article.client.view.html'
-      })
-      .state('articles.edit', {
-        url: '/:articleId/edit',
-        templateUrl: 'modules/articles/client/views/edit-article.client.view.html',
-        data: {
-          roles: ['user', 'admin']
-        }
-      });
-  }
-]);
-
-'use strict';
-
-// Articles controller
-angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Articles',
-  function ($scope, $stateParams, $location, Authentication, Articles) {
-    $scope.authentication = Authentication;
-
-    // Create new Article
-    $scope.create = function (isValid) {
-      $scope.error = null;
-
-      if (!isValid) {
-        $scope.$broadcast('show-errors-check-validity', 'articleForm');
-
-        return false;
-      }
-
-      // Create new Article object
-      var article = new Articles({
-        title: this.title,
-        content: this.content
-      });
-
-      // Redirect after save
-      article.$save(function (response) {
-        $location.path('articles/' + response._id);
-
-        // Clear form fields
-        $scope.title = '';
-        $scope.content = '';
-      }, function (errorResponse) {
-        $scope.error = errorResponse.data.message;
-      });
-    };
-
-    // Remove existing Article
-    $scope.remove = function (article) {
-      if (article) {
-        article.$remove();
-
-        for (var i in $scope.articles) {
-          if ($scope.articles[i] === article) {
-            $scope.articles.splice(i, 1);
-          }
-        }
-      } else {
-        $scope.article.$remove(function () {
-          $location.path('articles');
-        });
-      }
-    };
-
-    // Update existing Article
-    $scope.update = function (isValid) {
-      $scope.error = null;
-
-      if (!isValid) {
-        $scope.$broadcast('show-errors-check-validity', 'articleForm');
-
-        return false;
-      }
-
-      var article = $scope.article;
-
-      article.$update(function () {
-        $location.path('articles/' + article._id);
-      }, function (errorResponse) {
-        $scope.error = errorResponse.data.message;
-      });
-    };
-
-    // Find a list of Articles
-    $scope.find = function () {
-      $scope.articles = Articles.query();
-    };
-
-    // Find existing Article
-    $scope.findOne = function () {
-      $scope.article = Articles.get({
-        articleId: $stateParams.articleId
-      });
-    };
-  }
-]);
-
-'use strict';
-
-//Articles service used for communicating with the articles REST endpoints
-angular.module('articles').factory('Articles', ['$resource',
-  function ($resource) {
-    return $resource('api/articles/:articleId', {
-      articleId: '@_id'
-    }, {
-      update: {
-        method: 'PUT'
-      }
-    });
-  }
-]);
-
-'use strict';
-
 // Configuring the Chat module
 angular.module('chat').run(['Menus',
   function (Menus) {
     // Set top bar menu items
-    Menus.addMenuItem('topbar', {
-      title: 'Chat',
-      state: 'chat'
-    });
+    //Menus.addMenuItem('topbar', {
+    //  title: 'Chat',
+    //  state: 'chat'
+    //});
   }
 ]);
 
@@ -918,6 +812,336 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
 
 'use strict';
 
+angular.module('goals').run(['Menus',
+  function (Menus) {
+    // Set top bar menu items
+    Menus.addMenuItem('topbar', {
+      title: 'Goals',
+      state: 'goals.list',
+      roles: ['user']
+    });
+  }
+]);
+
+(function () {
+  'use strict';
+
+  angular
+    .module('goals')
+    .config(routeConfig);
+
+  routeConfig.$inject = ['$stateProvider'];
+
+  function routeConfig($stateProvider) {
+    $stateProvider
+      .state('goals', {
+        abstract: true,
+        url: '/goals',
+        template: '<ui-view/>'
+      })
+      .state('goals.list', {
+        url: '',
+        templateUrl: 'modules/goals/client/views/list-goals.client.view.html',
+        controller: 'GoalsListController',
+        controllerAs: 'vm',
+        data: {
+          pageTitle: 'Goals List'
+        }
+      })
+      .state('goals.create', {
+        url: '/create',
+        templateUrl: 'modules/goals/client/views/form-goal.client.view.html',
+        controller: 'GoalsController',
+        controllerAs: 'vm',
+        resolve: {
+          goalResolve: newGoal
+        },
+        data: {
+          roles: ['user', 'admin'],
+          pageTitle: 'Goals Create'
+        }
+      })
+      .state('goals.edit', {
+        url: '/:goalId/edit',
+        templateUrl: 'modules/goals/client/views/form-goal.client.view.html',
+        controller: 'GoalsController',
+        controllerAs: 'vm',
+        resolve: {
+          goalResolve: getGoal
+        },
+        data: {
+          roles: ['user', 'admin'],
+          pageTitle: 'Edit Goal {{ goalResolve.title }}'
+        }
+      })
+      .state('goals.view', {
+        url: '/:goalId',
+        templateUrl: 'modules/goals/client/views/view-goal.client.view.html',
+        controller: 'GoalsController',
+        controllerAs: 'vm',
+        resolve: {
+          goalResolve: getGoal
+        },
+        data: {
+          pageTitle: 'Goal {{ goalResolve.title }}'
+        }
+      })
+      .state('admin.goals-view', {
+        url: '/:goalId',
+        templateUrl: 'modules/goals/client/views/admin/view-goals-admin.client.view.html',
+        controller: 'GoalsListController',
+        controllerAs: 'vm',
+        data: {
+          pageTitle: 'Goals List'
+        }
+      });
+  }
+
+  getGoal.$inject = ['$stateParams', 'GoalsService'];
+
+  function getGoal($stateParams, GoalsService) {
+    return GoalsService.get({
+      goalId: $stateParams.goalId
+    }).$promise;
+  }
+
+  newGoal.$inject = ['GoalsService'];
+
+  function newGoal(GoalsService) {
+    return new GoalsService();
+  }
+}());
+
+(function () {
+  'use strict';
+
+  // Goals controller
+  angular
+    .module('goals')
+    .controller('GoalsController', GoalsController);
+
+  GoalsController.$inject = ['$scope', '$state', '$window', 'Authentication', 'goalResolve'];
+
+  function GoalsController ($scope, $state, $window, Authentication, goal) {
+    var vm = this;
+
+    vm.authentication = Authentication;
+    vm.goal = goal;
+    vm.error = null;
+    vm.form = {};
+    vm.remove = remove;
+    vm.save = save;
+
+    //Hard-coded categories. TODO: move them from the profiles controller into an injectable service
+    $scope.categories = ['Family', 'Health', 'Rest and Relaxation', 'Faith', 'Finance', 'Romance', 'Friends',
+                          'Contribution', 'Personal Growth', 'Career', 'Physical Environment'];
+
+    // Remove existing Goal
+    function remove() {
+      if ($window.confirm('Are you sure you want to delete?')) {
+        vm.goal.$remove($state.go('goals.list'));
+      }
+    }
+
+    $scope.cancel = function() {
+      $state.go('goals.list');
+    };
+
+    // Save Goal
+    function save(isValid) {
+      if (!isValid) {
+        $scope.$broadcast('show-errors-check-validity', 'vm.form.goalForm');
+        return false;
+      }
+
+      //Create or update a goal using the GoalsService
+      vm.goal.createOrUpdate()
+        .then(successCallback)
+        .catch(errorCallback);
+
+
+      function successCallback(res) {
+        $state.go('goals.list', {
+          goalId: res._id
+        });
+      }
+
+      function errorCallback(res) {
+        vm.error = res.data.message;
+      }
+    }
+  }
+}());
+
+(function () {
+  'use strict';
+
+  angular
+    .module('goals')
+    .controller('GoalsListController', GoalsListController);
+
+  GoalsListController.$inject = ['$scope', '$state', '$window', 'Authentication', 'GoalsService', 'PriorityService', 'Profiles'];
+
+  function GoalsListController($scope, $state, $window, Authentication, GoalsService, PriorityService, Profiles) {
+    var vm = this;
+
+	//Add priorities to goals
+    (function() {
+      GoalsService.query().$promise.then(function(value) {
+        vm.goals = value;
+        var userId = '';
+
+        if(vm.goals.length > 0)
+        {				
+          userId = vm.goals[0].user._id;
+
+          Profiles.get({ user: userId }, function(value) {
+            $scope.userProfile = value;
+
+            for(var i = 0; i < vm.goals.length; i++) {
+              var priority = PriorityService.getPriority($scope.userProfile, vm.goals[i].category);
+              vm.goals[i].priority = priority;
+            }
+          });
+        }
+      });
+    })();
+
+    function getThisMonday() {
+      var d = new Date();
+      var day = d.getDay();
+      var diff = d.getDate() - day + (day == 0 ? -6:1);
+      var monday = new Date(d.setDate(diff));
+      monday.setHours(0, 0, 0, 0);
+      return monday;
+    }
+    $scope.monday = getThisMonday();
+    var today = new Date();
+    var timeDiff = Math.abs(today.getTime() - $scope.monday.getTime());
+    $scope.diffDays = 7 - Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+
+    $scope.status = ['Complete', 'In Progress', 'Not Started'];
+
+    $scope.createGoal = function () {
+      $state.go('goals.create');
+    };
+
+    $scope.markGoalInProgress = function (goal) {
+      goal.status = 'In Progress';
+      goal.started_at = new Date();
+      console.log(JSON.stringify(goal));
+      GoalsService.update(goal);
+    };
+
+    $scope.markGoalComplete = function (goal) {
+      goal.status = 'Complete';
+      goal.completed_at = new Date();
+      console.log(JSON.stringify(goal));
+      GoalsService.update(goal);
+    };
+
+  }
+}());
+
+// Goals service used to communicate Goals REST endpoints
+(function () {
+  'use strict';
+
+  angular
+    .module('goals')
+    .factory('GoalsService', GoalsService);
+
+  GoalsService.$inject = ['$resource'];
+
+  function GoalsService($resource) {
+    var Goal = $resource('api/goals/:goalId', {
+      goalId: '@_id'
+    }, {
+      update: {
+        method: 'PUT'
+      }
+    });
+
+    angular.extend(Goal.prototype, {
+      createOrUpdate: function () {
+        var goal = this;
+        return createOrUpdate(goal);
+      }
+    });
+
+    return Goal;
+
+    function createOrUpdate(goal) {
+      if (goal._id) {
+        return goal.$update(onSuccess, onError);
+      } else {
+        return goal.$save(onSuccess, onError);
+      }
+
+      function onSuccess(goal) {
+        var success = goal.data;
+      }
+
+      function onError(errorResponse) {
+        var error = errorResponse.data;
+        handleError(error);
+      }
+
+      function handleError(error) {
+        console.log(error);
+      }
+
+    }
+  }
+}());
+
+'use strict';
+
+//Service to calculate the priority of a goal, based on its category
+angular.module('goals').factory('PriorityService', [
+  function () {
+    return {
+      getPriority: function(profile, category) {
+        var cat = category.split(' ').join('_');
+        var priority = profile.Priority[0][cat];
+        var satisfaction = profile.Satisfaction[0][cat];
+        var result = '';
+		
+        if(priority >= 1 && priority <= 6 && satisfaction >= 1 && satisfaction <= 5) {
+          result = 'Support';
+        }
+        else if(priority >= 1 && priority <= 6 && satisfaction >= 5 && satisfaction <= 10) {
+          result = 'Maintenance';
+        }
+        else if(priority >= 7 && priority <= 11 && satisfaction >= 1 && satisfaction <= 5) {
+          result = 'Cut/Shift';
+        }
+        else if(priority >= 7 && priority <= 11 && satisfaction >= 5 && satisfaction <= 10) {
+          result = 'Minimize';
+        }
+			
+        return result;
+      }
+    };
+  }
+]);
+
+'use strict';
+
+angular.module('profiles').run(['Menus',
+  function (Menus) {
+    // Set top bar menu items
+    Menus.addMenuItem('topbar', {
+      title: 'Profile',
+      state: 'profile.view',
+      roles: ['user']
+    });
+  }
+]);
+
+'use strict';
+
 angular.module('profiles').config(['$stateProvider',
   function ($stateProvider) {
     // Profiles state routing
@@ -937,6 +1161,9 @@ angular.module('profiles').config(['$stateProvider',
       .state('profile.create', {
         url: '/create',
         templateUrl: 'modules/profiles/client/views/create-profile.client.view.html',
+        data: {
+          roles: ['user', 'admin']
+        }
       })
       .state('profile.edit', {
         url: '/edit',
@@ -958,13 +1185,12 @@ angular.module('profiles').config(['$stateProvider',
 angular.module('profiles').controller('AdminProfile', ['$scope', '$stateParams', 'Authentication', 'Profiles',
   function ($scope, $stateParams, Authentication, Profiles) {
     $scope.authentication = Authentication;
+	
     $scope.currentProfile = Profiles.get(
       { user: $stateParams.userId },
       function(prof) {
-        $scope.profile = prof;
-        console.log(JSON.stringify($scope.profile));
         $scope.prioritiesArray = [];
-        angular.forEach($scope.profile.Priority[0], function(value,key) {
+        angular.forEach(prof.Priority[0], function(value,key) {
           if(key !== '_id'){
             $scope.prioritiesArray.push({
               name: key.replace('_', ' ').replace('_', ' '),
@@ -972,6 +1198,8 @@ angular.module('profiles').controller('AdminProfile', ['$scope', '$stateParams',
             });
           }
         });
+        $scope.Satisfaction = prof.Satisfaction[0];
+        $scope.user = prof.user.displayName;
       }
     );
   }
@@ -979,8 +1207,8 @@ angular.module('profiles').controller('AdminProfile', ['$scope', '$stateParams',
 
 'use strict';
 
-angular.module('profiles').controller('ProfilesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Profiles',
-    function ($scope, $stateParams, $location, Authentication, Profiles) {
+angular.module('profiles').controller('ProfilesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Profiles', 'orderByFilter',
+    function ($scope, $stateParams, $location, Authentication, Profiles, orderByFilter) {
         $scope.authentication = Authentication;
         $scope.profile = {
             priorities: [
@@ -1009,99 +1237,95 @@ angular.module('profiles').controller('ProfilesController', ['$scope', '$statePa
                     name: 'Contribution'
                 },
                 {
-                    name: 'Security'
+                    name: 'Personal Growth'
                 },
                 {
-                    name: 'Personal Growth'
-                }
+                    name: 'Career'
+                },
+                {
+                    name: 'Physical Environment'
+                },
             ],
 			satisfactions: {
-				personalGrowth: 5,
-				career: 5,
-				familyAndFriends: 5,
-				health: 5,
-				physicalEnv: 5,
-				romance: 5,
-				money: 5,
-				fun: 5
+                Family: 5,
+                Health: 5,
+                Rest_and_Relaxation: 5,
+                Faith: 5,
+                Finance: 5,
+                Romance: 5,
+                Friends: 5,
+                Contribution: 5,
+                Personal_Growth: 5,
+                Career: 5,
+                Physical_Environment: 5
 			}
         };
 
         // Create new Profile
         $scope.CreateProfile = function () {
-            $scope.error = null;
+            if(confirm("You will not be able to make changes for 12 weeks after saving. \n Are you sure you want to save your profile?")){
+                $scope.error = null;
 
-            // Create new Profile object
-            var profile = new Profiles({
-                Priority: {
-                    Family: $scope.profile.priorities.findIndex(x => x.name === "Family") + 1,
-                    Health: $scope.profile.priorities.findIndex(x => x.name === "Health") + 1,
-                    Rest_and_Relaxation: $scope.profile.priorities.findIndex(x => x.name === "Rest and Relaxation") + 1,
-                    Faith: $scope.profile.priorities.findIndex(x => x.name === "Faith") + 1,
-                    Finance: $scope.profile.priorities.findIndex(x => x.name === "Finance") + 1,
-                    Romance: $scope.profile.priorities.findIndex(x => x.name === "Romance") + 1,
-                    Friends: $scope.profile.priorities.findIndex(x => x.name === "Friends") + 1,
-                    Contribution: $scope.profile.priorities.findIndex(x => x.name === "Contribution") + 1,
-                    Security: $scope.profile.priorities.findIndex(x => x.name === "Security") + 1,
-                    Personal_Growth: $scope.profile.priorities.findIndex(x => x.name === "Personal Growth") + 1
-                },
-                Satisfaction: {
-                    Personal_Growth: $scope.profile.satisfactions.personalGrowth,
-                    Career: $scope.profile.satisfactions.career,
-                    Family_and_Friends: $scope.profile.satisfactions.familyAndFriends,
-                    Health: $scope.profile.satisfactions.health,
-                    Physical_Env: $scope.profile.satisfactions.physicalEnv,
-                    Romance: $scope.profile.satisfactions.romance,
-                    Money: $scope.profile.satisfactions.money,
-                    Fun: $scope.profile.satisfactions.fun
-                }
-            });
-						
-            // Redirect after save
-            profile.$save(function (response) {
-                $location.path('profile/view');
+                // Create new Profile object
+                var profile = new Profiles({
+                    Priority: {
+                        Family: $scope.profile.priorities.findIndex(x => x.name === "Family") + 1,
+                        Health: $scope.profile.priorities.findIndex(x => x.name === "Health") + 1,
+                        Rest_and_Relaxation: $scope.profile.priorities.findIndex(x => x.name === "Rest and Relaxation") + 1,
+                        Faith: $scope.profile.priorities.findIndex(x => x.name === "Faith") + 1,
+                        Finance: $scope.profile.priorities.findIndex(x => x.name === "Finance") + 1,
+                        Romance: $scope.profile.priorities.findIndex(x => x.name === "Romance") + 1,
+                        Friends: $scope.profile.priorities.findIndex(x => x.name === "Friends") + 1,
+                        Contribution: $scope.profile.priorities.findIndex(x => x.name === "Contribution") + 1,
+                        Personal_Growth: $scope.profile.priorities.findIndex(x => x.name === "Personal Growth") + 1,
+                        Career: $scope.profile.priorities.findIndex(x => x.name === "Career") + 1,
+                        Physical_Environment: $scope.profile.priorities.findIndex(x => x.name === "Physical Environment") + 1,
+                    },
+                    Satisfaction: $scope.profile.satisfactions
+                });
+    						
+                // Redirect after save
+                profile.$save(function (response) {
+                    $location.path('profile/view');
 
-            }, function (errorResponse) {
-                $scope.error = errorResponse.data.message;
-            });
+                }, function (errorResponse) {
+                    $scope.error = errorResponse.data.message;
+                });
+            }
         };
 
 
         // Update existing Profile
         $scope.update = function () {
-            $scope.error = null;
+            if(confirm("You will not be able to make changes for 12 weeks after saving. \n Are you sure you want to save your profile?")){
+                $scope.error = null;
+                $scope.currentProfile = Profiles.get(
+                {user: $scope.authentication.user._id},
 
-            var profile = $scope.currentProfile;
-            profile.Priority = {
-                Family: $scope.profile.priorities.findIndex(x => x.name === "Family") + 1,
-                Health: $scope.profile.priorities.findIndex(x => x.name === "Health") + 1,
-                Rest_and_Relaxation: $scope.profile.priorities.findIndex(x => x.name === "Rest and Relaxation") + 1,
-                Faith: $scope.profile.priorities.findIndex(x => x.name === "Faith") + 1,
-                Finance: $scope.profile.priorities.findIndex(x => x.name === "Finance") + 1,
-                Romance: $scope.profile.priorities.findIndex(x => x.name === "Romance") + 1,
-                Friends: $scope.profile.priorities.findIndex(x => x.name === "Friends") + 1,
-                Contribution: $scope.profile.priorities.findIndex(x => x.name === "Contribution") + 1,
-                Security: $scope.profile.priorities.findIndex(x => x.name === "Security") + 1,
-                Personal_Growth: $scope.profile.priorities.findIndex(x => x.name === "Personal Growth") + 1
-            };
-            profile.Satisfaction = {
-                Personal_Growth: $scope.profile.satisfactions.personalGrowth,
-                Career: $scope.profile.satisfactions.career,
-                Family_and_Friends: $scope.profile.satisfactions.familyAndFriends,
-                Health: $scope.profile.satisfactions.health,
-                Physical_Env: $scope.profile.satisfactions.physicalEnv,
-                Romance: $scope.profile.satisfactions.romance,
-                Money: $scope.profile.satisfactions.money,
-                Fun: $scope.profile.satisfactions.fun
-            };
+                function(result){
+                var profile = $scope.currentProfile;
+                    profile.Priority = {
+                        Family: $scope.profile.priorities.findIndex(x => x.name === "Family") + 1,
+                        Health: $scope.profile.priorities.findIndex(x => x.name === "Health") + 1,
+                        Rest_and_Relaxation: $scope.profile.priorities.findIndex(x => x.name === "Rest and Relaxation") + 1,
+                        Faith: $scope.profile.priorities.findIndex(x => x.name === "Faith") + 1,
+                        Finance: $scope.profile.priorities.findIndex(x => x.name === "Finance") + 1,
+                        Romance: $scope.profile.priorities.findIndex(x => x.name === "Romance") + 1,
+                        Friends: $scope.profile.priorities.findIndex(x => x.name === "Friends") + 1,
+                        Contribution: $scope.profile.priorities.findIndex(x => x.name === "Contribution") + 1,
+                        Personal_Growth: $scope.profile.priorities.findIndex(x => x.name === "Personal Growth") + 1,
+                        Career: $scope.profile.priorities.findIndex(x => x.name === "Career") + 1,
+                        Physical_Environment: $scope.profile.priorities.findIndex(x => x.name === "Physical Environment") + 1,
+                    };
+                    profile.Satisfaction = $scope.profile.satisfactions;
 
-            profile.$update(function () {
-                $location.path('profile/view');
-            }, function (errorResponse) {
-                $scope.error = errorResponse.data.message;
-            });
-
-
+                    profile.$update(function () {
+                        $location.path('profile/view');
+                    }, function (errorResponse) {
+                        $scope.error = errorResponse.data.message;
+                    });
+                });
+            }
         };
 
         // Find the current user's profile
@@ -1111,11 +1335,11 @@ angular.module('profiles').controller('ProfilesController', ['$scope', '$statePa
                 
                 // Function for the view/edit profile view
                 // Needs to be here so that it only gets called after the get() query finishes
-                function(s){
+                function(result){
 
                     // Make the Priority object into an array
                     // Arrays are much easier to display with ng-repeat
-                    var p = s.Priority[0];
+                    var p = result.Priority[0];
                     $scope.prioritiesArray = [];
                     angular.forEach(p, function(value, key) {
                         if(key !== '_id'){
@@ -1124,26 +1348,23 @@ angular.module('profiles').controller('ProfilesController', ['$scope', '$statePa
                                 rank: value
                             });
                         }
-
                     });
+                    $scope.profile.priorities = orderByFilter($scope.prioritiesArray, 'rank');
 
                     // Set the scroller's values to those on the user's profile
-                    $scope.profile.satisfactions.personalGrowth = s.Satisfaction[0].Personal_Growth;
-                    $scope.profile.satisfactions.career = s.Satisfaction[0].Career;
-                    $scope.profile.satisfactions.familyAndFriends = s.Satisfaction[0].Family_and_Friends;
-                    $scope.profile.satisfactions.health = s.Satisfaction[0].Health;
-                    $scope.profile.satisfactions.physicalEnv = s.Satisfaction[0].Physical_Env;
-                    $scope.profile.satisfactions.romance = s.Satisfaction[0].Romance;
-                    $scope.profile.satisfactions.money = s.Satisfaction[0].Money;
-                    $scope.profile.satisfactions.fun = s.Satisfaction[0].Fun;
+                    $scope.profile.satisfactions = result.Satisfaction[0];
                     
                     // Check if it's been 12 weeks since last changed
                     var oneDay = 24*60*60*1000;
-                    var dateOnProfile = new Date(s.last_modified);
+                    var dateOnProfile = new Date(result.last_modified);
                     var daysElapsed = Math.round(Math.abs((dateOnProfile.getTime() - (new Date()).getTime())/(oneDay)));
 
+                    // Check if the profile is less than 1 day old (grace period)
+                    var createdOn = new Date(result.created_on);
+                    var daysSinceCreated = Math.round(Math.abs((createdOn.getTime() - (new Date()).getTime())/(oneDay)));
+                    
                     // This variable will be used with ng-show on the view to indicate when it's time to update the profile
-                    $scope.profileCanChange = (daysElapsed >= 7*12);
+                    $scope.profileCanChange = (daysElapsed >= 7*12 || daysSinceCreated <= 1);
             });
         };
 
@@ -1163,6 +1384,299 @@ angular.module('profiles').factory('Profiles', ['$resource',
     });
   }
 ]);
+'use strict';
+
+angular.module('rewards').run(['Menus',
+  function (Menus) {
+    // Set top bar menu items
+    Menus.addMenuItem('topbar', {
+      title: 'Rewards',
+      state: 'rewards.list',
+      roles: ['user']
+    });
+  }
+]);
+
+(function () {
+  'use strict';
+
+  angular
+    .module('rewards')
+    .config(routeConfig);
+
+  routeConfig.$inject = ['$stateProvider'];
+
+  function routeConfig($stateProvider) {
+    $stateProvider
+      .state('rewards', {
+        abstract: true,
+        url: '/rewards',
+        template: '<ui-view/>'
+      })
+      .state('rewards.list', {
+        url: '',
+        templateUrl: 'modules/rewards/client/views/list-rewards.client.view.html',
+        controller: 'RewardsListController',
+        controllerAs: 'vm',
+        data: {
+          roles: ['user', 'admin'],
+          pageTitle: 'Rewards List'
+        }
+      })
+      .state('rewards.create', {
+        url: '/create',
+        templateUrl: 'modules/rewards/client/views/form-reward.client.view.html',
+        controller: 'RewardsController',
+        controllerAs: 'vm',
+        resolve: {
+          rewardResolve: newReward
+        },
+        data: {
+          roles: ['user', 'admin'],
+          pageTitle: 'Rewards Create'
+        }
+      })
+      .state('rewards.edit', {
+        url: '/:rewardId/edit',
+        templateUrl: 'modules/rewards/client/views/form-reward.client.view.html',
+        controller: 'RewardsController',
+        controllerAs: 'vm',
+        resolve: {
+          rewardResolve: getReward
+        },
+        data: {
+          roles: ['user', 'admin'],
+          pageTitle: 'Edit Reward {{ rewardResolve.name }}'
+        }
+      })
+      .state('rewards.view', {
+        url: '/:rewardId',
+        templateUrl: 'modules/rewards/client/views/view-reward.client.view.html',
+        controller: 'RewardsController',
+        controllerAs: 'vm',
+        resolve: {
+          rewardResolve: getReward
+        },
+        data: {
+          roles: ['user', 'admin'],
+          pageTitle: 'Reward {{ rewardResolve.name }}'
+        }
+      });
+  }
+
+  getReward.$inject = ['$stateParams', 'RewardsService'];
+
+  function getReward($stateParams, RewardsService) {
+    return RewardsService.get({
+      rewardId: $stateParams.rewardId
+    }).$promise;
+  }
+
+  newReward.$inject = ['RewardsService'];
+
+  function newReward(RewardsService) {
+    return new RewardsService();
+  }
+}());
+
+(function () {
+  'use strict';
+
+  angular
+    .module('rewards')
+    .controller('RewardsListController', RewardsListController);
+
+  RewardsListController.$inject = ['RewardsService', 'PagerService', 'Authentication', 'filterFilter'];
+
+  function RewardsListController(RewardsService, PagerService, Authentication, filterFilter) {
+    var vm = this;
+    vm.authentication = Authentication;
+
+    vm.rewards = RewardsService.query(function(){
+      vm.setPageClaimed(1);
+    });
+    vm.claimedPager = {};
+    vm.setPageClaimed = setPageClaimed;
+
+    function setPageClaimed(page) {
+      if (page < 1 || page > vm.claimedPager.totalPages) {
+          return;
+      }
+      var pageSize = 5;
+      vm.claimedRewards = filterFilter(vm.rewards, {claimed: true});
+      // get pager object from service
+      vm.claimedPager = PagerService.GetPager(vm.claimedRewards.length, page, pageSize);
+
+      // get current page of items
+      vm.claimedItems = vm.claimedRewards.slice(vm.claimedPager.startIndex, vm.claimedPager.endIndex + 1);
+    }
+
+  }
+}());
+
+(function () {
+  'use strict';
+
+  // Rewards controller
+  angular
+    .module('rewards')
+    .controller('RewardsController', RewardsController);
+
+  RewardsController.$inject = ['$scope', '$state', '$window', 'Authentication', 'rewardResolve'];
+
+  function RewardsController ($scope, $state, $window, Authentication, reward) {
+    var vm = this;
+
+    vm.authentication = Authentication;
+    vm.reward = reward;
+    vm.error = null;
+    vm.form = {};
+    vm.remove = remove;
+    vm.save = save;
+    vm.claim = claim;
+
+    // Remove existing Reward
+    function remove() {
+      if ($window.confirm('Are you sure you want to delete?')) {
+        vm.reward.$remove($state.go('rewards.list'));
+      }
+    }
+
+    function claim() {
+      vm.reward.claimed = true;
+      vm.reward.claimed_on = Date.now();
+      vm.reward.$update(successCallback, errorCallback);
+
+      function successCallback(res) {
+        $state.go('rewards.list', {
+          rewardId: res._id
+        });
+      }
+
+      function errorCallback(res) {
+        vm.error = res.data.message;
+      }
+
+    }
+
+    // Save Reward
+    function save(isValid) {
+      if (!isValid) {
+        $scope.$broadcast('show-errors-check-validity', 'vm.form.rewardForm');
+        return false;
+      }
+
+      // TODO: move create/update logic to service
+      if (vm.reward._id) {
+        vm.reward.$update(successCallback, errorCallback);
+      } else {
+        vm.reward.$save(successCallback, errorCallback);
+      }
+
+      function successCallback(res) {
+        $state.go('rewards.list');
+      }
+
+      function errorCallback(res) {
+        vm.error = res.data.message;
+      }
+    }
+  }
+}());
+
+// Rewards service used to communicate Rewards REST endpoints
+
+(function () {
+  'use strict';
+
+  angular
+    .module('rewards')
+    .factory('RewardsService', RewardsService);
+  angular
+    .module('rewards')
+    .service('PagerService', PagerService);
+
+  RewardsService.$inject = ['$resource'];
+
+  function RewardsService($resource) {
+    return $resource('api/rewards/:rewardId', {
+      rewardId: '@_id'
+    }, {
+      update: {
+        method: 'PUT'
+      }
+    });
+  }
+
+  function PagerService() {
+    // service definition
+    var service = {};
+ 
+    service.GetPager = GetPager;
+ 
+    return service;
+ 
+    // service implementation
+    function GetPager(totalItems, currentPage, pageSize) {
+      // default to first page
+      currentPage = currentPage || 1;
+
+      // default page size is 10
+      //pageSize = pageSize || 10;
+
+      // calculate total pages
+      var totalPages = Math.ceil(totalItems / pageSize);
+
+      var startPage, endPage;
+      if (totalPages <= 10) {
+          // less than 10 total pages so show all
+          startPage = 1;
+          endPage = totalPages;
+      } else {
+          // more than 10 total pages so calculate start and end pages
+          if (currentPage <= 6) {
+              startPage = 1;
+              endPage = 10;
+          } else if (currentPage + 4 >= totalPages) {
+              startPage = totalPages - 9;
+              endPage = totalPages;
+          } else {
+              startPage = currentPage - 5;
+              endPage = currentPage + 4;
+          }
+      }
+
+      // calculate start and end item indexes
+      var startIndex = (currentPage - 1) * pageSize;
+      var endIndex = Math.min(startIndex + pageSize - 1, totalItems - 1);
+
+      // create an array of pages to ng-repeat in the pager control
+      //var pages = angular.range(startPage, endPage + 1);
+      var pages = [];
+      var i = startPage;
+      while(i <= endPage){
+        pages.push(i);
+        i++;
+      }
+
+      // return object with all pager properties required by the view
+      return {
+          totalItems: totalItems,
+          currentPage: currentPage,
+          pageSize: pageSize,
+          totalPages: totalPages,
+          startPage: startPage,
+          endPage: endPage,
+          startIndex: startIndex,
+          endIndex: endIndex,
+          pages: pages
+      };
+    }
+  }
+
+
+}());
+
 'use strict';
 
 // Configuring the Articles module
@@ -1392,8 +1906,8 @@ angular.module('users.admin').controller('UserController', ['$scope', '$state', 
 
 'use strict';
 
-angular.module('users').controller('AuthenticationController', ['$scope', '$state', '$http', '$location', '$window', 'Authentication', 'PasswordValidator','Verifications',
-  function ($scope, $state, $http, $location, $window, Authentication, PasswordValidator, Verifications) {
+angular.module('users').controller('AuthenticationController', ['$scope', '$state', '$http', '$location', '$window', 'Authentication', 'PasswordValidator','Verifications', 'Profiles',
+  function ($scope, $state, $http, $location, $window, Authentication, PasswordValidator, Verifications, Profiles) {
     $scope.authentication = Authentication;
     $scope.popoverMsg = PasswordValidator.getPopoverMsg();
 
@@ -1416,6 +1930,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$stat
       Verifications.read($scope.credentials.registrationKey).then(function (response) {
         $scope.errorMsg = '';
         $scope.verification = response.data;
+        $scope.credentials.roles = response.data.type;
         $http.post('/api/auth/signup', $scope.credentials).success(function (response) {
           // If successful we assign the response to the global user model
           $scope.authentication.user = response;
@@ -1432,12 +1947,12 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$stat
                //Error
           });
           // And redirect to the profile creation page upon signup IF USER else Admin Dashboard
-        if($scope.authentication.user.roles[0] === 'user'){
-          $state.go('profile.create', $state.previous.params);
-        }
-        else{
-          $state.go('admin.users', $state.previous.params);
-        }
+          if($scope.authentication.user.roles[0] === 'user'){
+            $state.go('profile.create', $state.previous.params);
+          }
+          else{
+            $state.go('admin.users', $state.previous.params);
+          }
         }).error(function (response) {
           $scope.error = response.message;
         });
@@ -1461,7 +1976,16 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$stat
         $scope.authentication.user = response;
 
         // And redirect to the previous or home page
-        $state.go($state.previous.state.name || 'home', $state.previous.params);
+        if ($scope.authentication.user.roles[0] === 'user') {
+          Profiles.get({ user: response._id }, function(result){
+            if(result.Priority)
+              $state.go('home', $state.previous.params);
+            else
+              $state.go('profile.create', $state.previous.params);
+          });
+        } else {
+          $state.go('admin.users', $state.previous.params);
+        }
       }).error(function (response) {
         $scope.error = response.message;
       });

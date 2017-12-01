@@ -25,7 +25,12 @@
     // Remove existing Goal
     function remove() {
       if ($window.confirm('Are you sure you want to delete?')) {
-        vm.goal.$remove($state.go('goals.list'));
+        vm.goal.$remove()
+        .then(function (response) {
+          if (response.success === true) {
+            $state.go('goals.list', {}, { reload: true });
+          }
+        });
       }
     }
 
@@ -47,13 +52,14 @@
 
 
       function successCallback(res) {
-        $state.go('goals.list', {
-          goalId: res._id
+        $state.go('goals.view', {
+          goalId: res._id,
         });
       }
 
       function errorCallback(res) {
         vm.error = res.data.message;
+        console.log(vm.error);
       }
     }
   }

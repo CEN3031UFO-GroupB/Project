@@ -23,21 +23,13 @@ function getThisMonday() {
   var monday = new Date(d.setDate(diff));
   return monday.setHours(0,0,0,0);
 }
-
-function getNextMonday() {
-  var d = new Date();
-  var day = d.getDay() + 1;
-  var diff = d.getDate() + day + (day == 0 ? -6:1);
-  var monday = new Date(d.setDate(diff));
-  return monday.setHours(0,0,0,0);
-}
-
 /**
  * Create a Goal
  */
 exports.create = function(req, res) {
   var goal = new Goal(req.body);
   goal.user = req.user;
+  goal.status = 'Not Started';
   goal.status = 'Not Started';
   goal.week_timestamp = getThisMonday();
   //Create a goal in the goals collection
@@ -52,13 +44,16 @@ exports.create = function(req, res) {
   });
 
   //Append that goal to the user's list
-  GoalsList.findOneAndUpdate({ user: goal.user }, { $push: { goals: goal } }, { upsert: true }).exec(function(err,goal) {
+  GoalsList.findOneAndUpdate({ user: goal.user }, { $push: { goals: goal } }, { upsert: true }).exec(function(err,newGoal) {
     if(err) {
       console.log(err);
-      return err;
-    } else if(goal) {
-      console.log(goal);
-      return goal;
+      //return res.status(400).send({
+      //  message: errorHandler.getErrorMessage(err)
+      //});
+    } else if(newGoal) {
+      //console.log(newGoal);
+     // console.log('Successfully Added!');
+      //res.jsonp(newGoal);
     }
   });
 };
@@ -93,14 +88,16 @@ exports.update = function(req, res) {
       } 
     });
   }
-  GoalsList.findOneAndUpdate({ user: goal.user, 'goals._id': goal._id }, { '$set': { 'goals.$': goal } }).exec(function(err,goal) {
+  GoalsList.findOneAndUpdate({ user: goal.user, 'goals._id': goal._id }, { '$set': { 'goals.$': goal } }).exec(function(err,newGoal) {
     if(err) {
       console.log(err);
-      return err;
-    } else if(goal) {
-      console.log(goal);
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else if(newGoal) {
+      console.log(newGoal);
       console.log('Successfully updated!');
-      return goal;
+      res.jsonp(goal);
     }
   });
 
@@ -146,13 +143,36 @@ exports.list = function(req, res) {
   });
 };
 
+/**
+ * List User's Goals for Admin
+ */
+exports.adminList = function(req, res) {
+
+  var oid = mongoose.Types.ObjectId(req.params.userId);
+  console.log('OID:' + oid);
+  //console.log(req);
+
+  GoalsList.find({ user: oid }).populate('goals.user', 'displayName').exec(function(err, goalsList) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      if (goalsList[0] === undefined) {
+        res.jsonp(goalsList);
+      } else {
+        res.jsonp(goalsList[0].goals);
+      }
+    }
+  });
+};
+
 exports.goalsPoints = function(req, res) {
   var userReq = req.user._doc._id;
   if(req.query.user && req.user._doc.roles[0] === 'admin')
     userReq = req.query.user;
 
-  GoalsList.find({ 'user': mongoose.Types.ObjectId(userReq)
-  }).populate('goals.user', 'displayName').exec(function(err, goalsList) {
+  GoalsList.find({ 'user': mongoose.Types.ObjectId(userReq) }).populate('goals.user', 'displayName').exec(function(err, goalsList) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -170,6 +190,7 @@ exports.goalsPoints = function(req, res) {
     }
   });
 };
+
 // TODO: make this actually update the points
 exports.goalsPointsUpdate = function(req, res) {
   var goalPoints = req.body.goalPoints;
