@@ -6,6 +6,7 @@ angular.module('verifications').controller('VerificationsController', ['$scope',
       $scope.code = '';
       $scope.codeCreate = '';
 	  
+	  //Function to build the pagination for the table
       $scope.buildPager = function () {
         $scope.itemsPerPage = 15;
         $scope.currentPage = 1;
@@ -17,17 +18,20 @@ angular.module('verifications').controller('VerificationsController', ['$scope',
         $scope.buildPager();
       });
 	  
+	  //Function to get the collection of items to display
 	  $scope.figureOutItemsToDisplay = function () {
-		  $scope.itemLength = $scope.veriList.length;
+		$scope.itemLength = $scope.veriList.length;
         var begin = (($scope.currentPage - 1) * $scope.itemsPerPage);
         var end = begin + $scope.itemsPerPage;
         $scope.pagedItems = $scope.veriList.slice(begin, end);
-    };
+      };
 
-    $scope.pageChanged = function () {
-      $scope.figureOutItemsToDisplay();
-    };
+      $scope.pageChanged = function () {
+        $scope.figureOutItemsToDisplay();
+      };
 
+	  //Function to check if the verification code is valid and active.
+	  //If it is active, inactivate the code.
       $scope.CheckVerification = function () {
         var code = $scope.code;
 
@@ -53,7 +57,8 @@ angular.module('verifications').controller('VerificationsController', ['$scope',
             $scope.errorMsg = 'Invalid code "' + code;
           });
       };
-		
+      
+	  //Function to create a new user verification code and store it in the database
       $scope.CreateUserVerification = function () {
         $scope.codeCreate = Math.random().toString(36).substring(6);
 		
@@ -67,6 +72,7 @@ angular.module('verifications').controller('VerificationsController', ['$scope',
 		});
       };
 	  
+      //Function to create a new admin verification code and store it in the database
 	  $scope.CreateAdminVerification = function () {
         $scope.codeCreate = Math.random().toString(36).substring(6);
 		
@@ -80,6 +86,7 @@ angular.module('verifications').controller('VerificationsController', ['$scope',
 		});
       };
 	  
+	  //Function to get retrieve codes
       $scope.ListVerifications = function () {
         Verifications.list().then(function (response) { 
 		$scope.veriList = response.data;

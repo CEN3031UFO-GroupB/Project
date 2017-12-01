@@ -29,7 +29,7 @@
         $state.go('rewards.list');
       }
       function errorCallback(res) {
-          vm.error = res.data.message;
+        vm.error = res.data.message;
       }
     }
 
@@ -82,8 +82,8 @@
     }
 
     function getPoints(){
-      GoalsPointsService.get({user: vm.authentication.user._id}, function(value){
-        vm.goalPoints = { goalPoints: {_id: value._id, points: value.points} };
+      GoalsPointsService.get({ user: vm.authentication.user._id }, function(value){
+        vm.goalPoints = { goalPoints: { _id: value._id, points: value.points } };
         vm.points = vm.goalPoints.goalPoints.points;
       });
     };

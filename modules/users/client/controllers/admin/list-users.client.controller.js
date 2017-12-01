@@ -2,12 +2,13 @@
 
 angular.module('users.admin').controller('UserListController', ['$scope', '$filter', 'Admin', 'GoalsService', 'GoalsPointsService',
   function ($scope, $filter, Admin, GoalsService, GoalsPointsService) {
-	  
+	//Create array for graph data. Instantiate all values within the array to zero
     $scope.data = [new Array(5+1).join('0').split('').map(parseFloat),new Array(5+1).join('0').split('').map(parseFloat)];
-
+	//Labels for the graph
     $scope.labels = ['4 weeks ago', '3 weeks ago', '2 weeks ago', 'Past week', 'Current week'];
     $scope.series = ['Goals Completed', 'Goals Started'];
 
+	//Function to load all users and statistics data
 	$scope.loadData = function(){
       Admin.query(function (data) {
 		//Filter by user
@@ -40,7 +41,8 @@ angular.module('users.admin').controller('UserListController', ['$scope', '$filt
               for(var j = 0; j < goals.length; j++) {
                 if(goals[j].week_timestamp) {
                   var timeStamp = Date.parse(goals[j].week_timestamp);
-                  //Past 4 weeks
+                  //Past 4 weeks (86400*1000 ms is 24 hours in epoch time)
+				  //Tolerance is used to account for local time differences
                   if(timeStamp >= (fourMonday - 86400*1000) && timeStamp <= (lastMonday + 86400*1000)) {
                     if(goals[j].completed_at)
                       goalsCompletedFour++;
@@ -75,8 +77,10 @@ angular.module('users.admin').controller('UserListController', ['$scope', '$filt
                   
                 }
               }
+			  //Find the user's index within the array
               var userIndex = $scope.users.findIndex(x => x._id === goals[0].user._id);
 
+			  //Add the relevant completion percentage and goals started count to each column
               if(userIndex >= 0 && goalsStartedPast !== 0)
                 $scope.users[userIndex].pastWeek = ((goalsCompletedPast / goalsStartedPast)*100).toFixed(1) + '% / ' + goalsStartedPast;
               if(userIndex >= 0 && goalsStartedFour !== 0)
@@ -86,6 +90,7 @@ angular.module('users.admin').controller('UserListController', ['$scope', '$filt
 		    }
           });
 		  
+          //Add rewards points to table
 		  GoalsPointsService.get({ user: $scope.users[i]._id }, function(value) {
             var userIndex = $scope.users.findIndex(x => x._id === value.userId);
 			
@@ -96,6 +101,7 @@ angular.module('users.admin').controller('UserListController', ['$scope', '$filt
       });
 	}
 
+	//Function to build the pagination for the table
     $scope.buildPager = function () {
       $scope.pagedItems = [];
       $scope.itemsPerPage = 15;
@@ -103,6 +109,8 @@ angular.module('users.admin').controller('UserListController', ['$scope', '$filt
       $scope.figureOutItemsToDisplay();
     };
 
+	//Function to get the collection of items to display
+	//and filter by the search term
     $scope.figureOutItemsToDisplay = function () {
       $scope.filteredItems = $filter('filter')($scope.users, {
         $: $scope.search
@@ -117,6 +125,7 @@ angular.module('users.admin').controller('UserListController', ['$scope', '$filt
       $scope.figureOutItemsToDisplay();
     };
 	
+	//Get the date of a Monday depending on the provided offset.
 	//Offset being the offset from the current week
 	//E.g. 0 is the current week, 1 is the past week,
 	//2 is two weeks ago

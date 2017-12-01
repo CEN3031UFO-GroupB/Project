@@ -1,6 +1,7 @@
 'use strict';
 
 //Service to calculate the priority of a goal, based on its category
+//Priority calculations were provided by client
 angular.module('goals').factory('PriorityService', [
   function () {
     return {
@@ -22,7 +23,7 @@ angular.module('goals').factory('PriorityService', [
         else if(priority >= 7 && priority <= 11 && satisfaction >= 5 && satisfaction <= 10) {
           result = 'Minimize';
         }
-			
+		
         return result;
       }
     };

@@ -8,6 +8,8 @@ var path = require('path'),
   Verification = mongoose.model('Verification'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
 
+//Creates a new admin verification code
+//depending on the code string supplied
 exports.create = function (req, res) {
   var verification = new Verification(req.body);
 
@@ -22,10 +24,13 @@ exports.create = function (req, res) {
   });
 };
 
+//Returns one verification depending on code
 exports.read = function (req, res) {
   res.json(req.verification);
 };
 
+//Updates the verification code's user and active
+//properties in the database
 exports.update = function (req, res) {
   var verification = req.verification;
 
@@ -43,6 +48,7 @@ exports.update = function (req, res) {
   });
 };
 
+//Lists all codes in the database
 exports.list = function(req, res) {
   Verification.find().sort('code').exec(function(err, verifications) {
     if(err) {
@@ -53,6 +59,8 @@ exports.list = function(req, res) {
   });
 };
 
+//Return the verification code depending on the code supplied
+//or return an error message if the code was invalid
 exports.verificationByCode = function (req, res, next, code) {
   Verification.findOne({ 'code': code }).exec(function (err, verification) {
     if (err) {

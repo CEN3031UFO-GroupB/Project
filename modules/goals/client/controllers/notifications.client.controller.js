@@ -6,6 +6,7 @@ angular.module('goals').controller('NotificationsController', ['$scope', '$state
       $scope.notification = {};
       $scope.message = '';
 
+	  //Function to load current notifications settings
       $scope.load = function() {
         var notification = Notifications.read()
           .then(function (response) {
@@ -15,7 +16,11 @@ angular.module('goals').controller('NotificationsController', ['$scope', '$state
           });
       };
 
+	  //Function to update notifications settings for the entire application
+	  //depending on the user's input
       $scope.update = function(isValid) {
+		  
+		//If the form is not valid, display all errors within the view
         if (!isValid) {
           $scope.$broadcast('show-errors-check-validity', 'updateForm');
           return false;

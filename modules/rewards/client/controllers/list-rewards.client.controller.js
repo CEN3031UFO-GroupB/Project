@@ -18,10 +18,10 @@
 
     function setPageClaimed(page) {
       if (page < 1 || page > vm.claimedPager.totalPages) {
-          return;
+        return;
       }
       var pageSize = 5;
-      vm.claimedRewards = filterFilter(vm.rewards, {claimed: true});
+      vm.claimedRewards = filterFilter(vm.rewards, { claimed: true });
       // get pager object from service
       vm.claimedPager = PagerService.GetPager(vm.claimedRewards.length, page, pageSize);
 
@@ -30,10 +30,10 @@
     }
 
     function getPoints(){
-        GoalsPointsService.get({user: vm.authentication.user._id}, function(value){
-          vm.goalPoints = { goalPoints: {_id: value._id, points: value.points} };
-          vm.points = vm.goalPoints.goalPoints.points;
-        });
+      GoalsPointsService.get({ user: vm.authentication.user._id }, function(value){
+        vm.goalPoints = { goalPoints: { _id: value._id, points: value.points } };
+        vm.points = vm.goalPoints.goalPoints.points;
+      });
     };
     getPoints();
 
