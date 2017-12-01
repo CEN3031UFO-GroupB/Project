@@ -30,7 +30,8 @@ module.exports = {
     },
     css: [
       'modules/*/client/css/*.css',
-      'public/lib/jquery-ui/themes/base/jquery-ui.css'
+      'public/lib/jquery-ui/themes/base/jquery-ui.css',
+      'public/lib/glyphicons-only-bootstrap/css/bootstrap.min.css'
     ],
     less: [
       'modules/*/client/less/*.less'
