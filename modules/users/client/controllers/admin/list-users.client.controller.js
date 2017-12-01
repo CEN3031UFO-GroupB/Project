@@ -24,7 +24,7 @@ angular.module('users.admin').controller('UserListController', ['$scope', '$filt
         $scope.data = [new Array(5+1).join('0').split('').map(parseFloat),new Array(5+1).join('0').split('').map(parseFloat)];
         
         for(var i = 0; i < $scope.users.length; i++) {
-          GoalsService.query({ user: $scope.users[i]._id }, function(goals) {
+          GoalsService.Goal.query({ user: $scope.users[i]._id }, function(goals) {
             var goalsStartedPast = 0;
             var goalsCompletedPast = 0;
             var goalsStartedFour = 0;
