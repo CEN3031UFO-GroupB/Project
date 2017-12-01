@@ -73,7 +73,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$stat
         if ($scope.authentication.user.roles[0] === 'user') {
           Profiles.get({ user: response._id }, function(result){
             if(result.Priority)
-              $state.go('home', $state.previous.params);
+              $state.go('goals.list', $state.previous.params);
             else
               $state.go('profile.create', $state.previous.params);
           });
