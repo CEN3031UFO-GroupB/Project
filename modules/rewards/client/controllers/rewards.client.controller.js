@@ -6,9 +6,9 @@
     .module('rewards')
     .controller('RewardsController', RewardsController);
 
-  RewardsController.$inject = ['$scope', '$state', '$window', 'Authentication', 'rewardResolve'];
+  RewardsController.$inject = ['$scope', '$state', '$window', 'Authentication', 'rewardResolve', 'GoalsPointsService'];
 
-  function RewardsController ($scope, $state, $window, Authentication, reward) {
+  function RewardsController ($scope, $state, $window, Authentication, reward, GoalsPointsService) {
     var vm = this;
 
     vm.authentication = Authentication;
@@ -22,25 +22,41 @@
     // Remove existing Reward
     function remove() {
       if ($window.confirm('Are you sure you want to delete?')) {
-        vm.reward.$remove($state.go('rewards.list'));
+        vm.reward.$remove(successCallback, errorCallback);
+      }
+
+      function successCallback(res){
+        $state.go('rewards.list');
+      }
+      function errorCallback(res) {
+          vm.error = res.data.message;
       }
     }
 
     function claim() {
-      vm.reward.claimed = true;
-      vm.reward.claimed_on = Date.now();
-      vm.reward.$update(successCallback, errorCallback);
+      if(vm.reward.points > vm.goalPoints.goalPoints.points){
+        vm.error = 'You don\'t have enough points to claim this rewards.';
+        return;
+      } else {
+        vm.reward.claimed = true;
+        vm.reward.claimed_on = Date.now();
+        vm.reward.$update(rewardUpdateSuccess, errorCallback);
 
-      function successCallback(res) {
-        $state.go('rewards.list', {
-          rewardId: res._id
-        });
+        function rewardUpdateSuccess(res){
+          vm.goalPoints.goalPoints.points -= vm.reward.points;
+          GoalsPointsService.update(vm.goalPoints, pointUpdateSuccess)
+        }
+
+        function pointUpdateSuccess(res){
+          $state.go('rewards.list', {
+            rewardId: res._id
+          });
+        }
+
+        function errorCallback(res) {
+          vm.error = res.data.message;
+        }
       }
-
-      function errorCallback(res) {
-        vm.error = res.data.message;
-      }
-
     }
 
     // Save Reward
@@ -50,7 +66,6 @@
         return false;
       }
 
-      // TODO: move create/update logic to service
       if (vm.reward._id) {
         vm.reward.$update(successCallback, errorCallback);
       } else {
@@ -65,5 +80,13 @@
         vm.error = res.data.message;
       }
     }
+
+    function getPoints(){
+      GoalsPointsService.get({user: vm.authentication.user._id}, function(value){
+        vm.goalPoints = { goalPoints: {_id: value._id, points: value.points} };
+        vm.points = vm.goalPoints.goalPoints.points;
+      });
+    };
+    getPoints();
   }
 }());

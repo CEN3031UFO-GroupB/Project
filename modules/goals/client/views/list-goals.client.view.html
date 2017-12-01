@@ -11,6 +11,17 @@
     <div class="clearfix"></div>
     <h5 style="font-style: italic; padding-left: 10px" ng-hide="auth.user.roles[0] == 'admin'">{{diffDays}} days left to finish your goals</h5>
   </div>
+  <div ng-init="updatePoints();">
+    <p>You have {{vm.points}} points</p>
+    <p ng-if="vm.points >= 10">You have enough points to <a ui-sref="rewards.list">claim a reward!</a></p>
+    <div class="progress">
+      <p ng-if="vm.points == 0">Complete goals to earn points!</p>
+      <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{vm.points}}"
+      aria-valuemin="0" aria-valuemax="10" style="width:{{vm.points*10}}%">
+      </div>
+    </div>
+  </div>
+  
   <h2 class="row">Current Goals</h2>
   <div class="row" id="currentWeek">
     <div class="list-group col-md-4">

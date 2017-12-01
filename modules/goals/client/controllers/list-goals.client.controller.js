@@ -5,12 +5,14 @@
     .module('goals')
     .controller('GoalsListController', GoalsListController);
 
-  GoalsListController.$inject = ['$scope', '$state', '$stateParams', 'Authentication', 'GoalsService', 'PriorityService', 'PerformanceService', 'Profiles', 'moment'];
+  GoalsListController.$inject = ['$scope', '$state', '$stateParams', 'Authentication', 'GoalsService', 'GoalsPointsService', 'PriorityService', 'PerformanceService', 'Profiles', 'moment'];
 
-  function GoalsListController($scope, $state, $stateParams, Authentication, GoalsService, PriorityService, PerformanceService, Profiles, moment) {
+  function GoalsListController($scope, $state, $stateParams, Authentication, GoalsService, GoalsPointsService, PriorityService, PerformanceService, Profiles, moment) {
+
     var vm = this;
     vm.oldGoals = [];
     $scope.auth = Authentication;
+
 
     //Function to return the date at 00:00:00 of the current week's Monday
     function getThisMonday() {
@@ -87,6 +89,14 @@
         });
       })();
     }
+    
+    function updatePoints(){
+      GoalsPointsService.get().$promise.then(function(value) {
+        vm.goalPoints = { goalPoints: { _id: value._id, points: value.points } };
+        vm.points = vm.goalPoints.goalPoints.points;
+      });
+    };
+    updatePoints();
 
       //Chart options
       $scope.options = {
@@ -181,10 +191,28 @@
     };
 
     $scope.markGoalComplete = function (goal) {
+      var numPoints = 3;
+      var p = goal.priority;
+      if(p === 'Support'){
+        numPoints = 4;
+      } else if(p === 'Maintenance'){
+        numPoints = 3;
+      } else if(p === 'Cut/Shift'){
+        numPoints = 2;
+      } else if(p === 'Minimize'){
+        numPoints = 1;
+      }
+
       goal.status = 'Complete';
       goal.completed_at = new Date();
       console.log(JSON.stringify(goal));
       GoalsService.Goal.update(goal);
+
+      // Increment user's points
+      vm.goalPoints.goalPoints.points += numPoints;
+      GoalsPointsService.update(vm.goalPoints);
+      vm.points += numPoints;
+      console.log(JSON.stringify(vm.goalPoints));
     };
 
   }

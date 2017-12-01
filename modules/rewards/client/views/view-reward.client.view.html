@@ -2,15 +2,18 @@
   <div class="page-header">
     <h1 ng-bind="vm.reward.name"></h1>
   </div>
+  <div>
+    <h3>You need {{ vm.reward.points }} points to claim this reward. You currently have {{ vm.goalPoints.goalPoints.points }} points. </h3>
+  </div>
   <div class="pull-right"
        ng-show="vm.reward.isCurrentUserOwner">
-    <a class="btn btn-primary"
-       ng-click="vm.claim()">
+    <button class="btn btn-primary"
+       ng-click="vm.claim()" ng-if="vm.reward.points <= vm.goalPoints.goalPoints.points">
       Claim!
-    </a>
-    <a class="btn btn-warning" ng-click="vm.remove()">
+    </button>
+    <button class="btn btn-danger" ng-click="vm.remove()">
       Delete
-    </a>
+    </button>
   </div>
   <small>
     <em class="text-muted">
