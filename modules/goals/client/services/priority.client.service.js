@@ -14,7 +14,7 @@ angular.module('goals').factory('PriorityService', [
           result = 'Support';
         }
         else if(priority >= 1 && priority <= 6 && satisfaction >= 5 && satisfaction <= 10) {
-          result = 'Maintenance';
+          result = 'Maintain';
         }
         else if(priority >= 7 && priority <= 11 && satisfaction >= 1 && satisfaction <= 5) {
           result = 'Cut/Shift';
