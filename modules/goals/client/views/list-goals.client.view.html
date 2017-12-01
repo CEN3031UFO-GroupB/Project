@@ -1,3 +1,9 @@
+<style>
+  .list-group-item {
+    border-bottom-right-radius: 0px !important;
+    border-bottom-left-radius: 0px !important;
+  }
+</style>
 <container>
   <div class="page-header row">
     <h1 class="col-md-8">{{name}} Goals</h1>
@@ -15,13 +21,14 @@
             style="margin-bottom: 5px;">
         <div class="row">
           <div class="col-md-1" style="position: relative; height: 100%; width: 20px; padding: 0px; margin-bottom: 0px; margin-top: 0px; bottom: 5px; clear: both;">
-            <div style="background-color: #505050; width:1px;
+            <div ng-style="todoCSS(goal)"
+              style="background-color: #505050; width:1px;
             transform: rotate(-90deg); transform-origin: bottom right;
-            position: relative; height: 100%; width: 100%; margin-left: -55px;
-            margin-top: -25px; clear: both; padding-left: 10px;
-            border-right: 65px solid #505050; color: white;"> {{goal.priority}}</div>
+            position: relative; height: 100%; width: 100%;
+            margin-top: -25px; clear: both;
+            border-right: solid #505050; color: white;"> {{goal.priority}}</div>
           </div>
-          <div class="col-md-7" style="padding-right: 0px;">
+          <div class="col-md-8" style="padding-right: 0px;">
             <h4 class="list-group-item-heading" style="display:block; font-weight: bold">{{goal.title}} </h4>
             <h5 class="list-group-item-heading" style="display:inline">{{goal.category}} </h5>
           </div>
@@ -40,11 +47,11 @@
            style="margin-bottom: 5px;">
         <div class="row">
           <div class="col-md-1" style="position: relative; height: 100%; width: 20px; padding: 0px; margin-bottom: 0px; margin-top: 0px; bottom: 5px; clear: both;">
-            <div style="background-color: #347fa5; width:1px;
+            <div ng-style="inProgressCSS(goal)"
+            style="background-color: #347fa5; width:1px;
             transform: rotate(-90deg); transform-origin: bottom right;
-            position: relative; height: 100%; width: 100%; margin-left: -55px;
-            margin-top: -25px; clear: both; padding-left: 10px;
-            border-right: 65px solid #347fa5; color: white;"> {{goal.priority}}</div>
+            position: relative; height: 100%; width: 100%;
+            margin-top: -25px; clear: both; color: white;"> {{goal.priority}}</div>
           </div>
           <div class="col-md-7" style="padding-right: 0px;">
             <h4 class="list-group-item-heading" style="display:block; font-weight: bold">{{goal.title}} </h4>
@@ -52,7 +59,7 @@
           </div>
           <div class="col-md-2">
             <button class="btn" style="padding-top: 0; padding-bottom: 0; margin-top: 6px; margin-bottom: 5px" ui-sref="goals.view({ goalId: goal._id })">View</button>
-            <button class="btn btn-primary" style="padding-top: 0; padding-bottom: 0" ng-click="markGoalInProgress(goal)">Start</button>
+            <button class="btn" style="padding-top: 0; padding-bottom: 0; padding-left: 8px; padding-right: 8px; background-color: #30bb00; color: white;" ng-click="markGoalComplete(goal)">Finish</button>
           </div>
         </div>
       </div>
@@ -65,11 +72,12 @@
            style="margin-bottom: 5px;">
         <div class="row">
           <div class="col-md-1" style="position: relative; height: 100%; width: 20px; padding: 0px; margin-bottom: 0px; margin-top: 0px; bottom: 5px; clear: both;">
-            <div style="background-color: #248900; width:1px;
+            <div ng-style="completedCSS(goal)"
+              style="background-color: #30bb00; width:1px;
             transform: rotate(-90deg); transform-origin: bottom right;
-            position: relative; height: 100%; width: 100%; margin-left: -55px;
-            margin-top: -25px; clear: both; padding-left: 10px;
-            border-right: 65px solid #248900; color: white;"> {{goal.priority}}</div>
+            position: relative; height: 100%; width: 100%; margin-left: -45px;
+            margin-top: -25px; clear: both; padding-left: 5px;
+            border-right: 60px solid #30bb00; color: white;"> {{goal.priority}}</div>
           </div>
           <div class="col-md-7" style="padding-right: 0px;">
             <h4 class="list-group-item-heading" style="display:block; font-weight: bold">{{goal.title}} </h4>
