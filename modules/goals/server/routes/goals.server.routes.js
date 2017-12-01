@@ -17,6 +17,9 @@ module.exports = function(app) {
     .put(goals.update)
     .delete(goals.delete);
 
+  app.route('/api/admin/goals/:userId').all(goalsPolicy.isAllowed)
+    .get(goals.adminList);
+
   // Finish by binding the Goal middleware
   app.param('goalId', goals.goalByID);
 };
