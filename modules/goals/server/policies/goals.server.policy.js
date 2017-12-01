@@ -20,6 +20,9 @@ exports.invokeRolesPolicies = function () {
     }, {
       resources: '/api/goals/:goalId',
       permissions: '*'
+    }, {
+      resources: '/api/admin/goals/:userId',
+      permissions: '*'
     }]
   }, {
     roles: ['user'],
@@ -28,7 +31,7 @@ exports.invokeRolesPolicies = function () {
       permissions: ['get', 'post']
     }, {
       resources: '/api/goals/:goalId',
-      permissions: ['get']
+      permissions: ['get', 'put']
     }]
   }, {
     roles: ['guest'],
@@ -37,7 +40,7 @@ exports.invokeRolesPolicies = function () {
       permissions: ['get']
     }, {
       resources: '/api/goals/:goalId',
-      permissions: ['get']
+      permissions: ['get', 'put']
     }]
   }]);
 };
