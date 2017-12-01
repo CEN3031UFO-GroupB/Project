@@ -43,10 +43,10 @@
                   }
                 }
               }
-              vm.performanceData = PerformanceService.getPerformance(vm.oldGoals);
+              vm.performanceData = PerformanceService.getPerformance(vm.goals);
               $scope.labels = vm.performanceData.weeks;
-              $scope.series = ['Started', 'Completed'];
-              $scope.data = [vm.performanceData.starts, vm.performanceData.finishes];
+              $scope.series = ['Completed', 'Started'];
+              $scope.data = [vm.performanceData.finishes, vm.performanceData.starts];
               $scope.type = 'line';
 
             });
@@ -76,10 +76,10 @@
                   }
                 }
               }
-              vm.performanceData = PerformanceService.getPerformance(vm.oldGoals);
+              vm.performanceData = PerformanceService.getPerformance(vm.goals);
               $scope.labels = vm.performanceData.weeks;
-              $scope.series = ['Started', 'Completed'];
-              $scope.data = [vm.performanceData.starts, vm.performanceData.finishes];
+              $scope.series = ['Completed', 'Started'];
+              $scope.data = [vm.performanceData.finishes, vm.performanceData.starts];
               $scope.type = 'line';
 
             });
@@ -160,9 +160,9 @@
           'padding-left': '5px',
           'margin-left': '-45px', };
       } else {
-        return { 'border-right': '70px solid #30bb00',
-          'padding-left': '14px',
-          'margin-left': '-64px', };
+        return { 'border-right': '69px solid #30bb00',
+          'padding-left': '15px',
+          'margin-left': '-65px', };
       }
     };
 
