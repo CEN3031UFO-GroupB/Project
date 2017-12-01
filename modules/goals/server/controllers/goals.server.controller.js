@@ -22,21 +22,13 @@ function getThisMonday() {
   var monday = new Date(d.setDate(diff));
   return monday.setHours(0,0,0,0);
 }
-
-function getNextMonday() {
-  var d = new Date();
-  var day = d.getDay() + 1;
-  var diff = d.getDate() + day + (day == 0 ? -6:1);
-  var monday = new Date(d.setDate(diff));
-  return monday.setHours(0,0,0,0);
-}
-
 /**
  * Create a Goal
  */
 exports.create = function(req, res) {
   var goal = new Goal(req.body);
   goal.user = req.user;
+  goal.status = 'Not Started';
   goal.status = 'Not Started';
   goal.week_timestamp = getThisMonday();
   //Create a goal in the goals collection
@@ -51,13 +43,16 @@ exports.create = function(req, res) {
   });
 
   //Append that goal to the user's list
-  GoalsList.findOneAndUpdate({ user: goal.user }, { $push: { goals: goal } }, { upsert: true }).exec(function(err,goal) {
+  GoalsList.findOneAndUpdate({ user: goal.user }, { $push: { goals: goal } }, { upsert: true }).exec(function(err,newGoal) {
     if(err) {
       console.log(err);
-      return err;
-    } else if(goal) {
-      console.log(goal);
-      return goal;
+      //return res.status(400).send({
+      //  message: errorHandler.getErrorMessage(err)
+      //});
+    } else if(newGoal) {
+      //console.log(newGoal);
+     // console.log('Successfully Added!');
+      //res.jsonp(newGoal);
     }
   });
 };
@@ -86,18 +81,13 @@ exports.update = function(req, res) {
   GoalsList.findOneAndUpdate({ user: goal.user, 'goals._id': goal._id }, { '$set': { 'goals.$': goal } }).exec(function(err,newGoal) {
     if(err) {
       console.log(err);
-      return err;
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
     } else if(newGoal) {
-      //console.log("Old Goal ID:" + goal._id);
-      for(var i = 0; i < newGoal.goals.length; i++){
-        //console.log(newGoal.goals[i]._id);
-        if(JSON.stringify(newGoal.goals[i]._id) == JSON.stringify(goal._id)){
-          //console.log("MATCH:"+newGoal.goals[i]);
-          console.log('Successfully updated!');
-          return newGoal.goals[i];
-        }
-      }
-      return goal;
+      console.log(newGoal);
+      console.log('Successfully updated!');
+      res.jsonp(goal);
     }
   });
 
