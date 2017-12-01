@@ -125,7 +125,7 @@
     $scope.monday = getThisMonday();
     var today = new Date();
     var timeDiff = Math.abs(today.getTime() - $scope.monday.getTime());
-    $scope.diffDays = 7 - Math.ceil(timeDiff / (1000 * 3600 * 24));
+    $scope.diffDays = 8 - Math.ceil(timeDiff / (1000 * 3600 * 24));
 
     //CSS to be applied to the To Do goals column via ng-style to accommodate for longer titles
     $scope.todoCSS = function (goal) {
