@@ -21,7 +21,7 @@
       </div>
     </div>
   </div>
-  
+
   <h2 class="row">Current Goals</h2>
   <div class="row" id="currentWeek">
     <div class="list-group col-md-4">
@@ -78,7 +78,7 @@
     <div class="list-group col-md-4">
       <h4 style="font-weight: bolder">Completed</h4>
       <div ng-repeat="goal in vm.goals"
-           ng-if="(goal.status == 'Complete') && ((goal.completed_at | date:'dd/MM/yyyy') > (monday | date:'dd/MM/yyyy'))"
+           ng-if="(goal.status == 'Complete') && ((goal.completed_at | date:'yyyy/MM/dd') >= (monday | date:'yyyy/MM/dd'))"
            class="list-group-item"
            style="margin-bottom: 5px;">
         <div class="row">
