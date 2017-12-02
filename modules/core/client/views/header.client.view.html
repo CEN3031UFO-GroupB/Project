@@ -45,8 +45,8 @@
           <li ui-sref-active="active" ng-show="authentication.user.provider === 'local'">
             <a ui-sref="settings.password">Change Password</a>
           </li>
-          <li ui-sref-active="active">
-            <a ui-sref="settings.accounts">Manage Social Accounts</a>
+          <li ng-hide="authentication.user.roles[0] === 'admin'">
+            <a ng-href="{{authentication.user.email.includes('@gmail.com') ? 'https://mail.google.com/mail/?view=cm&fs=1&to=lifecoachroach@gmail.com' : 'mailto:lifecoachroach@gmail.com'}}" target="_blank">Contact Your Coach</a>
           </li>
           <li class="divider"></li>
           <li>
