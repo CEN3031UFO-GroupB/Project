@@ -23,7 +23,8 @@
     "angular-chart.js": "^1.1.1",
     "chart.js": "^2.7.1",
     "moment": "^2.19.2",
-    "angular-moment": "^1.1.0"
+    "angular-moment": "^1.1.0",
+    "glyphicons-only-bootstrap": "^0.0.1"
   },
   "resolutions": {
     "angular": "~1.3"

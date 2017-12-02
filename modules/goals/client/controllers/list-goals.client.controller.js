@@ -27,13 +27,13 @@
     if ($scope.auth.user.roles[0] == 'admin') {
       $scope.name = $stateParams.userDisplayName.concat("'s");
       (function () {
-        GoalsService.adminGoal.query({userId: $stateParams.userId}).$promise.then(function (value) {
+        GoalsService.adminGoal.query({ userId: $stateParams.userId }).$promise.then(function (value) {
           vm.goals = value;
           var userId = '';
           if (vm.goals.length > 0) {
             userId = vm.goals[0].user._id;
 
-            Profiles.get({user: userId}, function (value) {
+            Profiles.get({ user: userId }, function (value) {
               $scope.userProfile = value;
 
               for (var i = 0; i < vm.goals.length; i++) {
@@ -66,7 +66,7 @@
           if (vm.goals.length > 0) {
             userId = vm.goals[0].user._id;
 
-            Profiles.get({user: userId}, function (value) {
+            Profiles.get({ user: userId }, function (value) {
               $scope.userProfile = value;
 
               for (var i = 0; i < vm.goals.length; i++) {
@@ -99,38 +99,38 @@
     updatePoints();
 
       //Chart options
-      $scope.options = {
-        legend: {
-          display: true,
-          position: 'right',
-        },
-        responsive: true,
-        scales: {
-          xAxes: [{
-            //stacked: true,
-            type: 'time',
-            distribution: 'linear',
-            time: {
-              displayFormats: {
-                week: 'MM-DD-YYYY'
-              },
-              isoWeekday: true,
-              unit: 'week',
-              tooltipFormat: 'MM-DD-YYYY',
-              max: getThisMonday(),
-            }
-          }],
-          yAxes: [{
-            //stacked: true,
-            ticks:{
-              min: 0,
-              max: 5,
-              fixedStepSize: 1,
-            }
-          }],
-          bounds: 'ticks',
-        }
-      };
+    $scope.options = {
+      legend: {
+        display: true,
+        position: 'right',
+      },
+      responsive: true,
+      scales: {
+        xAxes: [{
+          //stacked: true,
+          type: 'time',
+          distribution: 'linear',
+          time: {
+            displayFormats: {
+              week: 'MM-DD-YYYY'
+            },
+            isoWeekday: true,
+            unit: 'week',
+            tooltipFormat: 'MM-DD-YYYY',
+            max: getThisMonday(),
+          }
+        }],
+        yAxes: [{
+          //stacked: true,
+          ticks:{
+            min: 0,
+            max: 5,
+            fixedStepSize: 1,
+          }
+        }],
+        bounds: 'ticks',
+      }
+    };
 
     $scope.monday = getThisMonday();
     var today = new Date();
