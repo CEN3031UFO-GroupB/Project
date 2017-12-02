@@ -6,7 +6,7 @@
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <a ui-sref="home" ><img alt="Sandra Roach" class="img-responsive text-center navbar-logo" src="modules/core/client/img/brand/logo.png" /></a>
+    <img ng-click="homeRoute()" alt="Sandra Roach" class="img-responsive text-center navbar-logo" src="modules/core/client/img/brand/logo.png" />
   </div>
   <nav class="collapse navbar-collapse" collapse="!isCollapsed" role="navigation">
     <ul class="nav navbar-nav" ng-if="menu.shouldRender(authentication.user);">
