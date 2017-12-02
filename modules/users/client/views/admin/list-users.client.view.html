@@ -24,7 +24,9 @@
       <tbody>
         <tr ng-repeat="user in pagedItems">
           <td ng-bind="user.displayName"></td>
-          <td ng-bind="user.email"></td>
+          <td>
+            <a ng-href="https://mail.google.com/mail/?view=cm&fs=1&to={{user.email}}" target="_blank" ng-bind="user.email"></a>
+          </td>
           <td ng-bind="user.fourWeeks"></td>
           <td ng-bind="user.pastWeek"></td>
 		  <td ng-bind="user.currentWeek"></td>
@@ -46,7 +48,7 @@
   </div>
 
   <pagination boundary-links="true" max-size="8" items-per-page="itemsPerPage" total-items="filterLength" ng-model="currentPage" ng-change="pageChanged()"></pagination>
-  
+
   <h2>Goals started/completed</h2>
   <p>Displays a bar chart with the goals which were started and/or completed within the past four weeks or the current week.</p>
   <div class="list-group">
