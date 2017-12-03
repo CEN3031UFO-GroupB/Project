@@ -1,6 +1,14 @@
 var username = 'jake';
 var password = '!Password1';
 
+var fNameSignUp = 'test';
+var lNameSignUp = 'test';
+var emailSignUp = 'test@test.com';
+var usernameSignUp = 'test';
+var passwordSignUp = 'Test123!@#';
+//Will need to be swapped out after each use
+var regCodeSignUp = 'ffj5219';
+
 describe('Users who have signed up ', function() {
   it('should be able to create profile', function() {
     browser.get('http://localhost:3000/');
@@ -87,5 +95,20 @@ describe('Users who have signed up ', function() {
 	element(by.buttonText('Claim!')).click();
 	browser.pause(5001);
   });
-  
+
+  it('should be able to sign up for an account with an active registration code', function() {
+  	browser.get('http://localhost:3000');
+    browser.waitForAngular();
+    element(by.buttonText('Sign Up')).click();
+    browser.waitForAngular();
+    element(by.id('firstName')).sendKeys(fNameSignUp);
+    element(by.id('lastName')).sendKeys(lNameSignUp);
+    element(by.id('email')).sendKeys(emailSignUp);
+    element(by.id('username')).sendKeys(usernameSignUp);
+    element(by.id('password')).sendKeys(passwordSignUp);
+    element(by.id('registrationKey')).sendKeys(regCodeSignUp);
+    element(by.buttonText('Sign up')).click();
+    browser.waitForAngular();
+	});
+
 });
