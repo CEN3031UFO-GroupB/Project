@@ -124,7 +124,6 @@
           //stacked: true,
           ticks:{
             min: 0,
-            max: 5,
             fixedStepSize: 1,
           }
         }],
