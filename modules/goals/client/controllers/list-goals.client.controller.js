@@ -5,9 +5,9 @@
     .module('goals')
     .controller('GoalsListController', GoalsListController);
 
-  GoalsListController.$inject = ['$scope', '$state', '$stateParams', 'Authentication', 'GoalsService', 'GoalsPointsService', 'PriorityService', 'PerformanceService', 'Profiles', 'moment'];
+  GoalsListController.$inject = ['$scope', '$state', '$stateParams', 'Authentication', 'GoalsService', 'GoalsPointsService', 'PriorityService', 'PerformanceService', 'GoalsLimitService', 'Profiles', 'moment'];
 
-  function GoalsListController($scope, $state, $stateParams, Authentication, GoalsService, GoalsPointsService, PriorityService, PerformanceService, Profiles, moment) {
+  function GoalsListController($scope, $state, $stateParams, Authentication, GoalsService, GoalsPointsService, PriorityService, PerformanceService, GoalsLimitService, Profiles, moment) {
 
     var vm = this;
     vm.oldGoals = [];
@@ -124,7 +124,6 @@
           //stacked: true,
           ticks:{
             min: 0,
-            max: 5,
             fixedStepSize: 1,
           }
         }],
@@ -136,8 +135,9 @@
     var today = new Date();
     var timeDiff = Math.abs(today.getTime() - $scope.monday.getTime());
     $scope.diffDays = 8 - Math.ceil(timeDiff / (1000 * 3600 * 24));
+    $scope.pluralDay = $scope.diffDays === 1 ? '' : 's';
 
-    //CSS to be applied to the To Do goals column via ng-style to accommodate for longer titles
+      //CSS to be applied to the To Do goals column via ng-style to accommodate for longer titles
     $scope.todoCSS = function (goal) {
       if (goal.title.length <= 24) {
         return { 'border-right': '65px solid #505050',
@@ -184,10 +184,17 @@
     };
 
     $scope.markGoalInProgress = function (goal) {
-      goal.status = 'In Progress';
-      goal.started_at = new Date();
-      console.log(JSON.stringify(goal));
-      GoalsService.Goal.update(goal);
+      GoalsService.Goal.query().$promise.then(function (value) {
+        if (GoalsLimitService.canAddInProgress(value)) {
+          goal.status = 'In Progress';
+          goal.started_at = new Date();
+          console.log(JSON.stringify(goal));
+          GoalsService.Goal.update(goal);
+        } else {
+          alert('Sorry, but you can only have 5 goals in progress!');
+        }
+      });
+
     };
 
     $scope.markGoalComplete = function (goal) {

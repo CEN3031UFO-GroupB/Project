@@ -1,7 +1,31 @@
 <section ng-controller="ProfilesController" ng-init="findOne(authentication.user._id)">
-  <div class="page-header">
-    <h1>Priorities and Satisfaction Ratings</h1>
+  <div class="row">
+    <div class="col-md-6">
+      <div>
+        <h1>Priorities and Satisfaction Ratings</h1>
+      </div>
+    </div>
+    <div class="col-md-1">
+      <button class="btn" ng-click="open()" style="
+        position: relative;
+        top: 28px;
+        right: 30px;
+        padding-top: 4px;
+        padding-left: 8px;
+        text-align: center;
+        background-color: #BCDBEA;
+        border: 0;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        font-size: 14px;
+        font-weight: bold;
+        color:#000000;
+        ">?</button>
+    </div>
   </div>
+  <hr style="margin-top: 5px">
+
   <div class="col-md-12">
      <div ng-show="profileCanChange" id="editButton1" class="form-group">
       <p>

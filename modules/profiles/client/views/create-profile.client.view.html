@@ -1,7 +1,30 @@
 <section ng-controller="ProfilesController">
-  <div class="page-header">
-    <h1>Getting Started</h1>
+  <div class="row">
+    <div class="col-md-3">
+      <div>
+        <h1>Getting Started</h1>
+      </div>
+    </div>
+    <div class="col-md-1">
+      <button class="btn" ng-click="open()" style="
+        position: relative;
+        top: 28px;
+        right: 30px;
+        padding-top: 4px;
+        padding-left: 8px;
+        text-align: center;
+        background-color: #BCDBEA;
+        border: 0;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        font-size: 14px;
+        font-weight: bold;
+        color:#000000;
+        ">?</button>
+    </div>
   </div>
+  <hr style="margin-top: 5px">
   <div class="col-md-12">
     <form name="profileForm" class="form-horizontal" ng-submit="CreateProfile();">
       <fieldset>
@@ -15,7 +38,7 @@
         </ul>
 		<h2>Satisfactions</h2>
 		<p>
-	      Please indicate your current satisfaction levels for each category below. 
+	      Please indicate your current satisfaction levels for each category below.
 	      1 being completely unsatisfied and 10 being completely satisfied.
         </p>
 		<div class="form-group">
