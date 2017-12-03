@@ -19,5 +19,15 @@ angular.module('core').controller('HeaderController', ['$scope', '$state', 'Auth
     $scope.$on('$stateChangeSuccess', function () {
       $scope.isCollapsed = false;
     });
+
+    //function to route user/admin to home depending on role
+    $scope.homeRoute = function () {
+      if ($scope.authentication.user.roles[0] === 'admin') {
+        console.log('admin!');
+        $state.go('admin.users', $state.previous.params);
+      } else {
+        $state.go('goals.list', $state.previous.params);
+      }
+    }
   }
 ]);

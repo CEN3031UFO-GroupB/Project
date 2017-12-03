@@ -6,7 +6,7 @@
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <a ui-sref="home" ><img alt="Sandra Roach" class="img-responsive text-center navbar-logo" src="modules/core/client/img/brand/logo.png" /></a>
+    <img ng-click="homeRoute()" alt="Sandra Roach" class="img-responsive text-center navbar-logo" src="modules/core/client/img/brand/logo.png" />
   </div>
   <nav class="collapse navbar-collapse" collapse="!isCollapsed" role="navigation">
     <ul class="nav navbar-nav" ng-if="menu.shouldRender(authentication.user);">
@@ -45,8 +45,8 @@
           <li ui-sref-active="active" ng-show="authentication.user.provider === 'local'">
             <a ui-sref="settings.password">Change Password</a>
           </li>
-          <li ui-sref-active="active">
-            <a ui-sref="settings.accounts">Manage Social Accounts</a>
+          <li ng-hide="authentication.user.roles[0] === 'admin'">
+            <a ng-href="{{authentication.user.email.includes('@gmail.com') ? 'https://mail.google.com/mail/?view=cm&fs=1&to=lifecoachroach@gmail.com' : 'mailto:lifecoachroach@gmail.com'}}" target="_blank">Contact Your Coach</a>
           </li>
           <li class="divider"></li>
           <li>
