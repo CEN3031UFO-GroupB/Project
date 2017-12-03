@@ -108,27 +108,29 @@
 </container>
 
 <hr>
-<h2 class="col-md-8">Previously Completed Goals</h2>
-<div class="list-group">
-  <table st-table="vm.oldGoals" id="goals-table" class="table table-striped">
-    <thead>
-    <th style="width:130px">Title</th>
-    <th style="width:130px">Category</th>
-    <th style="width:130px">Started On</th>
-    <th style="width:130px">Completed On</th>
-    </thead>
-    <tbody>
-    <tr ng-repeat="goal in vm.oldGoals" >
-      <td ng-bind="goal.title"></td>
-      <td ng-bind="goal.category"></td>
-      <td ng-bind="(goal.started_at | date:'mediumDate')"></td>
-      <td ng-bind="(goal.completed_at | date:'mediumDate')"></td>
-    </tr>
-    </tbody>
-  </table>
+<div ng-hide="vm.goals.$resolved && !vm.oldGoals.length">
+  <h2 class="col-md-8">Previously Completed Goals</h2>
+  <div class="list-group">
+    <table st-table="vm.oldGoals" id="goals-table" class="table table-striped">
+      <thead>
+      <th style="width:130px">Title</th>
+      <th style="width:130px">Category</th>
+      <th style="width:130px">Started On</th>
+      <th style="width:130px">Completed On</th>
+      </thead>
+      <tbody>
+      <tr ng-repeat="goal in vm.oldGoals" >
+        <td ng-bind="goal.title"></td>
+        <td ng-bind="goal.category"></td>
+        <td ng-bind="(goal.started_at | date:'mediumDate')"></td>
+        <td ng-bind="(goal.completed_at | date:'mediumDate')"></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 <hr>
-<div>
+<div ng-hide="vm.goals.$resolved && !vm.oldGoals.length">
   <canvas id="bar" class="chart chart-line"
           chart-data="data" chart-labels="labels" chart-options="options" chart-series="series">
   </canvas>
