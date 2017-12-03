@@ -5,9 +5,9 @@
     .module('goals')
     .controller('GoalsListController', GoalsListController);
 
-  GoalsListController.$inject = ['$scope', '$state', '$stateParams', 'Authentication', 'GoalsService', 'GoalsPointsService', 'PriorityService', 'PerformanceService', 'Profiles', 'moment'];
+  GoalsListController.$inject = ['$scope', '$state', '$stateParams', 'Authentication', 'GoalsService', 'GoalsPointsService', 'PriorityService', 'PerformanceService', 'GoalsLimitService', 'Profiles', 'moment'];
 
-  function GoalsListController($scope, $state, $stateParams, Authentication, GoalsService, GoalsPointsService, PriorityService, PerformanceService, Profiles, moment) {
+  function GoalsListController($scope, $state, $stateParams, Authentication, GoalsService, GoalsPointsService, PriorityService, PerformanceService, GoalsLimitService, Profiles, moment) {
 
     var vm = this;
     vm.oldGoals = [];
@@ -184,10 +184,17 @@
     };
 
     $scope.markGoalInProgress = function (goal) {
-      goal.status = 'In Progress';
-      goal.started_at = new Date();
-      console.log(JSON.stringify(goal));
-      GoalsService.Goal.update(goal);
+      GoalsService.Goal.query().$promise.then(function (value) {
+        if (GoalsLimitService.canAddInProgress(value)) {
+          goal.status = 'In Progress';
+          goal.started_at = new Date();
+          console.log(JSON.stringify(goal));
+          GoalsService.Goal.update(goal);
+        } else {
+          alert('Sorry, but you can only have 5 goals in progress!');
+        }
+      });
+
     };
 
     $scope.markGoalComplete = function (goal) {
