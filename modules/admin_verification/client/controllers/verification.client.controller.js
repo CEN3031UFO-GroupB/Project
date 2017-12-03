@@ -109,6 +109,8 @@ angular.module('verifications').controller('VerificationsController', ['$scope',
 
                 if(index && index != '-1')
                   $scope.veriList[i].user_id = $scope.users[index].displayName;
+                else
+                  $scope.veriList[i].user_id = '';
 			}
 			else
                 $scope.veriList[i].user_id = '';
