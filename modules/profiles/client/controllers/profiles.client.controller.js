@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('profiles').controller('ProfilesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Profiles', 'orderByFilter',
-    function ($scope, $stateParams, $location, Authentication, Profiles, orderByFilter) {
+angular.module('profiles').controller('ProfilesController', ['$scope', '$modal', '$stateParams', '$location', 'Authentication', 'Profiles', 'orderByFilter',
+    function ($scope, $modal, $stateParams, $location, Authentication, Profiles, orderByFilter) {
         $scope.authentication = Authentication;
         $scope.profile = {
             priorities: [
@@ -53,6 +53,27 @@ angular.module('profiles').controller('ProfilesController', ['$scope', '$statePa
                 Physical_Environment: 5
 			}
         };
+
+
+        //Define modal parameters
+      $scope.open = function (size) {
+
+        var modalInstance = $modal.open({
+          templateUrl: '/modules/profiles/client/views/informationModal.html',
+          controller: ModalInstanceCtrl,
+          size: size,
+        });
+
+        modalInstance.result.then(function () {
+          console.log('Modal dismissed at: ' + new Date());
+        });
+      };
+
+      var ModalInstanceCtrl = ['$scope', '$modalInstance', function($scope, $modalInstance){
+        $scope.ok = function () {
+          $modalInstance.dismiss('cancel');
+        };
+      }];
 
         // Create new Profile
         $scope.CreateProfile = function () {
