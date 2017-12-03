@@ -135,8 +135,9 @@
     var today = new Date();
     var timeDiff = Math.abs(today.getTime() - $scope.monday.getTime());
     $scope.diffDays = 8 - Math.ceil(timeDiff / (1000 * 3600 * 24));
+    $scope.pluralDay = $scope.diffDays === 1 ? '' : 's';
 
-    //CSS to be applied to the To Do goals column via ng-style to accommodate for longer titles
+      //CSS to be applied to the To Do goals column via ng-style to accommodate for longer titles
     $scope.todoCSS = function (goal) {
       if (goal.title.length <= 24) {
         return { 'border-right': '65px solid #505050',

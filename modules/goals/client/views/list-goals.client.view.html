@@ -9,7 +9,7 @@
     <h1 class="col-md-8">{{name}} Goals</h1>
     <button class="btn btn-default" style="float:right;margin-top: 25px;" ng-click="createGoal()" ng-hide="auth.user.roles[0] == 'admin'">New Goal</button>
     <div class="clearfix"></div>
-    <h5 style="font-style: italic; padding-left: 10px" ng-hide="auth.user.roles[0] == 'admin'">{{diffDays}} days left to finish your goals</h5>
+    <h5 style="font-style: italic; padding-left: 10px" ng-hide="auth.user.roles[0] == 'admin'">{{diffDays}} day{{pluralDay}} left to finish your goals</h5>
   </div>
   <div ng-init="updatePoints();">
     <p>You have {{vm.points}} points</p>
