@@ -91,3 +91,21 @@ grunt --force
 ```
 
 Once the server started, navigate to localhost:3000/ within your browser.
+
+## Update database connection
+
+The configuration files can be found within the /config/env folder. The production.js file will have to be edited if a new production database will be added. 
+The changes will be identical when changing the test database (test.js) or the development database (development.js). The new database connection string will
+have to be added on line 11 for the production file and on line 7 for the development and test files. See below:
+
+```
+module.exports = {
+  db: {
+    uri: process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'YOUR CONNECTION STRING HERE',
+    options: {
+      user: '',
+      pass: ''
+    },
+```
+
+Note: If the application is deployed the connection string can also be added as the environment variable "process.env.MONGOLAB_URI".
