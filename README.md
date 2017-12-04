@@ -1,5 +1,4 @@
-# CEN3031 UFO Group B - Client Project
-# Accountability App
+# CEN3031 UFO Group B - Accountability App
 
 A web app that allows clients to write down their goals for the week and allows their life coach to view and provide feedback on their progress. 
 
