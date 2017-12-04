@@ -108,4 +108,4 @@ module.exports = {
     },
 ```
 
-Note: If the application is deployed the connection string can also be added as the environment variable "process.env.MONGOLAB_URI".
+Note: If the application is deployed, the connection string can also be added as the environment variable "process.env.MONGOLAB_URI".
