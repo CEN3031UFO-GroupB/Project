@@ -7,18 +7,18 @@ A web app that allows clients to write down their goals for the week and allows 
 https://cen3031-groupb-lifecoaching.herokuapp.com/
 
 ## Technology Used/Credits
-* MEAN.JS
-* Bootstrap
-* AngularJS
-* jQuery
-* jQuery UI
-* Chart.js
-* Angular-UI
-* Angular Smart Table
-* MailGun
-* node-schedule
-* Angular Chart
-* Moment.js
+* MEAN.JS (Entire application)
+* Bootstrap (Entire application - front-end)
+* AngularJS (Entire application - front-end)
+* jQuery (Entire application - front-end)
+* jQuery UI (Profiles module)
+* Chart.js (Goals/Users modules)
+* Angular-UI (Profiles module)
+* Angular Smart Table (Goals/Admin_verifications/Users modules)
+* MailGun (Goals module)
+* node-schedule (Goals module)
+* Angular Chart (Goals/Users modules)
+* Moment.js (Entire application)
 
 ## Features
 
