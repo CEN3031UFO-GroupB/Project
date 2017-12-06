@@ -16,7 +16,11 @@
         <tr ng-repeat="verification in pagedItems">
           <td>{{verification.code}}</td>
           <td><span style='color: green;' ng-show="verification.active">Active</span><span style='color: red;' ng-show="!verification.active">Inactive</span></td>
-          <td>{{verification.user_id}}</td>
+          <td>
+            <span ng-show="!verification.active">{{verification.user_id}}</span>
+            <span ng-show="verification.active"><a  href="mailto:?subject=look at this website&body=Hi,I found this website
+and thought you might like it http://www.geocities.com/wowhtml/"><button type="button">Send email</button></a></span>
+          </td>
           <td>{{verification.created_at}}</td>
           <td>{{verification.type}}</td>
         </tr>
