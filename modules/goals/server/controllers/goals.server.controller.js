@@ -12,7 +12,7 @@ var path = require('path'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   _ = require('lodash'),
   config = require(path.resolve('./config/env/development.js')),
-  mailgun = require('mailgun-js')({ apiKey: config.mailGun.api_key, domain: 'sandboxb26a50f3d0844386a5071d5431553e72.mailgun.org' }),
+  mailgun = require('mailgun-js')({ apiKey: config.mailGun.api_key, domain: config.mailGun.domain }),
   fs = require('fs');
 
 

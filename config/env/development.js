@@ -101,6 +101,7 @@ module.exports = {
     }
   },
   mailGun: {
-    api_key: 'key-8d0e07bc2e0f0c6332233b23a8242850'
+    api_key: process.env.MAILGUN_KEY || 'key-8d0e07bc2e0f0c6332233b23a8242850',
+    domain: process.env.MAILGUN_DOMAIN || 'sandboxb26a50f3d0844386a5071d5431553e72.mailgun.org'
   }
 };
