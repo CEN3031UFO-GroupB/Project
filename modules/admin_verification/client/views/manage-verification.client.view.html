@@ -16,7 +16,12 @@
         <tr ng-repeat="verification in pagedItems">
           <td>{{verification.code}}</td>
           <td><span style='color: green;' ng-show="verification.active">Active</span><span style='color: red;' ng-show="!verification.active">Inactive</span></td>
-          <td>{{verification.user_id}}</td>
+          <td>
+            <span ng-show="!verification.active">{{verification.user_id}}</span>
+            <span ng-show="verification.active"><a  href="mailto:?subject=Accountability App Invitation&body=Hi,%0D%0A Please find your registration code below.%0D%0A%0D%0A 
+			Code: {{verification.code}}%0D%0A%0D%0A The sign-up form can be found here:%0D%0A https://cen3031-groupb-lifecoaching.herokuapp.com/authentication/signup">
+			<button type="button">Send email</button></a></span>
+          </td>
           <td>{{verification.created_at}}</td>
           <td>{{verification.type}}</td>
         </tr>
