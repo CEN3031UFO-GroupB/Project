@@ -7,14 +7,18 @@
     <fieldset>
       <h2>Priorities</h2>
       <p>
+	    <strong>
         {{user}}'s current order of priorities.
+        </strong>
       </p>
       <ul id="sort1" ui-sortable="sortablePriorities" class="profiles-list">
-        <li  ng-repeat="priority in prioritiesArray | orderBy:'rank'" class="profiles-list-element" ng-bind="priority.name"></li>
+        <li style="color: #FFFFFF;" ng-repeat="priority in prioritiesArray | orderBy:'rank'" class="profiles-list-element" ng-bind="priority.name"></li>
       </ul>
       <h2>Satisfactions</h2>
       <p>
+        <strong>
         {{user}}'s current satisfaction levels.
+        </strong>
       </p>
 
 
