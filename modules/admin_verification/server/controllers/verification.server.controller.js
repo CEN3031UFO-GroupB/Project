@@ -11,6 +11,9 @@ var path = require('path'),
 //Creates a new admin verification code
 //depending on the code string supplied
 exports.create = function (req, res) {
+  if(req.user._doc.roles[0] !== 'admin')
+    res.status(403);
+
   var verification = new Verification(req.body);
 
   verification.save(function (err) {
@@ -50,6 +53,9 @@ exports.update = function (req, res) {
 
 //Lists all codes in the database
 exports.list = function(req, res) {
+  if(req.user._doc.roles[0] !== 'admin')
+    res.status(403);
+
   Verification.find().sort('code').exec(function(err, verifications) {
     if(err) {
       res.status(400).send(err);
