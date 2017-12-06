@@ -30,16 +30,20 @@
       <fieldset>
         <h2>Priorities</h2>
 		  <p>
+		  <strong>
 	      Please sort the list below, with the highest priority on top,
 	      and the lowest priority at the bottom.
+		  </strong>
         </p>
         <ul ui-sortable="sortablePriorities" ng-model="profile.priorities" class="profiles-list">
-          <li ng-repeat="priority in profile.priorities" class="profiles-list-element">{{ priority.name }}</li>
+          <li style="color: #FFFFFF;" ng-repeat="priority in profile.priorities" class="profiles-list-element">{{ priority.name }}</li>
         </ul>
 		<h2>Satisfactions</h2>
 		<p>
+		<strong>
 	      Please indicate your current satisfaction levels for each category below.
 	      1 being completely unsatisfied and 10 being completely satisfied.
+		  </strong>
         </p>
 		<div class="form-group">
 			<div class="col-md-2">Family
