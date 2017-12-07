@@ -141,12 +141,12 @@
     $scope.todoCSS = function (goal) {
       if (goal.title.length <= 24) {
         return { 'border-right': '65px solid #505050',
-          'padding-left': '10px',
-          'margin-left': '-55px', };
+          'padding-left': '11px',
+          'margin-left': '-56px', };
       } else {
         return { 'border-right': '69px solid #505050',
-          'padding-left': '14px',
-          'margin-left': '-63px', };
+          'padding-left': '16px',
+          'margin-left': '-65px', };
       }
     };
 
@@ -154,12 +154,12 @@
     $scope.inProgressCSS = function (goal) {
       if (goal.title.length <= 24) {
         return { 'border-right': '65px solid #347fa5',
-          'padding-left': '10px',
-          'margin-left': '-55px', };
+          'padding-left': '11px',
+          'margin-left': '-56px', };
       } else {
         return { 'border-right': '69px solid #347fa5',
-          'padding-left': '14px',
-          'margin-left': '-63px', };
+          'padding-left': '16px',
+          'margin-left': '-65px', };
       }
     };
 
@@ -167,12 +167,12 @@
     $scope.completedCSS = function (goal) {
       if (goal.title.length <= 24) {
         return { 'border-right': '60px solid #30bb00',
-          'padding-left': '5px',
-          'margin-left': '-45px', };
+          'padding-left': '6px',
+          'margin-left': '-46px', };
       } else {
         return { 'border-right': '69px solid #30bb00',
-          'padding-left': '15px',
-          'margin-left': '-65px', };
+          'padding-left': '17px',
+          'margin-left': '-67px', };
       }
     };
 
