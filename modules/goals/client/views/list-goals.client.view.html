@@ -11,7 +11,7 @@
     <div class="clearfix"></div>
     <h5 style="font-style: italic; padding-left: 10px" ng-hide="auth.user.roles[0] == 'admin'">{{diffDays}} day{{pluralDay}} left to finish your goals</h5>
   </div>
-  <div ng-init="updatePoints();">
+  <div ng-init="updatePoints();" ng-hide="auth.user.roles[0] == 'admin'">
     <p>You have {{vm.points}} points</p>
     <p ng-if="vm.points >= 10">You have enough points to <a ui-sref="rewards.list">claim a reward!</a></p>
     <div class="progress">
@@ -45,7 +45,7 @@
           </div>
           <div class="col-md-2">
             <button class="btn" style="padding-top: 0; padding-bottom: 0; margin-top: 6px; margin-bottom: 5px" ui-sref="goals.view({ goalId: goal._id })">View</button>
-            <button class="btn btn-primary" style="padding-top: 0; padding-bottom: 0" ng-click="markGoalInProgress(goal)">Start</button>
+            <button class="btn btn-primary" style="padding-top: 0; padding-bottom: 0" ng-click="markGoalInProgress(goal)" ng-hide="auth.user.roles[0] == 'admin'">Start</button>
           </div>
         </div>
       </div>
@@ -70,7 +70,7 @@
           </div>
           <div class="col-md-2">
             <button class="btn" style="padding-top: 0; padding-bottom: 0; margin-top: 6px; margin-bottom: 5px" ui-sref="goals.view({ goalId: goal._id })">View</button>
-            <button class="btn" style="padding-top: 0; padding-bottom: 0; padding-left: 8px; padding-right: 8px; background-color: #30bb00; color: white;" ng-click="markGoalComplete(goal)">Finish</button>
+            <button class="btn" style="padding-top: 0; padding-bottom: 0; padding-left: 8px; padding-right: 8px; background-color: #30bb00; color: white;" ng-click="markGoalComplete(goal)" ng-hide="auth.user.roles[0] == 'admin'">Finish</button>
           </div>
         </div>
       </div>
@@ -139,6 +139,6 @@
 <hr>
 <div ng-hide="vm.goals.$resolved && !vm.oldGoals.length">
   <canvas id="bar" class="chart chart-line"
-          chart-data="data" chart-labels="labels" chart-options="options" chart-series="series">
+          chart-data="data" chart-labels="labels" chart-options="options" chart-series="series" chart-colors="colors">
   </canvas>
 </div>

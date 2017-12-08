@@ -98,6 +98,8 @@
     };
     updatePoints();
 
+    $scope.colors = ['#30bb00', '#347fa5'];
+
       //Chart options
     $scope.options = {
       legend: {
@@ -139,27 +141,43 @@
 
       //CSS to be applied to the To Do goals column via ng-style to accommodate for longer titles
     $scope.todoCSS = function (goal) {
-      if (goal.title.length <= 24) {
+      if ((goal.title.length <= 24) && ($scope.auth.user.roles[0] == 'user')) {
         return { 'border-right': '65px solid #505050',
           'padding-left': '11px',
           'margin-left': '-56px', };
-      } else {
+      } else if ((goal.title.length > 24) && ($scope.auth.user.roles[0] == 'user')){
         return { 'border-right': '69px solid #505050',
           'padding-left': '16px',
           'margin-left': '-65px', };
+      } else if ((goal.title.length <= 24) && ($scope.auth.user.roles[0] == 'admin')) {
+        return { 'border-right': '60px solid #505050',
+          'padding-left': '6px',
+          'margin-left': '-46px', };
+      } else {
+        return { 'border-right': '69px solid #505050',
+          'padding-left': '17px',
+          'margin-left': '-67px', };
       }
     };
 
     //CSS to be applied to the In Prog goals column via ng-style to accommodate for longer titles
     $scope.inProgressCSS = function (goal) {
-      if (goal.title.length <= 24) {
+      if ((goal.title.length <= 24) && ($scope.auth.user.roles[0] == 'user')) {
         return { 'border-right': '65px solid #347fa5',
           'padding-left': '11px',
           'margin-left': '-56px', };
-      } else {
+      } else if ((goal.title.length > 24) && ($scope.auth.user.roles[0] == 'user')){
         return { 'border-right': '69px solid #347fa5',
           'padding-left': '16px',
           'margin-left': '-65px', };
+      } else if ((goal.title.length <= 24) && ($scope.auth.user.roles[0] == 'admin')) {
+        return { 'border-right': '60px solid #347fa5',
+          'padding-left': '6px',
+          'margin-left': '-46px', };
+      } else {
+        return { 'border-right': '69px solid #347fa5',
+          'padding-left': '17px',
+          'margin-left': '-67px', };
       }
     };
 
