@@ -25,10 +25,10 @@
   <p> Status:
     <span ng-bind="vm.goal.status"></span>
   </p>
-  <p ng-hide="vm.goal.started_at == null"> Started on
+  <p ng-hide="vm.goal.status == 'Not Started'"> Started on
     <span ng-bind="vm.goal.started_at | date:'mediumDate'"></span>
   </p>
-  <p ng-hide="vm.goal.completed_at == null"> Completed on
+  <p ng-hide="vm.goal.status != 'Complete'"> Completed on
     <span ng-bind="vm.goal.completed_at | date:'mediumDate'"></span>
   </p>
 </section>
