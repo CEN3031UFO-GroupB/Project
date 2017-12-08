@@ -22,6 +22,8 @@
     $scope.categories = ['Family', 'Health', 'Rest and Relaxation', 'Faith', 'Finance', 'Romance', 'Friends',
                           'Contribution', 'Personal Growth', 'Career', 'Physical Environment'];
 
+    $scope.statuses = ['Not Started', 'In Progress', 'Complete'];
+
     // Remove existing Goal
     function remove() {
       if ($window.confirm('Are you sure you want to delete?')) {
