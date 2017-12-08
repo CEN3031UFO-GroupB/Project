@@ -7,6 +7,13 @@ angular.module('users.admin').controller('UserListController', ['$scope', '$filt
 	//Labels for the graph
     $scope.labels = ['4 weeks ago', '3 weeks ago', '2 weeks ago', 'Past week', 'Current week'];
     $scope.series = ['Goals Completed', 'Goals Started'];
+    $scope.colors = ['#30bb00', '#347fa5'];
+    $scope.options = {
+      legend: {
+        display: true,
+        position: 'right',
+      }
+    };
 
 	//Function to load all users and statistics data
 	$scope.loadData = function(){
