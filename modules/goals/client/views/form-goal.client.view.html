@@ -19,11 +19,19 @@
             <p class="help-block error-text" ng-message="required">A brief description is required.</p>
           </div>
         </div>
-        <div class="form-group col-sm-4" style="padding-left: 0">
-          <label for="category">Category</label>
-          <select name="category" id="category" class="form-control" ng-options="category for category in categories" ng-model="vm.goal.category" required></select>
-          <div ng-messages="vm.form.goalForm.category.$error" role="alert">
-            <p class="help-block error-text" ng-message="required">Categorizing your goal is required.</p>
+        <div class="row">
+          <div class="form-group col-sm-4" style="padding-left: 0; margin-left: 12px">
+            <label for="category">Category</label>
+            <select name="category" id="category" class="form-control" ng-options="category for category in categories" ng-model="vm.goal.category" required></select>
+            <div ng-messages="vm.form.goalForm.category.$error" role="alert">
+              <p class="help-block error-text" ng-message="required">Categorizing your goal is required.</p>
+            </div>
+          </div>
+          <div class="form-group col-sm-4" style="padding-left: 0; margin-left: 12px" ng-hide="vm.goal._id == null">
+            <label for="status">Status</label>
+            <select name="status" id="status" class="form-control" ng-options="status for status in statuses" ng-model="vm.goal.status" required></select>
+            <div ng-messages="vm.form.goalForm.category.$error" role="alert">
+            </div>
           </div>
         </div>
         <div class="clearfix"></div>
